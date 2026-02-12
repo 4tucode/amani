@@ -29,7 +29,7 @@ const socialLinks = [
       <div class="flex flex-col md:flex-row justify-between items-center gap-4 md:gap-6">
         <!-- Copyright (Left) -->
         <div class="text-xs md:text-sm text-gray-500 order-2 md:order-1">
-          © 2024 Amani. Todos los derechos reservados.
+          © 2026 Amani. Todos los derechos reservados.
         </div>
 
         <!-- Social Media Icons (Center on mobile, Right on desktop) -->
