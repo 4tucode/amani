@@ -1,0 +1,340 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+.redes {
+    position: relative;
+    z-index: 9;
+    display: flex;
+    justify-content: center;
+    margin-top: 2%;
+}
+.redes h3{
+    color: white;
+}
+.redes a{
+    margin: 1rem;
+}
+.icono.fab.fa-instagram {
+    color: #b72284;
+    font-size: 30px;
+}
+.icono.fab.fa-facebook-square {
+    color: #0052ff;
+    font-size: 30px;
+}
+.icono.fab.fa-youtube {
+    color: #FF0000;
+    font-size: 30px;
+}
+.imagen{
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100vh;
+}
+.imagen img{
+    width: 100%;
+    transform: translateY(-212px);
+}
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 500px;
+    overflow: hidden;
+    background: aqua;
+}
+.container h1{
+    font-size: 40px;
+    overflow: hidden;
+}
+
+.caja-logo.open{
+    z-index: 7!important;
+}
+
+.caja-logo img {
+    width: 80%;
+    position: absolute;
+    top: 50px;
+    left: 16px;
+    transform: rotate(0deg);
+}
+.caja-blog {
+    position: absolute;
+    top: 15px;
+    left: 85%;
+    padding: .5rem 3rem;
+    /* padding-left: 2rem; */
+    /* height: 41px; */
+    border-radius: 35px;
+    /* padding-right: 2rem; */
+    cursor: pointer;
+    background: #8ac247;
+    z-index: 4;
+}
+.caja-blog h1{
+    font-size: 25px;
+    color: white;
+}
+.row {
+    position: relative;
+    margin-top: 6%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    opacity: .8;
+    z-index: 3;
+}
+.row.open{
+    display: none!important;
+}
+.row2 {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    opacity: .8;
+    z-index: 3;
+}
+.row2.open{
+    display: none!important;
+}
+.row div {
+    width: 20%;
+    margin: 3rem;
+    height: 130px;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.row2 div {
+    width: 20%;
+    margin: 3rem;
+    height: 130px;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: .3s;
+}
+
+div h2{
+    text-align: center;
+}
+.vista{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    background: #de2213;
+}
+.oido{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    background: #e5be01;
+}
+.olfato{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    background: #03bb85;
+}
+.vista,
+.oido,
+.olfato,
+.gusto,
+.tacto{
+    font-size: 24px;
+}
+.gusto{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    background: #000066;
+}
+.tacto{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    background: #4c2882;
+}
+.about {
+    position: absolute;
+    top: 0px;
+    left: 0;
+    z-index: 4;
+    opacity: .98;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    padding: 2rem;
+    background: #2A3D45;
+    width: 100%;
+}
+.open {
+    display: flex!important;
+    z-index: 6;
+    flex-direction: column;
+}
+.about.content h1{
+    font-size: 75px;
+    font-weight: bold;
+}
+.content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.content img {
+    width: 55%;
+    position: absolute;
+    box-shadow: 1px 1px 20px black;
+}
+audio{
+    position: relative;
+    z-index: 6;
+    display: none;
+}
+.redes.open {
+	height: 96vh;
+	align-items: end;
+	justify-content: center;
+	flex-direction: row;
+}
+a {
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+}
+.caja-logo {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    position: absolute;
+    top: 75vh;
+    left: 170vh;
+    overflow: hidden;
+    box-shadow: 1px 0px 6px 0px;
+    z-index: 4;
+    cursor: pointer;
+}
+
+@media only screen and (max-width: 768px){
+    .redes {
+        position: relative;
+        /* left: 25%; */
+        /* top: 94%; */
+        z-index: 4;
+    }
+    .musica {
+        position: absolute;
+        z-index: 1;
+        top: -29vh;
+        left: -412px;
+        overflow: hidden;
+        width: 125.59vh;
+        /* border: 1px solid; */
+        height: 129vh;
+        opacity: .1;
+        /* transform: rotate(90deg); */
+    }
+    .musica video {
+        width: 132%;
+        transform: rotate(90deg);
+    }
+    .caja-logo {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        overflow: hidden;
+        box-shadow: 1px 0px 6px 0px;
+        z-index: 3;
+        cursor: pointer;
+        /* background: white; */
+        border: none;
+    }
+    .musica{
+        opacity: .3;
+    }
+    .content img {
+        width: 85%;
+        position: absolute;
+        box-shadow: 1px 1px 20px black;
+    }
+    body {
+        background: #2A3D45;
+    }
+    .imagen{
+        display: none;
+    }
+    .row {
+        margin-top: 16%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    .caja-logo img {
+        width: 80%;
+        position: absolute;
+        top: 30px;
+        left: 11px;
+        transform: rotate(0deg);
+    }
+    .row div {
+        /* margin: 1rem; */
+        width: 85%;
+        height: 66px;
+        border-radius: 15px;
+        cursor: pointer;
+        box-shadow: 1px 1px 10px black;
+        transition: .3s;
+    }
+    .row div img{
+        width: 100%;
+    }
+
+    .row2 {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        opacity: .8;
+        z-index: 3;
+    }
+    .row2 div {
+        width: 85%;
+        margin: 3rem;
+        height: 66px;
+        border-radius: 15px;
+        cursor: pointer;
+        box-shadow: 1px 1px 10px black;
+        transition: .3s;
+    }
+
+    .caja-blog {
+        position: absolute;
+        top: -3px;
+        border: 1px solid gray;
+        left: 65%;
+        padding-left: 2rem;
+        height: 41px;
+        padding-right: 2rem;
+        cursor: pointer;
+        background: teal;
+    }
+}

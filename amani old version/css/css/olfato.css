@@ -1,0 +1,35 @@
+div#sec_olfato {
+    padding: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.volver{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+}
+.volver a {
+    text-decoration: none;
+    background: lightseagreen;
+    padding: .5rem 1rem;
+    border-radius: 35px;
+    color: white;
+}
+.olfato {
+    display: flex;
+    overflow: hidden;
+    justify-content: center;
+    align-items: center;
+}
+.olfato img{
+    width: 100%;
+}
+.olfato_imagenes{
+    padding: 1rem;
+}
+.row.olfato {
+    margin: .5rem;
+}

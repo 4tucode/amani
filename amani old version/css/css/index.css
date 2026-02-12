@@ -1,0 +1,44 @@
+cite {
+    color: #36827f;
+    background: #f9db6d;
+    padding: 1rem;
+    border-radius: 5px 15px;
+    margin: 1rem;
+}
+.row{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: white;
+}
+.row img{
+    width: 70%;
+    padding-left: 2%;
+    padding-right: 2%;
+}
+.row a {
+    margin: 1rem;
+    text-decoration: none;
+    color: white;
+    background: #ad909a;
+    padding: .5rem;
+    transition: 1s;
+    font-size: 16px;
+}
+.row a:hover {
+    background: #F9DB6D;
+    color: #3c3c3c;
+}
+.container{
+    height: 97vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+@media only screen and (max-width: 768px){
+    .row {
+        flex-direction: column;
+    }
+}

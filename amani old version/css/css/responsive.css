@@ -1,0 +1,29 @@
+@media only screen and (max-width: 768px){
+    .row.tacto,
+    .row.vista,
+    .row.oido,
+    .row.olfato,
+    .row.gusto {
+        flex-direction: column;
+    }
+}
+
+audio{
+    position: relative;
+    z-index: 6;
+    display: none;
+}
+.vista_imagenes img,
+.tacto_imagenes img,
+.gusto_imagenes img,
+.olfato_imagenes img{
+    transition: 1s;
+}
+.vista_imagenes img:hover,
+.tacto_imagenes img:hover,
+.gusto_imagenes img:hover,
+.olfato_imagenes img:hover{
+    box-shadow: 1px 1px 10px black;
+    transform: translateY(30px);
+    cursor: pointer;
+}

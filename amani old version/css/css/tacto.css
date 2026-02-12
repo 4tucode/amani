@@ -1,0 +1,31 @@
+.volver{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+}
+.volver a {
+    text-decoration: none;
+    background: lightseagreen;
+    padding: .5rem 1rem;
+    border-radius: 35px;
+    color: white;
+}
+div#sec_tacto {
+    padding: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.tacto_imagenes img{
+    width: 100%;
+}
+.tacto_imagenes{
+    padding: 1rem;
+}
+.row.tacto {
+    margin: .5rem;
+    display: flex;
+    justify-content: center;
+}
