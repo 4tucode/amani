@@ -30,9 +30,24 @@ const router = createRouter({
       component: () => import('../views/VistaView.vue'),
     },
     {
+      path: '/experiencia/oido',
+      name: 'experiencia-oido',
+      component: () => import('../views/OidoView.vue'),
+    },
+    {
       path: '/experiencia/olfato',
       name: 'experiencia-olfato',
       component: () => import('../views/OlfatoView.vue'),
+    },
+    {
+      path: '/experiencia/gusto',
+      name: 'experiencia-gusto',
+      component: () => import('../views/GustoView.vue'),
+    },
+    {
+      path: '/experiencia/tacto',
+      name: 'experiencia-tacto',
+      component: () => import('../views/TactoView.vue'),
     },
     {
       path: '/experiencias',

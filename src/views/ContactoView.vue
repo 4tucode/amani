@@ -1,10 +1,4 @@
 <script setup lang="ts">
-import { useScrollToTop } from '../composables/useScrollToTop'
-
-// Hook para hacer scroll hacia arriba al montar el componente
-useScrollToTop()
-
-// Información de contacto
 const contactInfo = {
   email: 'contacto@amani.com',
   telefono: '+34 123 456 789',
@@ -13,299 +7,254 @@ const contactInfo = {
 </script>
 
 <template>
-  <div class="contact-wrapper">
-    <!-- SVG Background Animations -->
-    <div class="svg-background">
-      <img src="@/assets/SVG/FORM-07.svg" alt="" class="bg-svg bg-svg-1" />
-      <img src="@/assets/SVG/FORM-08.svg" alt="" class="bg-svg bg-svg-2" />
-      <img src="@/assets/SVG/FORM-09.svg" alt="" class="bg-svg bg-svg-3" />
-      <img src="@/assets/SVG/FORM-10.svg" alt="" class="bg-svg bg-svg-4" />
-      <img src="@/assets/SVG/FORM-11.svg" alt="" class="bg-svg bg-svg-5" />
-      <img src="@/assets/SVG/FORM-12.svg" alt="" class="bg-svg bg-svg-6" />
-    </div>
-    
-    <main class="contact-main">
-      <div class="contact-container">
-        <div class="contact-card">
-          <!-- Email -->
-          <div class="contact-item">
-            <h3 class="contact-label">Email</h3>
-            <p class="contact-value">{{ contactInfo.email }}</p>
-          </div>
+  <div class="contact-view">
+    <div class="panels-row">
 
-          <!-- Teléfono -->
-          <div class="contact-item">
-            <h3 class="contact-label">Teléfono</h3>
-            <p class="contact-value">{{ contactInfo.telefono }}</p>
-          </div>
+      <!-- ── Panel izquierdo: título + horario ── -->
+      <div class="panel panel-left">
 
-          <!-- Horario -->
-          <div class="contact-item">
-            <h3 class="contact-label">Horario</h3>
-            <p class="contact-value">{{ contactInfo.horario }}</p>
-          </div>
+        <div class="eyebrow">
+          <span class="ew-line" />
+          <span class="ew-text">Estamos aquí</span>
         </div>
+
+        <h1 class="panel-title">Contacto</h1>
+
+        <div class="subsection">
+          <h3 class="sub-label">Horario</h3>
+          <blockquote class="quote">
+            <p v-for="line in contactInfo.horario.split('\n')" :key="line">{{ line }}</p>
+          </blockquote>
+        </div>
+
       </div>
-    </main>
+
+      <!-- Divisor vertical -->
+      <div class="v-divider" aria-hidden="true" />
+
+      <!-- ── Panel derecho: email + teléfono ── -->
+      <div class="panel panel-right">
+
+        <div class="eyebrow eyebrow-r">
+          <span class="ew-text">Información</span>
+          <span class="ew-line" />
+        </div>
+
+        <h2 class="panel-title title-r">Escríbenos</h2>
+
+        <ul class="contact-list">
+          <li class="contact-item">
+            <span class="contact-label">Email</span>
+            <a :href="`mailto:${contactInfo.email}`" class="contact-value">
+              {{ contactInfo.email }}
+            </a>
+          </li>
+          <li class="contact-item">
+            <span class="contact-label">Teléfono</span>
+            <a :href="`tel:${contactInfo.telefono.replace(/\s/g, '')}`" class="contact-value">
+              {{ contactInfo.telefono }}
+            </a>
+          </li>
+        </ul>
+
+      </div>
+    </div>
+
+    <!-- Número decorativo -->
+    <span class="deco-num" aria-hidden="true">03</span>
   </div>
 </template>
 
-<style lang="scss" scoped>
-// Wrapper container
-.contact-wrapper {
+<style scoped lang="scss">
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Contenedor ── */
+.contact-view {
   position: relative;
-  width: 100%;
-  min-height: 100vh;
-  overflow: visible;
+  height: 100%;
+  overflow: hidden;
+  background: #ecedf4;
 }
 
-// SVG Background Animations
-.svg-background {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: 0;
-  pointer-events: none;
-  overflow: visible;
-}
-
-.bg-svg {
-  position: absolute;
-  opacity: 0.3;
-  width: 200px;
-  height: 200px;
-  pointer-events: none;
-
-  @media (min-width: 768px) {
-    width: 250px;
-    height: 250px;
-  }
-
-  @media (min-width: 1024px) {
-    width: 300px;
-    height: 300px;
-  }
-}
-
-.bg-svg-1 {
-  top: 5%;
-  left: 5%;
-  animation: float-svg-1 25s ease-in-out infinite;
-}
-
-.bg-svg-2 {
-  top: 15%;
-  right: 10%;
-  animation: float-svg-2 30s ease-in-out infinite;
-}
-
-.bg-svg-3 {
-  bottom: 20%;
-  left: 10%;
-  animation: float-svg-3 28s ease-in-out infinite;
-}
-
-.bg-svg-4 {
-  top: 60%;
-  right: 15%;
-  animation: float-svg-4 32s ease-in-out infinite;
-}
-
-.bg-svg-5 {
-  bottom: 15%;
-  right: 5%;
-  animation: float-svg-5 35s ease-in-out infinite;
-}
-
-.bg-svg-6 {
-  top: 40%;
-  left: 20%;
-  animation: float-svg-6 27s ease-in-out infinite;
-}
-
-// Animations for SVG movement
-@keyframes float-svg-1 {
-  0%, 100% {
-    transform: translate(0, 0) rotate(0deg);
-  }
-  25% {
-    transform: translate(150px, 80px) rotate(90deg);
-  }
-  50% {
-    transform: translate(300px, 40px) rotate(180deg);
-  }
-  75% {
-    transform: translate(200px, -60px) rotate(270deg);
-  }
-}
-
-@keyframes float-svg-2 {
-  0%, 100% {
-    transform: translate(0, 0) rotate(0deg);
-  }
-  25% {
-    transform: translate(-180px, 120px) rotate(-90deg);
-  }
-  50% {
-    transform: translate(-350px, 60px) rotate(-180deg);
-  }
-  75% {
-    transform: translate(-250px, -80px) rotate(-270deg);
-  }
-}
-
-@keyframes float-svg-3 {
-  0%, 100% {
-    transform: translate(0, 0) rotate(0deg);
-  }
-  33% {
-    transform: translate(120px, -150px) rotate(120deg);
-  }
-  66% {
-    transform: translate(-80px, -100px) rotate(240deg);
-  }
-}
-
-@keyframes float-svg-4 {
-  0%, 100% {
-    transform: translate(0, 0) rotate(0deg);
-  }
-  25% {
-    transform: translate(-150px, 100px) rotate(-90deg);
-  }
-  50% {
-    transform: translate(-280px, 50px) rotate(-180deg);
-  }
-  75% {
-    transform: translate(-200px, -120px) rotate(-270deg);
-  }
-}
-
-@keyframes float-svg-5 {
-  0%, 100% {
-    transform: translate(0, 0) rotate(0deg);
-  }
-  25% {
-    transform: translate(200px, -180px) rotate(90deg);
-  }
-  50% {
-    transform: translate(400px, -100px) rotate(180deg);
-  }
-  75% {
-    transform: translate(300px, 150px) rotate(270deg);
-  }
-}
-
-@keyframes float-svg-6 {
-  0%, 100% {
-    transform: translate(0, 0) rotate(0deg);
-  }
-  33% {
-    transform: translate(-120px, 130px) rotate(-120deg);
-  }
-  66% {
-    transform: translate(80px, 160px) rotate(-240deg);
-  }
-}
-
-.contact-main {
+/* ── Fila de paneles ── */
+.panels-row {
   position: relative;
-  z-index: 10;
-  min-height: 100vh;
+  z-index: 1;
+  height: 100%;
   display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  padding: 1rem;
-  padding-top: 6rem;
-
-  @media (min-width: 768px) {
-    padding: 1.5rem;
-    padding-top: 6rem;
-  }
+  align-items: stretch;
 }
 
-.contact-container {
-  max-width: 800px;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-}
-
-.contact-card {
-  background: #ffffff17;
-  backdrop-filter: blur(10px);
-  border-radius: 0.75rem;
-  padding: 2rem;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+/* ── Panel base ── */
+.panel {
+  flex: 1;
+  padding: 3.5rem 3.5rem;
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1.5rem;
+  overflow-y: auto;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar { display: none; }
+}
+
+.panel-left {
+  animation: fadeUp 0.55s ease both;
+}
+
+.panel-right {
+  align-items: flex-end;
+  animation: fadeUp 0.55s ease 0.15s both;
+}
+
+/* ── Divisor vertical ── */
+.v-divider {
+  width: 1px;
+  flex-shrink: 0;
+  margin: 2.5rem 0;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(140, 58, 80, 0.2) 20%,
+    rgba(140, 58, 80, 0.2) 80%,
+    transparent
+  );
+}
+
+/* ── Eyebrow ── */
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.ew-line {
+  flex: 0 0 36px;
+  height: 1px;
+  background: rgba(140, 58, 80, 0.35);
+}
+
+.ew-text {
+  font-family: 'Syne', sans-serif;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: #8c3a50;
+  white-space: nowrap;
+}
+
+/* ── Títulos ── */
+.panel-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 28px;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: #3d1a26;
+  letter-spacing: 0.03em;
+  margin: 0;
+  line-height: 1.15;
+}
+
+.title-r {
+  text-align: right;
+}
+
+/* ── Subsección horario ── */
+.subsection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.sub-label {
+  font-family: 'Syne', sans-serif;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #8c3a50;
+  margin: 0;
+}
+
+.quote {
+  border-left: 2.5px solid rgba(140, 58, 80, 0.25);
+  padding-left: 20px;
+  margin: 0;
+
+  p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px;
+    font-style: italic;
+    color: rgba(61, 26, 38, 0.65);
+    line-height: 2;
+    margin: 0;
+  }
+}
+
+/* ── Lista de contacto ── */
+.contact-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  align-items: flex-end;
   width: 100%;
-
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
-    border-color: rgba(88, 42, 53, 0.2);
-  }
-
-  @media (min-width: 768px) {
-    padding: 2.5rem;
-    gap: 2.5rem;
-  }
-
-  @media (min-width: 1024px) {
-    padding: 3rem;
-    gap: 3rem;
-  }
+  max-width: 360px;
 }
 
 .contact-item {
+  width: 100%;
   display: flex;
   flex-direction: column;
+  align-items: flex-end;
+  gap: 0.3rem;
+  padding: 1.5rem 0;
+  border-bottom: 1px solid rgba(140, 58, 80, 0.1);
+
+  &:last-child {
+    border-bottom: none;
+  }
 }
 
 .contact-label {
-  font-size: 0.75rem;
+  font-family: 'Syne', sans-serif;
+  font-size: 9.5px;
   font-weight: 700;
-  color: #582a35;
-  margin: 0 0 0.5rem 0;
+  letter-spacing: 0.3em;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  position: relative;
-  padding-bottom: 0.375rem;
-
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 35px;
-    height: 2px;
-    background: #807a2a;
-    border-radius: 1px;
-  }
-
-  @media (min-width: 768px) {
-    font-size: 0.875rem;
-    margin-bottom: 0.75rem;
-    padding-bottom: 0.5rem;
-  }
+  color: rgba(61, 26, 38, 0.35);
 }
 
 .contact-value {
-  font-size: 0.8125rem;
-  font-weight: 400;
-  color: #000;
-  line-height: 1.5;
-  margin: 0;
-  white-space: pre-line;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px;
+  font-style: italic;
+  color: rgba(61, 26, 38, 0.75);
+  text-decoration: none;
+  transition: color 0.2s ease;
 
-  @media (min-width: 768px) {
-    font-size: 0.9375rem;
-    line-height: 1.6;
+  &:hover {
+    color: #8c3a50;
   }
+}
+
+/* ── Número decorativo ── */
+.deco-num {
+  position: absolute;
+  bottom: -1.5rem;
+  right: 2.5rem;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 120px;
+  line-height: 1;
+  color: rgba(61, 26, 38, 0.04);
+  pointer-events: none;
+  user-select: none;
+  z-index: 0;
 }
 </style>

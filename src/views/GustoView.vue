@@ -7,12 +7,10 @@ import ImageLightbox from '../components/ImageLightbox.vue'
 const { isExperienciaSensorial } = useGlobalMusic()
 
 const productos = ref([
-  { id: 1, nombre: 'Aromas Ancestrales del África Occidental', descripcion: 'Sumérgete en el mundo de las fragancias tradicionales africanas. Descubre esencias milenarias, hierbas aromáticas y perfumes naturales que han sido utilizados por generaciones para rituales, ceremonias y bienestar espiritual.', precio: '79.99', categoria: 'Aromaterapia', rating: 4.8, stock: 18, img: new URL('@/assets/olfato.jpg', import.meta.url).href },
-  { id: 2, nombre: 'Esencias de la Sabana', descripcion: 'Fragancias auténticas extraídas de plantas nativas de la sabana africana. Cada aroma cuenta una historia de tradición y conexión con la naturaleza salvaje del continente.', precio: '89.99', categoria: 'Esencias Naturales', rating: 4.9, stock: 12, img: new URL('@/assets/olfato2.jpg', import.meta.url).href },
-  { id: 3, nombre: 'Perfumes del Desierto', descripcion: 'Aromas intensos y misteriosos que evocan la majestuosidad del desierto del Sahara. Fragancias que transportan a paisajes de dunas infinitas y noches estrelladas.', precio: '95.99', categoria: 'Perfumes', rating: 4.7, stock: 8, img: new URL('@/assets/olfato3.jpg', import.meta.url).href },
-  { id: 4, nombre: 'Inciensos Sagrados', descripcion: 'Inciensos tradicionales utilizados en ceremonias espirituales africanas. Cada varilla está impregnada con resinas sagradas y hierbas medicinales ancestrales.', precio: '65.99', categoria: 'Inciensos', rating: 4.6, stock: 25, img: new URL('@/assets/olfato4.jpg', import.meta.url).href },
-  { id: 5, nombre: 'Aceites Esenciales Puros', descripcion: 'Aceites esenciales 100% naturales extraídos de plantas africanas. Cada gota contiene la esencia pura de la naturaleza salvaje del continente.', precio: '120.99', categoria: 'Aceites Esenciales', rating: 4.9, stock: 15, img: new URL('@/assets/olfato5.png', import.meta.url).href },
-  { id: 6, nombre: 'Fragancias del Bosque', descripcion: 'Aromas que capturan la esencia de los bosques tropicales africanos. Fragancias frescas y revitalizantes que conectan con la energía de la selva.', precio: '85.99', categoria: 'Fragancias', rating: 4.8, stock: 20, img: new URL('@/assets/olfato6.png', import.meta.url).href },
+  { id: 1, nombre: 'Especias del Sahel', descripcion: 'Una selección exclusiva de especias provenientes de las regiones del Sahel africano. Cada mezcla ha sido elaborada siguiendo recetas ancestrales que equilibran sabores ahumados, terrosos y florales únicos del continente.', precio: '34.99', categoria: 'Especias', rating: 4.7, stock: 20, img: 'https://picsum.photos/seed/spices-africa/300/300' },
+  { id: 2, nombre: 'Cacao Puro de Ghana', descripcion: 'El cacao de Ghana, considerado entre los mejores del mundo, cultivado en las exuberantes tierras tropicales del país. Un sabor intenso y complejo que revela notas frutales y terrosas en cada degustación.', precio: '28.99', categoria: 'Cacao', rating: 4.9, stock: 15, img: 'https://picsum.photos/seed/cacao-ghana/300/300' },
+  { id: 3, nombre: 'Té de Hibisco Bissap', descripcion: 'La flor de hibisco seco, conocida como bissap en el África Occidental, elabora una infusión de color rojo rubí con un sabor ácido y floral. Bebida sagrada de hospitalidad en Senegal y Guinea.', precio: '18.99', categoria: 'Infusión', rating: 4.8, stock: 40, img: 'https://picsum.photos/seed/hibiscus-tea/300/300' },
+  { id: 4, nombre: 'Aceite de Argán Premium', descripcion: 'Extraído de las nueces del árbol de argán que crece exclusivamente en Marruecos, este aceite dorado aporta un sabor suave y avellonado a cualquier preparación culinaria o cosmética tradicional.', precio: '45.99', categoria: 'Aceite', rating: 4.9, stock: 12, img: 'https://picsum.photos/seed/argan-oil/300/300' },
 ])
 
 const productosFiltrados = computed(() => productos.value)
@@ -29,7 +27,7 @@ const comprarProducto = (producto: { nombre: string; precio: string }) => {
 </script>
 
 <template>
-  <div class="olfato-view">
+  <div class="gusto-view">
     <div class="panels-row">
 
       <!-- ── Panel izquierdo: intro ── -->
@@ -42,14 +40,8 @@ const comprarProducto = (producto: { nombre: string; precio: string }) => {
 
         <div class="eyebrow">
           <span class="ew-line" />
-          <span class="ew-text">Olfato</span>
+          <span class="ew-text">Gusto</span>
         </div>
-
-        <img
-          :src="productosFiltrados[0].img"
-          :alt="productosFiltrados[0].nombre"
-          class="featured-img"
-        />
 
         <h1 class="panel-title">{{ productosFiltrados[0].nombre }}</h1>
 
@@ -59,7 +51,7 @@ const comprarProducto = (producto: { nombre: string; precio: string }) => {
 
         <div class="article-count">
           <span class="count-num">{{ String(productosFiltrados.length).padStart(2, '0') }}</span>
-          <span class="count-label">fragancias disponibles</span>
+          <span class="count-label">sabores disponibles</span>
         </div>
 
       </div>
@@ -74,7 +66,7 @@ const comprarProducto = (producto: { nombre: string; precio: string }) => {
           <span class="ew-line" />
         </div>
 
-        <h2 class="panel-title title-r">Fragancias</h2>
+        <h2 class="panel-title title-r">Sabores</h2>
 
         <ul class="products-list">
           <li
@@ -99,7 +91,7 @@ const comprarProducto = (producto: { nombre: string; precio: string }) => {
 
         <div v-if="productosFiltrados.length === 0" class="empty-state">
           <p class="empty-title">No hay experiencias disponibles</p>
-          <p class="empty-sub">Vuelve más tarde para descubrir nuevas experiencias olfativas</p>
+          <p class="empty-sub">Vuelve más tarde para descubrir nuevos sabores</p>
         </div>
 
       </div>
@@ -117,7 +109,7 @@ const comprarProducto = (producto: { nombre: string; precio: string }) => {
   to   { opacity: 1; transform: translateY(0); }
 }
 
-.olfato-view {
+.gusto-view {
   position: relative;
   height: 100%;
   overflow: hidden;
@@ -178,14 +170,6 @@ const comprarProducto = (producto: { nombre: string; precio: string }) => {
   text-transform: uppercase;
   color: #8c3a50;
   white-space: nowrap;
-}
-
-.featured-img {
-  width: 100%;
-  height: 160px;
-  object-fit: cover;
-  border-radius: 4px;
-  opacity: 0.9;
 }
 
 .panel-title {

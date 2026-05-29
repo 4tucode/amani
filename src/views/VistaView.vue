@@ -1,404 +1,315 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
 import { ref, computed } from 'vue'
-import { useScrollToTop } from '../composables/useScrollToTop'
 import { useGlobalMusic } from '../composables/useGlobalMusic'
-
-// Hook para hacer scroll hacia arriba al montar el componente
-useScrollToTop()
 
 const { isExperienciaSensorial } = useGlobalMusic()
 
-// Datos del producto cultural único
 const productos = ref([
   {
     id: 1,
-    nombre: "Danza Tradicional Fang - Guinea Ecuatorial",
-    descripcion: "Sumérgete en la rica cultura de la tribu Fang a través de esta experiencia visual única. Descubre los movimientos ancestrales, los trajes tradicionales y la energía espiritual que caracteriza esta danza milenaria del África Central.",
-    precio: "89.99",
-    categoria: "Cultura",
+    nombre: 'Danza Tradicional Fang - Guinea Ecuatorial',
+    descripcion: 'Sumérgete en la rica cultura de la tribu Fang a través de esta experiencia visual única. Descubre los movimientos ancestrales, los trajes tradicionales y la energía espiritual que caracteriza esta danza milenaria del África Central.',
+    precio: '89.99',
+    categoria: 'Cultura',
     rating: 4.9,
-    stock: 25
-  }
+    stock: 25,
+    img: new URL('@/assets/vista1.jpg', import.meta.url).href,
+  },
 ])
 
-const productosFiltrados = computed(() => {
-  return productos.value
-})
+const productosFiltrados = computed(() => productos.value)
 
-// Función para determinar la ruta de regreso
-const getBackRoute = () => {
-  if (isExperienciaSensorial.value) {
-    return '/experiencia-sensorial'
-  }
-  return '/experiencia-estandar'
-}
+const getBackRoute = () => isExperienciaSensorial.value ? '/experiencia-sensorial' : '/experiencia-estandar'
 
-// Función para abrir WhatsApp con mensaje de compra
-const comprarProducto = (producto: any) => {
+const comprarProducto = (producto: { nombre: string; precio: string }) => {
   const numero = '34680150864'
   const mensaje = encodeURIComponent(`Hola, me interesa comprar el siguiente producto:\n\n📦 ${producto.nombre}\n💰 Precio: €${producto.precio}\n\nPor favor, contacta conmigo para completar la compra.`)
-  const url = `https://wa.me/${numero}?text=${mensaje}`
-  window.open(url, '_blank')
+  window.open(`https://wa.me/${numero}?text=${mensaje}`, '_blank')
 }
 </script>
 
 <template>
-  <div class="view-wrapper">
-    <!-- SVG Background Animations -->
-    <div class="svg-background">
-      <img src="@/assets/SVG/FORM-07.svg" alt="" class="bg-svg bg-svg-1" />
-      <img src="@/assets/SVG/FORM-08.svg" alt="" class="bg-svg bg-svg-2" />
-      <img src="@/assets/SVG/FORM-09.svg" alt="" class="bg-svg bg-svg-3" />
-      <img src="@/assets/SVG/FORM-10.svg" alt="" class="bg-svg bg-svg-4" />
-      <img src="@/assets/SVG/FORM-11.svg" alt="" class="bg-svg bg-svg-5" />
-      <img src="@/assets/SVG/FORM-12.svg" alt="" class="bg-svg bg-svg-6" />
-    </div>
-    
-    <main class="min-h-screen relative z-10">
-    <!-- Contenido principal con productos -->
-    <div class="py-16">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <!-- Grid de productos -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <div v-for="producto in productosFiltrados" :key="producto.id" class="polaroid-card group">
-            <!-- Imagen del producto con borde polaroid -->
-            <div class="polaroid-image">
-              <img src="@/assets/vista1.jpg" :alt="producto.nombre" class="polaroid-photo" />
-            </div>
+  <div class="vista-view">
+    <div v-if="productosFiltrados.length > 0" class="panels-row">
 
-            <!-- Contenido del producto (como etiqueta de polaroid) -->
-            <div class="polaroid-label">
-              <!-- Nombre -->
-              <h3 class="polaroid-title">
-                {{ producto.nombre }}
-              </h3>
+      <!-- ── Panel izquierdo: info del producto ── -->
+      <div class="panel panel-left">
 
-              <!-- Descripción breve -->
-              <p class="polaroid-description">
-                {{ producto.descripcion }}
-              </p>
+        <RouterLink :to="getBackRoute()" class="back-link">
+          <span class="back-arrow">←</span>
+          Volver a Experiencias
+        </RouterLink>
 
-              <!-- Botón comprar -->
-              <button @click="comprarProducto(producto)" class="polaroid-button">
-                Comprar
-              </button>
-            </div>
-          </div>
+        <div class="eyebrow">
+          <span class="ew-line" />
+          <span class="ew-text">Vista</span>
         </div>
 
-        <!-- Mensaje si no hay productos -->
-        <div v-if="productosFiltrados.length === 0" class="text-center py-16">
-          <h3 class="text-2xl font-bold text-gray-600 mb-2">No hay experiencias disponibles</h3>
-          <p class="text-gray-500">Vuelve más tarde para descubrir nuevas experiencias culturales</p>
-        </div>
+        <img
+          :src="productosFiltrados[0].img"
+          :alt="productosFiltrados[0].nombre"
+          class="featured-img"
+        />
+
+        <h1 class="panel-title">{{ productosFiltrados[0].nombre }}</h1>
+
+        <blockquote class="quote">
+          <p>{{ productosFiltrados[0].descripcion }}</p>
+        </blockquote>
+
       </div>
 
-      <!-- Botón de regreso -->
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
-        <div class="text-center">
-          <RouterLink :to="getBackRoute()"
-            class="inline-flex items-center px-6 py-3 bg-white border border-gray-300 text-gray-700 font-thin rounded-lg shadow-sm hover:shadow-md transition-all duration-300 hover:border-gray-400">
-            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18">
-              </path>
-            </svg>
-            Volver a Experiencias
-          </RouterLink>
+      <div class="v-divider" aria-hidden="true" />
+
+      <!-- ── Panel derecho: detalles y compra ── -->
+      <div class="panel panel-right">
+
+        <div class="eyebrow eyebrow-r">
+          <span class="ew-text">Experiencia cultural</span>
+          <span class="ew-line" />
         </div>
+
+        <h2 class="panel-title title-r">Detalles</h2>
+
+        <ul class="details-list">
+          <li class="detail-item">
+            <span class="detail-label">Categoría</span>
+            <span class="detail-value">{{ productosFiltrados[0].categoria }}</span>
+          </li>
+          <li class="detail-item">
+            <span class="detail-label">Valoración</span>
+            <span class="detail-value">{{ productosFiltrados[0].rating }} / 5</span>
+          </li>
+          <li class="detail-item">
+            <span class="detail-label">Disponibles</span>
+            <span class="detail-value">{{ productosFiltrados[0].stock }} unidades</span>
+          </li>
+          <li class="detail-item detail-price">
+            <span class="detail-label">Precio</span>
+            <span class="price-value">€{{ productosFiltrados[0].precio }}</span>
+          </li>
+        </ul>
+
+        <button class="buy-btn" @click="comprarProducto(productosFiltrados[0])">
+          Comprar <span class="buy-arrow">→</span>
+        </button>
+
       </div>
     </div>
-    </main>
+
+    <!-- Sin productos -->
+    <div v-else class="empty-state">
+      <p class="empty-title">No hay experiencias disponibles</p>
+      <p class="empty-sub">Vuelve más tarde para descubrir nuevas experiencias culturales</p>
+      <RouterLink :to="getBackRoute()" class="back-link">← Volver a Experiencias</RouterLink>
+    </div>
+
+    <span class="deco-num" aria-hidden="true">01</span>
   </div>
 </template>
 
-<style lang="scss" scoped>
-/* Estilos Polaroid */
-.polaroid-card {
-  background: #ffffff;
-  padding: 1rem 1rem 1.5rem 1rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
-  border-radius: 4px;
-  transition: all 0.3s ease;
-  transform: rotate(-1deg);
-  max-width: 100%;
+<style scoped lang="scss">
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
-.polaroid-card:nth-child(even) {
-  transform: rotate(1deg);
-}
-
-.polaroid-card:nth-child(3n) {
-  transform: rotate(-0.5deg);
-}
-
-.polaroid-card:hover {
-  transform: rotate(0deg) scale(1.05);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15), 0 3px 6px rgba(0, 0, 0, 0.1);
-}
-
-.polaroid-image {
-  background: #ffffff;
-  padding: 0.75rem;
-  margin-bottom: 0.5rem;
-  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.05);
-}
-
-.polaroid-photo {
-  width: 100%;
-  height: 280px;
-  object-fit: cover;
-  display: block;
-  filter: sepia(10%) contrast(1.05);
-}
-
-.polaroid-label {
-  padding: 0.5rem 0;
-  text-align: center;
-}
-
-.polaroid-title {
-  font-size: 1.125rem;
-  font-weight: 600;
-  color: #1f2937;
-  margin-bottom: 0.5rem;
-  line-height: 1.4;
-  transition: color 0.3s ease;
-}
-
-.polaroid-card:hover .polaroid-title {
-  color: #d97706;
-}
-
-.polaroid-description {
-  font-size: 0.875rem;
-  color: #4b5563;
-  line-height: 1.5;
-  margin-bottom: 1rem;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.polaroid-button {
-  width: 100%;
-  padding: 0.75rem 1.5rem;
-  background: linear-gradient(to right, #f59e0b, #ea580c);
-  color: #ffffff;
-  font-weight: 600;
-  font-size: 0.875rem;
-  border: none;
-  border-radius: 0.5rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.polaroid-button:hover {
-  background: linear-gradient(to right, #d97706, #dc2626);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-}
-
-.polaroid-button:active {
-  transform: translateY(0);
-}
-
-/* Animaciones personalizadas */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.polaroid-card {
-  animation: fadeInUp 0.6s ease-out;
-}
-
-.polaroid-card:nth-child(2) {
-  animation-delay: 0.1s;
-}
-
-.polaroid-card:nth-child(3) {
-  animation-delay: 0.2s;
-}
-
-.polaroid-card:nth-child(4) {
-  animation-delay: 0.3s;
-}
-
-.polaroid-card:nth-child(5) {
-  animation-delay: 0.4s;
-}
-
-.polaroid-card:nth-child(6) {
-  animation-delay: 0.5s;
-}
-
-// Wrapper container
-.view-wrapper {
+.vista-view {
   position: relative;
+  height: 100%;
+  overflow: hidden;
+  background: #ecedf4;
+}
+
+.panels-row {
+  height: 100%;
+  display: flex;
+  align-items: stretch;
+}
+
+.panel {
+  flex: 1;
+  padding: 3.5rem 3.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  overflow-y: auto;
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
+}
+
+.panel-left  { animation: fadeUp 0.55s ease both; }
+.panel-right { align-items: flex-end; animation: fadeUp 0.55s ease 0.15s both; }
+
+.v-divider {
+  width: 1px;
+  flex-shrink: 0;
+  margin: 2.5rem 0;
+  background: linear-gradient(to bottom, transparent, rgba(140,58,80,0.2) 20%, rgba(140,58,80,0.2) 80%, transparent);
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: 'Syne', sans-serif;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(61,26,38,0.4);
+  text-decoration: none;
+  transition: color 0.2s ease;
+  &:hover { color: #8c3a50; }
+}
+.back-arrow { font-size: 11px; transition: transform 0.2s ease; }
+.back-link:hover .back-arrow { transform: translateX(-3px); }
+
+.eyebrow { display: flex; align-items: center; gap: 0.75rem; }
+.ew-line { flex: 0 0 36px; height: 1px; background: rgba(140,58,80,0.35); }
+.ew-text {
+  font-family: 'Syne', sans-serif;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: #8c3a50;
+  white-space: nowrap;
+}
+
+.featured-img {
   width: 100%;
-  min-height: 100vh;
-  overflow: visible;
-}
-
-// SVG Background Animations
-.svg-background {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: 0;
-  pointer-events: none;
-  overflow: visible;
-}
-
-.bg-svg {
-  position: absolute;
-  opacity: 0.3;
-  width: 200px;
   height: 200px;
+  object-fit: cover;
+  border-radius: 4px;
+  opacity: 0.9;
+}
+
+.panel-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 24px;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: #3d1a26;
+  letter-spacing: 0.03em;
+  margin: 0;
+  line-height: 1.2;
+}
+.title-r { text-align: right; }
+
+.quote {
+  border-left: 2.5px solid rgba(140,58,80,0.25);
+  padding-left: 20px;
+  margin: 0;
+  p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px;
+    font-style: italic;
+    color: rgba(61,26,38,0.65);
+    line-height: 1.85;
+    margin: 0;
+  }
+}
+
+.details-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 320px;
+}
+
+.detail-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.2rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid rgba(140,58,80,0.1);
+  &:last-child { border-bottom: none; }
+}
+
+.detail-label {
+  font-family: 'Syne', sans-serif;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: rgba(61,26,38,0.35);
+}
+
+.detail-value {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 17px;
+  font-style: italic;
+  color: rgba(61,26,38,0.7);
+}
+
+.price-value {
+  font-family: 'Syne', sans-serif;
+  font-size: 22px;
+  font-weight: 800;
+  color: #3d1a26;
+}
+
+.buy-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: 'Syne', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #ffffff;
+  background: #8c3a50;
+  border: none;
+  padding: 0.85rem 1.75rem;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+  &:hover { background: #3d1a26; transform: translateY(-2px); }
+}
+.buy-arrow { font-size: 12px; }
+
+.empty-state {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  animation: fadeUp 0.55s ease both;
+}
+.empty-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: #3d1a26;
+  margin: 0;
+}
+.empty-sub {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 15px;
+  font-style: italic;
+  color: rgba(61,26,38,0.5);
+  margin: 0;
+}
+
+.deco-num {
+  position: absolute;
+  bottom: -1.5rem;
+  right: 2.5rem;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 120px;
+  line-height: 1;
+  color: rgba(61,26,38,0.04);
   pointer-events: none;
-
-  @media (min-width: 768px) {
-    width: 250px;
-    height: 250px;
-  }
-
-  @media (min-width: 1024px) {
-    width: 300px;
-    height: 300px;
-  }
-}
-
-.bg-svg-1 {
-  top: 5%;
-  left: 5%;
-  animation: float-svg-1 25s ease-in-out infinite;
-}
-
-.bg-svg-2 {
-  top: 15%;
-  right: 10%;
-  animation: float-svg-2 30s ease-in-out infinite;
-}
-
-.bg-svg-3 {
-  bottom: 20%;
-  left: 10%;
-  animation: float-svg-3 28s ease-in-out infinite;
-}
-
-.bg-svg-4 {
-  top: 60%;
-  right: 15%;
-  animation: float-svg-4 32s ease-in-out infinite;
-}
-
-.bg-svg-5 {
-  bottom: 15%;
-  right: 5%;
-  animation: float-svg-5 35s ease-in-out infinite;
-}
-
-.bg-svg-6 {
-  top: 40%;
-  left: 20%;
-  animation: float-svg-6 27s ease-in-out infinite;
-}
-
-// Animations for SVG movement
-@keyframes float-svg-1 {
-  0%, 100% {
-    transform: translate(0, 0) rotate(0deg);
-  }
-  25% {
-    transform: translate(150px, 80px) rotate(90deg);
-  }
-  50% {
-    transform: translate(300px, 40px) rotate(180deg);
-  }
-  75% {
-    transform: translate(200px, -60px) rotate(270deg);
-  }
-}
-
-@keyframes float-svg-2 {
-  0%, 100% {
-    transform: translate(0, 0) rotate(0deg);
-  }
-  25% {
-    transform: translate(-180px, 120px) rotate(-90deg);
-  }
-  50% {
-    transform: translate(-350px, 60px) rotate(-180deg);
-  }
-  75% {
-    transform: translate(-250px, -80px) rotate(-270deg);
-  }
-}
-
-@keyframes float-svg-3 {
-  0%, 100% {
-    transform: translate(0, 0) rotate(0deg);
-  }
-  33% {
-    transform: translate(120px, -150px) rotate(120deg);
-  }
-  66% {
-    transform: translate(-80px, -100px) rotate(240deg);
-  }
-}
-
-@keyframes float-svg-4 {
-  0%, 100% {
-    transform: translate(0, 0) rotate(0deg);
-  }
-  25% {
-    transform: translate(-150px, 100px) rotate(-90deg);
-  }
-  50% {
-    transform: translate(-280px, 50px) rotate(-180deg);
-  }
-  75% {
-    transform: translate(-200px, -120px) rotate(-270deg);
-  }
-}
-
-@keyframes float-svg-5 {
-  0%, 100% {
-    transform: translate(0, 0) rotate(0deg);
-  }
-  25% {
-    transform: translate(200px, -180px) rotate(90deg);
-  }
-  50% {
-    transform: translate(400px, -100px) rotate(180deg);
-  }
-  75% {
-    transform: translate(300px, 150px) rotate(270deg);
-  }
-}
-
-@keyframes float-svg-6 {
-  0%, 100% {
-    transform: translate(0, 0) rotate(0deg);
-  }
-  33% {
-    transform: translate(-120px, 130px) rotate(-120deg);
-  }
-  66% {
-    transform: translate(80px, 160px) rotate(-240deg);
-  }
+  user-select: none;
+  z-index: 0;
 }
 </style>

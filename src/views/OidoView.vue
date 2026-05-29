@@ -7,12 +7,10 @@ import ImageLightbox from '../components/ImageLightbox.vue'
 const { isExperienciaSensorial } = useGlobalMusic()
 
 const productos = ref([
-  { id: 1, nombre: 'Aromas Ancestrales del África Occidental', descripcion: 'Sumérgete en el mundo de las fragancias tradicionales africanas. Descubre esencias milenarias, hierbas aromáticas y perfumes naturales que han sido utilizados por generaciones para rituales, ceremonias y bienestar espiritual.', precio: '79.99', categoria: 'Aromaterapia', rating: 4.8, stock: 18, img: new URL('@/assets/olfato.jpg', import.meta.url).href },
-  { id: 2, nombre: 'Esencias de la Sabana', descripcion: 'Fragancias auténticas extraídas de plantas nativas de la sabana africana. Cada aroma cuenta una historia de tradición y conexión con la naturaleza salvaje del continente.', precio: '89.99', categoria: 'Esencias Naturales', rating: 4.9, stock: 12, img: new URL('@/assets/olfato2.jpg', import.meta.url).href },
-  { id: 3, nombre: 'Perfumes del Desierto', descripcion: 'Aromas intensos y misteriosos que evocan la majestuosidad del desierto del Sahara. Fragancias que transportan a paisajes de dunas infinitas y noches estrelladas.', precio: '95.99', categoria: 'Perfumes', rating: 4.7, stock: 8, img: new URL('@/assets/olfato3.jpg', import.meta.url).href },
-  { id: 4, nombre: 'Inciensos Sagrados', descripcion: 'Inciensos tradicionales utilizados en ceremonias espirituales africanas. Cada varilla está impregnada con resinas sagradas y hierbas medicinales ancestrales.', precio: '65.99', categoria: 'Inciensos', rating: 4.6, stock: 25, img: new URL('@/assets/olfato4.jpg', import.meta.url).href },
-  { id: 5, nombre: 'Aceites Esenciales Puros', descripcion: 'Aceites esenciales 100% naturales extraídos de plantas africanas. Cada gota contiene la esencia pura de la naturaleza salvaje del continente.', precio: '120.99', categoria: 'Aceites Esenciales', rating: 4.9, stock: 15, img: new URL('@/assets/olfato5.png', import.meta.url).href },
-  { id: 6, nombre: 'Fragancias del Bosque', descripcion: 'Aromas que capturan la esencia de los bosques tropicales africanos. Fragancias frescas y revitalizantes que conectan con la energía de la selva.', precio: '85.99', categoria: 'Fragancias', rating: 4.8, stock: 20, img: new URL('@/assets/olfato6.png', import.meta.url).href },
+  { id: 1, nombre: 'Tambores Djembe Tradicionales', descripcion: 'Sumérgete en el poder del djembe, el tambor más emblemático del África Occidental. Cada golpe resuena con siglos de historia, rituales y celebraciones comunales transmitidas de generación en generación.', precio: '79.99', categoria: 'Percusión', rating: 4.8, stock: 10, img: 'https://picsum.photos/seed/djembe-drum/300/300' },
+  { id: 2, nombre: 'Música de las Sabanas', descripcion: 'Una colección de grabaciones auténticas captadas en las sabanas africanas. Melodías que transportan a paisajes infinitos donde la naturaleza y la música humana se fusionan en perfecta armonía.', precio: '19.99', categoria: 'Grabación', rating: 4.9, stock: 50, img: 'https://picsum.photos/seed/savanna-music/300/300' },
+  { id: 3, nombre: 'Kora del África Occidental', descripcion: 'La kora, instrumento de cuerdas de la tradición mandinga, produce sonidos celestiales que evocan la espiritualidad y la sabiduría de los griots, los guardianes orales de la historia africana.', precio: '299.99', categoria: 'Instrumento', rating: 5.0, stock: 3, img: 'https://picsum.photos/seed/kora-instrument/300/300' },
+  { id: 4, nombre: 'Cantos Ceremoniales Bantú', descripcion: 'Voces ancestrales de las comunidades bantú en su expresión más pura. Grabaciones de campo que preservan la riqueza vocal de tradiciones milenarias de todo el continente africano.', precio: '24.99', categoria: 'Grabación', rating: 4.7, stock: 30, img: 'https://picsum.photos/seed/bantu-chant/300/300' },
 ])
 
 const productosFiltrados = computed(() => productos.value)
@@ -29,7 +27,7 @@ const comprarProducto = (producto: { nombre: string; precio: string }) => {
 </script>
 
 <template>
-  <div class="olfato-view">
+  <div class="oido-view">
     <div class="panels-row">
 
       <!-- ── Panel izquierdo: intro ── -->
@@ -42,14 +40,8 @@ const comprarProducto = (producto: { nombre: string; precio: string }) => {
 
         <div class="eyebrow">
           <span class="ew-line" />
-          <span class="ew-text">Olfato</span>
+          <span class="ew-text">Oído</span>
         </div>
-
-        <img
-          :src="productosFiltrados[0].img"
-          :alt="productosFiltrados[0].nombre"
-          class="featured-img"
-        />
 
         <h1 class="panel-title">{{ productosFiltrados[0].nombre }}</h1>
 
@@ -59,7 +51,7 @@ const comprarProducto = (producto: { nombre: string; precio: string }) => {
 
         <div class="article-count">
           <span class="count-num">{{ String(productosFiltrados.length).padStart(2, '0') }}</span>
-          <span class="count-label">fragancias disponibles</span>
+          <span class="count-label">experiencias sonoras</span>
         </div>
 
       </div>
@@ -74,7 +66,7 @@ const comprarProducto = (producto: { nombre: string; precio: string }) => {
           <span class="ew-line" />
         </div>
 
-        <h2 class="panel-title title-r">Fragancias</h2>
+        <h2 class="panel-title title-r">Sonidos</h2>
 
         <ul class="products-list">
           <li
@@ -99,7 +91,7 @@ const comprarProducto = (producto: { nombre: string; precio: string }) => {
 
         <div v-if="productosFiltrados.length === 0" class="empty-state">
           <p class="empty-title">No hay experiencias disponibles</p>
-          <p class="empty-sub">Vuelve más tarde para descubrir nuevas experiencias olfativas</p>
+          <p class="empty-sub">Vuelve más tarde para descubrir nuevas experiencias sonoras</p>
         </div>
 
       </div>
@@ -117,7 +109,7 @@ const comprarProducto = (producto: { nombre: string; precio: string }) => {
   to   { opacity: 1; transform: translateY(0); }
 }
 
-.olfato-view {
+.oido-view {
   position: relative;
   height: 100%;
   overflow: hidden;
@@ -178,14 +170,6 @@ const comprarProducto = (producto: { nombre: string; precio: string }) => {
   text-transform: uppercase;
   color: #8c3a50;
   white-space: nowrap;
-}
-
-.featured-img {
-  width: 100%;
-  height: 160px;
-  object-fit: cover;
-  border-radius: 4px;
-  opacity: 0.9;
 }
 
 .panel-title {

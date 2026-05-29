@@ -1,480 +1,372 @@
 <script setup lang="ts">
-import { useScrollToTop } from '../composables/useScrollToTop'
-
-// Hook para hacer scroll hacia arriba al montar el componente
-useScrollToTop()
+// layout sin scroll: no se necesita useScrollToTop
 </script>
 
 <template>
-  <main class="about-main">
-    <!-- Bloque 1 -->
-    <section class="essence-section">
-      <div class="essence-container">
-        <h2 class="essence-title">
-          Nuestra esencia
-        </h2>
-        
-        <div class="essence-quote">
-          <p class="quote-text">
-            "Un aroma puede llevarte a tu infancia.
-          </p>
-          <p class="quote-text">
-            Un sabor, a un viaje que marcó tu vida.
-          </p>
-          <p class="quote-text">
-            Una textura, a la tradición de tu tierra."
-          </p>
+  <div class="about-view">
+    <!-- Dos paneles -->
+    <div class="panels-row">
+
+      <!-- ── Panel izquierdo: Esencia + Visión ── -->
+      <div class="panel panel-left">
+
+        <div class="eyebrow">
+          <span class="ew-line" />
+          <span class="ew-text">Quiénes somos</span>
         </div>
-        
-        <div class="essence-description">
-          <p>
-            En Amani celebramos la magia de los sentidos. Nuestra tienda es un viaje por países y culturas, donde cada experiencia conecta contigo y con el mundo.
-          </p>
+
+        <h2 class="panel-title">Nuestra esencia</h2>
+
+        <blockquote class="quote">
+          <p>"Un aroma puede llevarte a tu infancia.</p>
+          <p>Un sabor, a un viaje que marcó tu vida.</p>
+          <p>Una textura, a la tradición de tu tierra."</p>
+        </blockquote>
+
+        <p class="panel-desc">
+          En Amani celebramos la magia de los sentidos. Nuestra tienda es un viaje por países y
+          culturas, donde cada experiencia conecta contigo y con el mundo.
+        </p>
+
+        <div class="subsection">
+          <h3 class="sub-label">Nuestra visión</h3>
+          <p class="sub-text">Convertirnos en el espacio de referencia donde los sentidos narran viajes.</p>
+          <p class="sub-text">Un lugar para explorar el mundo desde casa y reconectar con la esencia de lo que somos.</p>
         </div>
+
       </div>
-    </section>
 
-    <!-- Bloque 2 -->
-    <section class="block-two-section">
-      <div class="block-two-container">
-        <h2 class="block-two-title">
-          Nuestra misión
-        </h2>
-        
-        <div class="block-two-content">
-          <p>
-            Despertar emociones y recuerdos a través de experiencias sensoriales, ofreciendo productos que conectan culturas y raíces con tu día a día.
-          </p>
+      <!-- Divisor vertical -->
+      <div class="v-divider" aria-hidden="true" />
+
+      <!-- ── Panel derecho: Misión + Valores + Cierre ── -->
+      <div class="panel panel-right">
+
+        <div class="eyebrow eyebrow-r">
+          <span class="ew-text">Propósito</span>
+          <span class="ew-line" />
         </div>
-      </div>
-    </section>
 
-    <!-- Bloque 3 -->
-    <section class="block-three-section">
-      <div class="block-three-container">
-        <h2 class="block-three-title">
-          Nuestra visión
-        </h2>
-        
-        <div class="block-three-content">
-          <p class="block-three-text">
-            Convertirnos en el espacio de referencia donde los sentidos narran viajes.
-          </p>
-          <p class="block-three-text">
-            Un lugar para explorar el mundo desde casa y reconectar con la esencia de lo que somos.
-          </p>
+        <h2 class="panel-title title-r">Nuestra misión</h2>
+
+        <p class="mission-text">
+          Despertar emociones y recuerdos a través de experiencias sensoriales, ofreciendo
+          productos que conectan culturas y raíces con tu día a día.
+        </p>
+
+        <div class="values-wrap">
+          <h3 class="values-label">Nuestros valores</h3>
+          <ul class="values-list">
+            <li class="value-item">
+              <span class="val-num">01</span>
+              <span class="val-name">Raíces</span>
+              <span class="val-desc">autenticidad y tradición</span>
+            </li>
+            <li class="value-item">
+              <span class="val-num">02</span>
+              <span class="val-name">Nostalgia</span>
+              <span class="val-desc">el poder de recordar y revivir</span>
+            </li>
+            <li class="value-item">
+              <span class="val-num">03</span>
+              <span class="val-name">Exploración</span>
+              <span class="val-desc">curiosidad por descubrir lo nuevo</span>
+            </li>
+            <li class="value-item">
+              <span class="val-num">04</span>
+              <span class="val-name">Cercanía</span>
+              <span class="val-desc">conexión genuina con cada persona</span>
+            </li>
+            <li class="value-item">
+              <span class="val-num">05</span>
+              <span class="val-name">Respeto global</span>
+              <span class="val-desc">consumo consciente y sostenible</span>
+            </li>
+          </ul>
         </div>
-      </div>
-    </section>
 
-    <!-- Bloque 4 -->
-    <section class="block-four-section">
-      <div class="block-four-container">
-        <h2 class="block-four-title">
-          Nuestros valores
-        </h2>
-        
-        <div class="values-list">
-          <div class="value-item">
-            <div class="value-number">01</div>
-            <div class="value-content">
-              <h3 class="value-name">Raíces</h3>
-              <p class="value-description">autenticidad y tradición</p>
-            </div>
-          </div>
-
-          <div class="value-item">
-            <div class="value-number">02</div>
-            <div class="value-content">
-              <h3 class="value-name">Nostalgia</h3>
-              <p class="value-description">el poder de recordar y revivir</p>
-            </div>
-          </div>
-
-          <div class="value-item">
-            <div class="value-number">03</div>
-            <div class="value-content">
-              <h3 class="value-name">Exploración</h3>
-              <p class="value-description">curiosidad por descubrir lo nuevo</p>
-            </div>
-          </div>
-
-          <div class="value-item">
-            <div class="value-number">04</div>
-            <div class="value-content">
-              <h3 class="value-name">Cercanía</h3>
-              <p class="value-description">conexión genuina con cada persona</p>
-            </div>
-          </div>
-
-          <div class="value-item">
-            <div class="value-number">05</div>
-            <div class="value-content">
-              <h3 class="value-name">Respeto global</h3>
-              <p class="value-description">consumo consciente y sostenible</p>
-            </div>
-          </div>
+        <div class="closing">
+          <p>Amani es más que una tienda.</p>
+          <p>Es un viaje sensorial que conecta tus sentidos con el mundo.</p>
+          <p class="closing-italic">Bienvenido/a a un lugar donde viajar es sentir.</p>
         </div>
-      </div>
-    </section>
 
-    <!-- Bloque 5 -->
-    <section class="block-five-section">
-      <div class="block-five-container">
-        <div class="block-five-content">
-          <p class="block-five-text-main">
-            Amani es más que una tienda.
-          </p>
-          <p class="block-five-text-main">
-            Es un viaje sensorial que conecta tus sentidos con el mundo.
-          </p>
-          <p class="block-five-text-welcome">
-            Bienvenido/a a un lugar donde viajar es sentir.
-          </p>
-        </div>
       </div>
-    </section>
-  </main>
+    </div>
+
+    <!-- Número decorativo -->
+    <span class="deco-num" aria-hidden="true">02</span>
+  </div>
 </template>
 
-<style lang="sass" scoped>
-.about-main
-  min-height: 100vh
-  background: #e9e8dc
-  padding-top: 5rem
+<style scoped lang="scss">
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
-.essence-section
-  width: 100%
-  padding: 4rem 1rem
-  display: flex
-  justify-content: center
-  align-items: center
+/* ── Contenedor principal ── */
+.about-view {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+  background: #ecedf4;
+}
 
-.essence-container
-  max-width: 800px
-  width: 100%
+/* ── Fila de paneles ── */
+.panels-row {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  display: flex;
+  align-items: stretch;
+}
 
-.essence-title
-  font-size: 2rem
-  font-weight: 900
-  color: #582a35
-  margin-bottom: 3rem
-  text-align: center
-  letter-spacing: 0.05em
+/* ── Panel base ── */
+.panel {
+  flex: 1;
+  padding: 3.5rem 3.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  overflow-y: auto;
+  scrollbar-width: none;
 
-  @media (min-width: 768px)
-    font-size: 2.5rem
-    margin-bottom: 4rem
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
 
-.essence-quote
-  margin-bottom: 3rem
-  padding-left: 1.5rem
-  border-left: 2px solid rgba(88, 42, 53, 0.2)
+.panel-left {
+  animation: fadeUp 0.55s ease both;
+}
 
-  @media (min-width: 768px)
-    padding-left: 2rem
-    margin-bottom: 4rem
+.panel-right {
+  align-items: flex-end;
+  animation: fadeUp 0.55s ease 0.15s both;
+}
 
-.quote-text
-  font-size: 1.125rem
-  font-weight: 300
-  color: #4a4a4a
-  line-height: 1.8
-  margin-bottom: 0.75rem
-  font-style: italic
+/* ── Divisor vertical ── */
+.v-divider {
+  width: 1px;
+  flex-shrink: 0;
+  margin: 2.5rem 0;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(140, 58, 80, 0.2) 20%,
+    rgba(140, 58, 80, 0.2) 80%,
+    transparent
+  );
+}
 
-  @media (min-width: 768px)
-    font-size: 1.25rem
-    line-height: 2
-    margin-bottom: 1rem
+/* ── Eyebrow ── */
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
 
-  &:last-child
-    margin-bottom: 0
+.eyebrow-r {
+  /* El orden en template ya pone texto primero, línea después */
+}
 
-.essence-description
-  margin-top: 2rem
+.ew-line {
+  flex: 0 0 36px;
+  height: 1px;
+  background: rgba(140, 58, 80, 0.35);
+}
 
-  @media (min-width: 768px)
-    margin-top: 3rem
+.ew-text {
+  font-family: 'Syne', sans-serif;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: #8c3a50;
+  white-space: nowrap;
+}
 
-  p
-    font-size: 1rem
-    font-weight: 300
-    color: #4a4a4a
-    line-height: 1.8
-    text-align: left
+/* ── Títulos de panel ── */
+.panel-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 28px;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: #3d1a26;
+  letter-spacing: 0.03em;
+  margin: 0;
+  line-height: 1.15;
+}
 
-    @media (min-width: 768px)
-      font-size: 1.125rem
-      line-height: 2
+.title-r {
+  text-align: right;
+}
 
-// Bloque 2 - Estilo moderno con alineación a la derecha
-.block-two-section
-  width: 100%
-  padding: 4rem 1rem
-  display: flex
-  justify-content: flex-end
-  align-items: center
-  background: rgba(255, 255, 255, 0.3)
+/* ── Cita ── */
+.quote {
+  border-left: 2.5px solid rgba(140, 58, 80, 0.25);
+  padding-left: 20px;
+  margin: 0;
 
-  @media (min-width: 768px)
-    padding: 6rem 2rem
+  p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px;
+    font-style: italic;
+    color: rgba(61, 26, 38, 0.65);
+    line-height: 2;
+    margin: 0;
+  }
+}
 
-.block-two-container
-  max-width: 800px
-  width: 100%
-  text-align: right
+/* ── Descripción ── */
+.panel-desc {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 15.5px;
+  color: rgba(61, 26, 38, 0.55);
+  line-height: 1.75;
+  margin: 0;
+}
 
-  @media (min-width: 768px)
-    max-width: 900px
+/* ── Subsección visión ── */
+.subsection {
+  margin-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
 
-.block-two-title
-  font-size: 2rem
-  font-weight: 900
-  color: #582a35
-  margin-bottom: 3rem
-  text-align: right
-  letter-spacing: 0.05em
+.sub-label {
+  font-family: 'Syne', sans-serif;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #8c3a50;
+  margin: 0;
+}
 
-  @media (min-width: 768px)
-    font-size: 2.5rem
-    margin-bottom: 4rem
+.sub-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 15px;
+  color: rgba(61, 26, 38, 0.5);
+  line-height: 1.7;
+  margin: 0;
 
-.block-two-content
-  margin-top: 2rem
+  &::before {
+    content: '— ';
+    color: rgba(140, 58, 80, 0.3);
+  }
+}
 
-  @media (min-width: 768px)
-    margin-top: 3rem
+/* ── Texto de misión ── */
+.mission-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px;
+  font-style: italic;
+  color: rgba(61, 26, 38, 0.7);
+  line-height: 1.75;
+  text-align: right;
+  max-width: 340px;
+  margin: 0;
+}
 
-  p
-    font-size: 1rem
-    font-weight: 300
-    color: #4a4a4a
-    line-height: 1.8
-    text-align: right
+/* ── Valores ── */
+.values-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  align-items: flex-end;
+}
 
-    @media (min-width: 768px)
-      font-size: 1.125rem
-      line-height: 2
+.values-label {
+  font-family: 'Syne', sans-serif;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #8c3a50;
+  margin: 0;
+}
 
-// Bloque 3 - Estilo moderno con alineación a la izquierda
-.block-three-section
-  width: 100%
-  padding: 4rem 1rem
-  display: flex
-  justify-content: flex-start
-  align-items: center
-  background: rgba(255, 255, 255, 0.2)
+.values-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  align-items: flex-end;
+}
 
-  @media (min-width: 768px)
-    padding: 6rem 2rem
+.value-item {
+  display: flex;
+  align-items: baseline;
+  gap: 0.55rem;
+}
 
-.block-three-container
-  max-width: 800px
-  width: 100%
+.val-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 11px;
+  font-style: italic;
+  color: rgba(184, 154, 90, 0.75);
+}
 
-.block-three-title
-  font-size: 2rem
-  font-weight: 900
-  color: #582a35
-  margin-bottom: 3rem
-  text-align: left
-  letter-spacing: 0.05em
-  position: relative
-  padding-left: 1.5rem
+.val-name {
+  font-family: 'Syne', sans-serif;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #3d1a26;
+  letter-spacing: 0.05em;
+}
 
-  &::before
-    content: ''
-    position: absolute
-    left: 0
-    top: 0
-    bottom: 0
-    width: 4px
-    background: #582a35
-    border-radius: 2px
+.val-desc {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 12px;
+  font-style: italic;
+  color: rgba(61, 26, 38, 0.45);
+}
 
-  @media (min-width: 768px)
-    font-size: 2.5rem
-    margin-bottom: 4rem
-    padding-left: 2rem
+/* ── Cierre ── */
+.closing {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  text-align: right;
+  margin-top: 0.25rem;
 
-.block-three-content
-  margin-top: 2rem
-  padding-left: 1.5rem
+  p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 15px;
+    color: rgba(61, 26, 38, 0.55);
+    line-height: 1.7;
+    margin: 0;
+  }
 
-  @media (min-width: 768px)
-    margin-top: 3rem
-    padding-left: 2rem
+  .closing-italic {
+    font-style: italic;
+    color: rgba(61, 26, 38, 0.38);
+    font-size: 13.5px;
+  }
+}
 
-.block-three-text
-  font-size: 1rem
-  font-weight: 300
-  color: #4a4a4a
-  line-height: 1.8
-  text-align: left
-  margin-bottom: 1.5rem
-  position: relative
-  padding-left: 1.5rem
-
-  &::before
-    content: '—'
-    position: absolute
-    left: 0
-    color: rgba(88, 42, 53, 0.4)
-    font-weight: 300
-
-  @media (min-width: 768px)
-    font-size: 1.125rem
-    line-height: 2
-    margin-bottom: 2rem
-    padding-left: 2rem
-
-  &:last-child
-    margin-bottom: 0
-
-// Bloque 4 - Valores con tarjetas visuales
-.block-four-section
-  width: 100%
-  padding: 4rem 1rem
-  display: flex
-  justify-content: center
-  align-items: center
-  background: rgba(255, 255, 255, 0.3)
-
-  @media (min-width: 768px)
-    padding: 6rem 2rem
-
-.block-four-container
-  max-width: 1200px
-  width: 100%
-
-.block-four-title
-  font-size: 2rem
-  font-weight: 900
-  color: #582a35
-  margin-bottom: 3rem
-  text-align: center
-  letter-spacing: 0.05em
-
-  @media (min-width: 768px)
-    font-size: 2.5rem
-    margin-bottom: 4rem
-
-.values-list
-  display: flex
-  flex-direction: column
-  gap: 2rem
-  max-width: 900px
-  margin: 0 auto
-
-  @media (min-width: 768px)
-    gap: 2.5rem
-
-.value-item
-  display: flex
-  align-items: flex-start
-  gap: 2rem
-  padding: 2rem
-  background: rgba(255, 255, 255, 0.6)
-  backdrop-filter: blur(10px)
-  -webkit-backdrop-filter: blur(10px)
-  border-left: 3px solid rgba(88, 42, 53, 0.2)
-  border-radius: 0 8px 8px 0
-  transition: all 0.3s ease
-
-  &:hover
-    background: rgba(255, 255, 255, 0.8)
-    border-left-color: #582a35
-    transform: translateX(8px)
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08)
-
-  @media (min-width: 768px)
-    padding: 2.5rem
-    gap: 3rem
-
-.value-number
-  font-size: 1.5rem
-  font-weight: 900
-  color: rgba(88, 42, 53, 0.3)
-  line-height: 1
-  flex-shrink: 0
-  min-width: 3rem
-
-  @media (min-width: 768px)
-    font-size: 2rem
-    min-width: 4rem
-
-.value-item:hover .value-number
-  color: #582a35
-
-.value-content
-  flex: 1
-
-.value-name
-  font-size: 1.25rem
-  font-weight: 700
-  color: #582a35
-  margin-bottom: 0.5rem
-
-  @media (min-width: 768px)
-    font-size: 1.5rem
-    margin-bottom: 0.75rem
-
-.value-description
-  font-size: 0.875rem
-  font-weight: 300
-  color: #4a4a4a
-  line-height: 1.6
-
-  @media (min-width: 768px)
-    font-size: 1rem
-    line-height: 1.7
-
-// Bloque 5 - Cierre inspirador
-.block-five-section
-  width: 100%
-  padding: 4rem 1rem
-  display: flex
-  justify-content: center
-  align-items: center
-  background: rgba(88, 42, 53, 0.05)
-
-  @media (min-width: 768px)
-    padding: 6rem 2rem
-
-.block-five-container
-  max-width: 900px
-  width: 100%
-
-.block-five-content
-  text-align: center
-
-.block-five-text-main
-  font-size: 1.25rem
-  font-weight: 300
-  color: #582a35
-  line-height: 1.8
-  margin-bottom: 1.5rem
-
-  @media (min-width: 768px)
-    font-size: 1.5rem
-    line-height: 2
-    margin-bottom: 2rem
-
-  &:last-of-type
-    margin-bottom: 2rem
-
-    @media (min-width: 768px)
-      margin-bottom: 3rem
-
-.block-five-text-welcome
-  font-size: 1rem
-  font-weight: 400
-  color: #582a35
-  line-height: 1.8
-  font-style: italic
-
-  @media (min-width: 768px)
-    font-size: 1.125rem
-    line-height: 2
+/* ── Número decorativo ── */
+.deco-num {
+  position: absolute;
+  bottom: -1.5rem;
+  right: 2.5rem;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 120px;
+  line-height: 1;
+  color: rgba(61, 26, 38, 0.04);
+  pointer-events: none;
+  user-select: none;
+  z-index: 0;
+}
 </style>

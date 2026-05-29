@@ -1,110 +1,93 @@
 <script setup lang="ts">
-import { nextTick, ref, watch } from 'vue'
-import { useRoute } from 'vue-router'
 import TheHeader from './components/TheHeader.vue'
-import TheFooter from './components/TheFooter.vue'
 import GlobalMusicPlayer from './components/GlobalMusicPlayer.vue'
-import transitionVideoUrl from './assets/video presentacion.mp4'
-
-const route = useRoute()
-const showTransition = ref(false)
-const videoRef = ref<HTMLVideoElement | null>(null)
-const isFirstRoute = ref(true)
-let transitionTimeout: number | undefined
-
-const endTransition = () => {
-  showTransition.value = false
-  if (transitionTimeout) {
-    window.clearTimeout(transitionTimeout)
-    transitionTimeout = undefined
-  }
-  if (videoRef.value) {
-    videoRef.value.pause()
-    videoRef.value.currentTime = 0
-  }
-}
-
-watch(
-  () => route.fullPath,
-  async () => {
-    if (isFirstRoute.value) {
-      isFirstRoute.value = false
-      return
-    }
-
-    showTransition.value = true
-    if (transitionTimeout) {
-      window.clearTimeout(transitionTimeout)
-    }
-
-    await nextTick()
-    if (videoRef.value) {
-      videoRef.value.currentTime = 0
-      const playPromise = videoRef.value.play()
-      if (playPromise) {
-        playPromise.catch(() => undefined)
-      }
-    }
-
-    transitionTimeout = window.setTimeout(endTransition, 1000)
-  }
-)
 </script>
 
 <template>
-  <div class="min-h-screen bg-[#dcdee9] flex flex-col font-inter font-bold">
-    <Transition name="video-fade">
-      <div
-        v-if="showTransition"
-        class="fixed inset-0 z-[9999] bg-white flex items-center justify-center"
-      >
-        <video
-          ref="videoRef"
-          class="w-full h-full object-cover"
-          :src="transitionVideoUrl"
-          muted
-          playsinline
-          @ended="endTransition"
-        ></video>
-      </div>
-    </Transition>
-    <!-- Header -->
+  <div class="app-root">
+    <!-- Sidebar -->
     <TheHeader />
 
-    <!-- Main Content with padding for fixed header -->
-    <main class="flex-1">
-      <RouterView />
-    </main>
+    <!-- Right side -->
+    <div class="app-content">
+      <!-- Top bar -->
+      <div class="top-bar">
+        <span class="top-bar-wordmark">AMANI</span>
+        <span class="top-bar-line" />
+      </div>
 
-    <!-- Footer -->
-    <div class="">
-      <TheFooter />
+      <!-- Main content -->
+      <main class="app-main">
+        <RouterView v-slot="{ Component }">
+          <Transition name="page-fade" mode="out-in">
+            <component :is="Component" />
+          </Transition>
+        </RouterView>
+      </main>
     </div>
 
-    <!-- Reproductor de música global -->
+    <!-- Global music player (fixed, unaffected by layout) -->
     <GlobalMusicPlayer />
   </div>
 </template>
 
 <style scoped>
-.video-fade-enter-active {
-  transition: none;
+.app-root {
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  background: #ecedf4;
+  font-family: 'Syne', sans-serif;
 }
 
-.video-fade-enter-from,
-.video-fade-enter-to {
-  opacity: 1;
+.app-content {
+  flex: 1;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
-.video-fade-leave-active {
-  transition: opacity 0.6s ease;
+.top-bar {
+  height: 54px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  padding: 0 2.5rem;
+  gap: 1.25rem;
+  border-bottom: 1px solid rgba(140, 58, 80, 0.08);
 }
 
-.video-fade-leave-from {
-  opacity: 1;
+.top-bar-wordmark {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.35em;
+  color: rgba(61, 26, 38, 0.35);
+  text-transform: uppercase;
+  white-space: nowrap;
 }
 
-.video-fade-leave-to {
+.top-bar-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(184, 154, 90, 0.3), transparent);
+}
+
+.app-main {
+  flex: 1;
+  overflow-y: auto;
+  position: relative;
+}
+
+/* Page fade transition */
+.page-fade-enter-active,
+.page-fade-leave-active {
+  transition: opacity 0.45s ease;
+}
+
+.page-fade-enter-from,
+.page-fade-leave-to {
   opacity: 0;
 }
 </style>

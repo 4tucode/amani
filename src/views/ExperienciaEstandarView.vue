@@ -1,218 +1,314 @@
 <script setup lang="ts">
-import { RouterLink } from 'vue-router'
-import { useRouter } from 'vue-router'
-import { useScrollToTop } from '../composables/useScrollToTop'
+import { RouterLink, useRouter } from 'vue-router'
 import { scrollToTop } from '../composables/useScrollNavigation'
 
-// Hook para hacer scroll hacia arriba al montar el componente
-useScrollToTop()
-
 const router = useRouter()
+
+const sentidos = [
+  { nombre: 'Vista',   path: '/experiencia/vista',  img: new URL('@/assets/comic/vista.png',  import.meta.url).href, num: '01' },
+  { nombre: 'Oído',    path: '/experiencia/oido',   img: new URL('@/assets/comic/oido.png',   import.meta.url).href, num: '02' },
+  { nombre: 'Olfato',  path: '/experiencia/olfato', img: new URL('@/assets/comic/olfato.png', import.meta.url).href, num: '03' },
+  { nombre: 'Gusto',   path: '/experiencia/gusto',  img: new URL('@/assets/comic/gusto.png',  import.meta.url).href, num: '04' },
+  { nombre: 'Tacto',   path: '/experiencia/tacto',  img: new URL('@/assets/comic/tacto.png',  import.meta.url).href, num: '05' },
+]
 </script>
 
 <template>
-  <main class="relative bg-[#dcdee9] min-h-screen">
-    <!-- Contenido principal con los botones de los sentidos -->
-    <div class="relative py-4 md:py-6 z-10" style="background-color: #dcdee9;">
-      <div class="max-w-6xl mx-auto px-4 w-full">
-        <!-- Título y descripción - Móvil primero -->
-        <div class="mb-6 md:mb-0 text-left px-2 md:px-4">
-          <h1 class="text-2xl md:text-3xl font-[900] text-[#582a35] mb-4">Selecciona un sentido para continuar</h1>
-          <p class="text-[#474747] font-thin text-sm md:text-base text-left leading-relaxed mb-4">
-            Explora el mundo a través de tus sentidos con nuestras experiencias únicas
-          </p>
+  <div class="estandar-view">
+    <div class="panels-row">
 
-          <button @click="() => { router.push('/'); scrollToTop(); }"
-            class="inline-flex items-center px-4 md:px-6 py-2 md:py-3 bg-transparent text-[#582a35] font-semibold rounded-lg hover:bg-[#582a35]/10 transition-all duration-300 hover:scale-105 border border-[#582a35] mt-2 md:mt-4 text-sm md:text-base">
-            <svg class="w-4 h-4 md:w-5 md:h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18">
-              </path>
-            </svg>
-            Volver al Inicio
-          </button>
+      <!-- ── Panel izquierdo: intro ── -->
+      <div class="panel panel-left">
+
+        <button class="back-link" @click="() => { router.push('/'); scrollToTop(); }">
+          <span class="back-arrow">←</span>
+          Volver al Inicio
+        </button>
+
+        <div class="eyebrow">
+          <span class="ew-line" />
+          <span class="ew-text">Experiencia Estándar</span>
         </div>
-        <!-- Botones de los 5 sentidos -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5 w-full p-2 md:p-4">
-          <!-- Vista -->
-          <RouterLink to="/experiencia/vista" class="white-button group">
-            <div class="button-content">
-              <img src="@/assets/comic/vista.png" alt="Vista" class="sense-image mb-4" />
-              <h3>Vista</h3>
-            </div>
-          </RouterLink>
 
-          <!-- Oído -->
-          <RouterLink to="/experiencia/oido" class="white-button group">
-            <div class="button-content">
-              <img src="@/assets/comic/oido.png" alt="Oído" class="sense-image mb-4" />
-              <h3>Oído</h3>
-            </div>
-          </RouterLink>
+        <h1 class="panel-title">Selecciona un sentido para continuar</h1>
 
-          <!-- Olfato -->
-          <RouterLink to="/experiencia/olfato" class="white-button group">
-            <div class="button-content">
-              <img src="@/assets/comic/olfato.png" alt="Olfato" class="sense-image mb-4" />
-              <h3>Olfato</h3>
-            </div>
-          </RouterLink>
+        <blockquote class="quote">
+          <p>Explora el mundo a través de tus sentidos con nuestras experiencias únicas</p>
+        </blockquote>
 
-          <!-- Gusto -->
-          <RouterLink to="/experiencia/gusto" class="white-button group">
-            <div class="button-content">
-              <img src="@/assets/comic/gusto.png" alt="Gusto" class="sense-image mb-4" />
-              <h3>Gusto</h3>
-            </div>
-          </RouterLink>
+      </div>
 
-          <!-- Tacto -->
-          <RouterLink to="/experiencia/tacto" class="white-button group">
-            <div class="button-content">
-              <img src="@/assets/comic/tacto.png" alt="Tacto" class="sense-image mb-4" />
-              <h3>Tacto</h3>
-            </div>
-          </RouterLink>
+      <!-- Divisor vertical -->
+      <div class="v-divider" aria-hidden="true" />
+
+      <!-- ── Panel derecho: los 5 sentidos ── -->
+      <div class="panel panel-right">
+
+        <div class="eyebrow eyebrow-r">
+          <span class="ew-text">Los sentidos</span>
+          <span class="ew-line" />
         </div>
+
+        <h2 class="panel-title title-r">Elige</h2>
+
+        <ul class="senses-list">
+          <li
+            v-for="(sentido, i) in sentidos"
+            :key="sentido.nombre"
+            :style="{ animationDelay: `${0.15 + i * 0.07}s` }"
+            class="sense-item"
+          >
+            <RouterLink :to="sentido.path" class="sense-link">
+              <span class="sense-num">{{ sentido.num }}</span>
+              <span class="sense-name">{{ sentido.nombre }}</span>
+              <img
+                :src="sentido.img"
+                :alt="sentido.nombre"
+                class="sense-img"
+              />
+              <span class="sense-arrow">→</span>
+            </RouterLink>
+          </li>
+        </ul>
+
       </div>
     </div>
-  </main>
+
+    <!-- Número decorativo -->
+    <span class="deco-num" aria-hidden="true">05</span>
+  </div>
 </template>
 
-<style lang="scss" scoped>
-// White button styles
-.white-button {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(0, 0, 0, 0.05);
-  box-shadow: -2px -3px 10px 0 rgba(0, 0, 0, 0.1);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-  overflow: hidden;
-  border-radius: 1rem;
-  width: 100%;
-  padding: 1.5rem;
-  cursor: pointer;
-  text-decoration: none;
-  display: block;
-
-  @media (min-width: 768px) {
-    padding: 2rem;
-  }
-
-  @media (max-height: 600px) {
-    padding: 1rem;
-  }
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.03), transparent);
-    transition: left 0.6s ease;
-  }
-
-  &:hover {
-    background: rgba(255, 255, 255, 1);
-    border-color: rgba(0, 0, 0, 0.1);
-    box-shadow: 0 8px 30px 0 rgba(0, 0, 0, 0.15);
-    transform: translateY(-3px);
-
-    &::before {
-      left: 100%;
-    }
-
-    h3 {
-      letter-spacing: 0.05em;
-      transition: letter-spacing 0.3s ease;
-    }
-  }
-
-  &:active {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.12);
-  }
+<style scoped lang="scss">
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
-// Button content
-.button-content {
+/* ── Contenedor ── */
+.estandar-view {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+  background: #ecedf4;
+}
+
+/* ── Fila de paneles ── */
+.panels-row {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  display: flex;
+  align-items: stretch;
+}
+
+/* ── Panel base ── */
+.panel {
+  flex: 1;
+  padding: 3.5rem 3.5rem;
   display: flex;
   flex-direction: column;
+  gap: 1.5rem;
+  overflow-y: auto;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar { display: none; }
+}
+
+.panel-left {
+  animation: fadeUp 0.55s ease both;
+}
+
+.panel-right {
+  align-items: flex-end;
+  animation: fadeUp 0.55s ease 0.15s both;
+}
+
+/* ── Divisor vertical ── */
+.v-divider {
+  width: 1px;
+  flex-shrink: 0;
+  margin: 2.5rem 0;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(140, 58, 80, 0.2) 20%,
+    rgba(140, 58, 80, 0.2) 80%,
+    transparent
+  );
+}
+
+/* ── Volver ── */
+.back-link {
+  display: inline-flex;
   align-items: center;
-  position: relative;
-  z-index: 10;
+  gap: 0.4rem;
+  font-family: 'Syne', sans-serif;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(61, 26, 38, 0.4);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.2s ease;
+
+  &:hover { color: #8c3a50; }
+}
+
+.back-arrow {
+  font-size: 11px;
+  transition: transform 0.2s ease;
+}
+
+.back-link:hover .back-arrow {
+  transform: translateX(-3px);
+}
+
+/* ── Eyebrow ── */
+.eyebrow {
+  display: flex;
+  align-items: center;
   gap: 0.75rem;
+}
 
-  h3 {
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: #582a35;
-    margin-bottom: 0;
+.ew-line {
+  flex: 0 0 36px;
+  height: 1px;
+  background: rgba(140, 58, 80, 0.35);
+}
 
-    @media (min-width: 768px) {
-      font-size: 1.5rem;
-    }
+.ew-text {
+  font-family: 'Syne', sans-serif;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: #8c3a50;
+  white-space: nowrap;
+}
 
-    @media (max-height: 600px) {
-      font-size: 1.125rem;
-    }
-  }
+/* ── Títulos ── */
+.panel-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 28px;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: #3d1a26;
+  letter-spacing: 0.03em;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.title-r {
+  text-align: right;
+}
+
+/* ── Cita / subtítulo ── */
+.quote {
+  border-left: 2.5px solid rgba(140, 58, 80, 0.25);
+  padding-left: 20px;
+  margin: 0;
 
   p {
-    color: #474747;
-    font-weight: 100;
-    font-size: 0.875rem;
-    text-align: center;
-    line-height: 1.5;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px;
+    font-style: italic;
+    color: rgba(61, 26, 38, 0.65);
+    line-height: 2;
     margin: 0;
-
-    @media (min-width: 768px) {
-      font-size: 1rem;
-      line-height: 1.625;
-    }
-
-    @media (max-height: 600px) {
-      font-size: 0.75rem;
-      line-height: 1.4;
-    }
   }
 }
 
-// Sense image styles
-.sense-image {
+/* ── Lista de sentidos ── */
+.senses-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
   width: 100%;
-  max-width: 200px;
-  height: auto;
+  max-width: 400px;
+}
+
+.sense-item {
+  animation: fadeUp 0.5s ease both;
+}
+
+.sense-link {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.1rem 0;
+  border-bottom: 1px solid rgba(140, 58, 80, 0.1);
+  text-decoration: none;
+  transition: all 0.2s ease;
+
+  &:hover {
+    padding-left: 0.5rem;
+
+    .sense-name { color: #8c3a50; }
+    .sense-arrow { opacity: 1; transform: translateX(0); }
+    .sense-img { opacity: 0.9; transform: scale(1.05); }
+  }
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.sense-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 11px;
+  font-style: italic;
+  color: rgba(184, 154, 90, 0.7);
+  flex-shrink: 0;
+  width: 20px;
+}
+
+.sense-name {
+  font-family: 'Syne', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: #3d1a26;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  flex: 1;
+  transition: color 0.2s ease;
+}
+
+.sense-img {
+  width: 48px;
+  height: 48px;
   object-fit: contain;
-  margin: 0 auto;
-  display: block;
-
-  @media (min-width: 768px) {
-    max-width: 250px;
-  }
-
-  @media (min-width: 1024px) {
-    max-width: 300px;
-  }
+  opacity: 0.75;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  flex-shrink: 0;
 }
 
-/* Estilos adicionales personalizados */
-@keyframes float {
-
-  0%,
-  100% {
-    transform: translateY(0px);
-  }
-
-  50% {
-    transform: translateY(-20px);
-  }
+.sense-arrow {
+  font-family: 'Syne', sans-serif;
+  font-size: 12px;
+  color: #8c3a50;
+  opacity: 0;
+  transform: translateX(-4px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  flex-shrink: 0;
 }
 
-.animate-float {
-  animation: float 6s ease-in-out infinite;
+/* ── Número decorativo ── */
+.deco-num {
+  position: absolute;
+  bottom: -1.5rem;
+  right: 2.5rem;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 120px;
+  line-height: 1;
+  color: rgba(61, 26, 38, 0.04);
+  pointer-events: none;
+  user-select: none;
+  z-index: 0;
 }
 </style>

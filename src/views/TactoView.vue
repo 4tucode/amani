@@ -7,12 +7,9 @@ import ImageLightbox from '../components/ImageLightbox.vue'
 const { isExperienciaSensorial } = useGlobalMusic()
 
 const productos = ref([
-  { id: 1, nombre: 'Aromas Ancestrales del África Occidental', descripcion: 'Sumérgete en el mundo de las fragancias tradicionales africanas. Descubre esencias milenarias, hierbas aromáticas y perfumes naturales que han sido utilizados por generaciones para rituales, ceremonias y bienestar espiritual.', precio: '79.99', categoria: 'Aromaterapia', rating: 4.8, stock: 18, img: new URL('@/assets/olfato.jpg', import.meta.url).href },
-  { id: 2, nombre: 'Esencias de la Sabana', descripcion: 'Fragancias auténticas extraídas de plantas nativas de la sabana africana. Cada aroma cuenta una historia de tradición y conexión con la naturaleza salvaje del continente.', precio: '89.99', categoria: 'Esencias Naturales', rating: 4.9, stock: 12, img: new URL('@/assets/olfato2.jpg', import.meta.url).href },
-  { id: 3, nombre: 'Perfumes del Desierto', descripcion: 'Aromas intensos y misteriosos que evocan la majestuosidad del desierto del Sahara. Fragancias que transportan a paisajes de dunas infinitas y noches estrelladas.', precio: '95.99', categoria: 'Perfumes', rating: 4.7, stock: 8, img: new URL('@/assets/olfato3.jpg', import.meta.url).href },
-  { id: 4, nombre: 'Inciensos Sagrados', descripcion: 'Inciensos tradicionales utilizados en ceremonias espirituales africanas. Cada varilla está impregnada con resinas sagradas y hierbas medicinales ancestrales.', precio: '65.99', categoria: 'Inciensos', rating: 4.6, stock: 25, img: new URL('@/assets/olfato4.jpg', import.meta.url).href },
-  { id: 5, nombre: 'Aceites Esenciales Puros', descripcion: 'Aceites esenciales 100% naturales extraídos de plantas africanas. Cada gota contiene la esencia pura de la naturaleza salvaje del continente.', precio: '120.99', categoria: 'Aceites Esenciales', rating: 4.9, stock: 15, img: new URL('@/assets/olfato5.png', import.meta.url).href },
-  { id: 6, nombre: 'Fragancias del Bosque', descripcion: 'Aromas que capturan la esencia de los bosques tropicales africanos. Fragancias frescas y revitalizantes que conectan con la energía de la selva.', precio: '85.99', categoria: 'Fragancias', rating: 4.8, stock: 20, img: new URL('@/assets/olfato6.png', import.meta.url).href },
+  { id: 1, nombre: 'Telas Kente de Ghana', descripcion: 'Las telas kente, símbolo de realeza y espiritualidad en Ghana, son tejidas a mano por artesanos que guardan en cada hilo una historia milenaria. Sus texturas gruesas y patrones geométricos crean una experiencia táctil única que conecta con la tradición del pueblo Ashanti.', precio: '149.99', categoria: 'Textiles', rating: 4.8, stock: 8, img: 'https://picsum.photos/seed/kente-fabric/300/300' },
+  { id: 2, nombre: 'Cerámica Artesanal del Nilo', descripcion: 'Piezas de cerámica elaboradas con técnicas ancestrales a orillas del Nilo. Cada pieza transmite la rugosidad de la tierra africana y la suavidad de siglos de perfeccionamiento artesanal en manos de alfareros de generación en generación.', precio: '89.99', categoria: 'Artesanía', rating: 4.7, stock: 14, img: 'https://picsum.photos/seed/ceramic-nile/300/300' },
+  { id: 3, nombre: 'Masaje con Piedras Volcánicas', descripcion: 'Una experiencia de relajación profunda utilizando piedras volcánicas del interior del continente africano. El calor y la textura de las piedras liberan tensiones musculares mientras evocan la energía de la tierra madre africana.', precio: '65.99', categoria: 'Bienestar', rating: 4.9, stock: 22, img: 'https://picsum.photos/seed/volcanic-stones/300/300' },
 ])
 
 const productosFiltrados = computed(() => productos.value)
@@ -29,7 +26,7 @@ const comprarProducto = (producto: { nombre: string; precio: string }) => {
 </script>
 
 <template>
-  <div class="olfato-view">
+  <div class="tacto-view">
     <div class="panels-row">
 
       <!-- ── Panel izquierdo: intro ── -->
@@ -42,14 +39,8 @@ const comprarProducto = (producto: { nombre: string; precio: string }) => {
 
         <div class="eyebrow">
           <span class="ew-line" />
-          <span class="ew-text">Olfato</span>
+          <span class="ew-text">Tacto</span>
         </div>
-
-        <img
-          :src="productosFiltrados[0].img"
-          :alt="productosFiltrados[0].nombre"
-          class="featured-img"
-        />
 
         <h1 class="panel-title">{{ productosFiltrados[0].nombre }}</h1>
 
@@ -59,7 +50,7 @@ const comprarProducto = (producto: { nombre: string; precio: string }) => {
 
         <div class="article-count">
           <span class="count-num">{{ String(productosFiltrados.length).padStart(2, '0') }}</span>
-          <span class="count-label">fragancias disponibles</span>
+          <span class="count-label">experiencias táctiles</span>
         </div>
 
       </div>
@@ -74,7 +65,7 @@ const comprarProducto = (producto: { nombre: string; precio: string }) => {
           <span class="ew-line" />
         </div>
 
-        <h2 class="panel-title title-r">Fragancias</h2>
+        <h2 class="panel-title title-r">Texturas</h2>
 
         <ul class="products-list">
           <li
@@ -99,7 +90,7 @@ const comprarProducto = (producto: { nombre: string; precio: string }) => {
 
         <div v-if="productosFiltrados.length === 0" class="empty-state">
           <p class="empty-title">No hay experiencias disponibles</p>
-          <p class="empty-sub">Vuelve más tarde para descubrir nuevas experiencias olfativas</p>
+          <p class="empty-sub">Vuelve más tarde para descubrir nuevas experiencias táctiles</p>
         </div>
 
       </div>
@@ -117,7 +108,7 @@ const comprarProducto = (producto: { nombre: string; precio: string }) => {
   to   { opacity: 1; transform: translateY(0); }
 }
 
-.olfato-view {
+.tacto-view {
   position: relative;
   height: 100%;
   overflow: hidden;
@@ -178,14 +169,6 @@ const comprarProducto = (producto: { nombre: string; precio: string }) => {
   text-transform: uppercase;
   color: #8c3a50;
   white-space: nowrap;
-}
-
-.featured-img {
-  width: 100%;
-  height: 160px;
-  object-fit: cover;
-  border-radius: 4px;
-  opacity: 0.9;
 }
 
 .panel-title {
