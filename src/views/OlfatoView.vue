@@ -155,7 +155,7 @@ const comprarProducto = (producto: { nombre: string; precio: string }) => {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 9.5px;
   font-weight: 700;
   letter-spacing: 0.2em;
@@ -171,7 +171,7 @@ const comprarProducto = (producto: { nombre: string; precio: string }) => {
 .eyebrow { display: flex; align-items: center; gap: 0.75rem; }
 .ew-line { flex: 0 0 36px; height: 1px; background: rgba(140,58,80,0.35); }
 .ew-text {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 9.5px;
   font-weight: 700;
   letter-spacing: 0.35em;
@@ -189,7 +189,7 @@ const comprarProducto = (producto: { nombre: string; precio: string }) => {
 }
 
 .panel-title {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 22px;
   font-weight: 800;
   text-transform: uppercase;
@@ -205,7 +205,7 @@ const comprarProducto = (producto: { nombre: string; precio: string }) => {
   padding-left: 20px;
   margin: 0;
   p {
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'Nunito Sans', sans-serif;
     font-size: 14px;
     font-style: italic;
     color: rgba(61,26,38,0.65);
@@ -221,14 +221,14 @@ const comprarProducto = (producto: { nombre: string; precio: string }) => {
   margin-top: auto;
 }
 .count-num {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 2.5rem;
   font-style: italic;
   color: rgba(184,154,90,0.6);
   line-height: 1;
 }
 .count-label {
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 10px;
   font-weight: 600;
   letter-spacing: 0.15em;
@@ -293,7 +293,7 @@ const comprarProducto = (producto: { nombre: string; precio: string }) => {
   gap: 1rem;
 }
 .product-cat {
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 9.5px;
   font-weight: 600;
   letter-spacing: 0.12em;
@@ -301,7 +301,7 @@ const comprarProducto = (producto: { nombre: string; precio: string }) => {
   color: rgba(61,26,38,0.35);
 }
 .product-price {
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 13px;
   font-weight: 500;
   font-style: italic;
@@ -309,7 +309,7 @@ const comprarProducto = (producto: { nombre: string; precio: string }) => {
 }
 
 .product-name {
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 13px;
   font-weight: 600;
   color: #3d1a26;
@@ -320,7 +320,7 @@ const comprarProducto = (producto: { nombre: string; precio: string }) => {
 }
 
 .product-buy {
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 10px;
   font-weight: 600;
   letter-spacing: 0.12em;
@@ -346,14 +346,14 @@ const comprarProducto = (producto: { nombre: string; precio: string }) => {
   gap: 0.4rem;
 }
 .empty-title {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 13px;
   font-weight: 700;
   color: rgba(61,26,38,0.4);
   margin: 0;
 }
 .empty-sub {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 14px;
   font-style: italic;
   color: rgba(61,26,38,0.3);
@@ -365,7 +365,7 @@ const comprarProducto = (producto: { nombre: string; precio: string }) => {
   position: absolute;
   bottom: -1.5rem;
   right: 2.5rem;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 120px;
   line-height: 1;
   color: rgba(61,26,38,0.04);

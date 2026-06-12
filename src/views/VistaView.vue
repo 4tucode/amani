@@ -8,31 +8,35 @@ const { isExperienciaSensorial } = useGlobalMusic()
 const productos = ref([
   {
     id: 1,
-    nombre: 'Obra Vista 01',
-    descripcion: 'Pieza visual única que captura la esencia cultural a través del arte contemporáneo.',
-    precio: '89.99',
+    nombre: 'United colours of Africa',
+    descripcion: 'United Colours of Africa reúne en una sola obra la energía, la diversidad y la belleza de África. A través de un mosaico de tejidos tradicionales, colores intensos y motivos geométricos, cada fragmento cuenta una historia diferente mientras contribuye a una narrativa común. La obra habla de identidad, de encuentro y de la capacidad de múltiples voces, culturas y tradiciones para coexistir en armonía sin perder su esencia.',
+    precio: '50',
     img: new URL('@/assets/productos/fotos-productos/Vista/v1.jpg', import.meta.url).href,
+    certificado: new URL('@/assets/productos/fotos-productos/Vista/Certificado Autenticidad_United colours of Africa.pdf', import.meta.url).href,
   },
   {
     id: 2,
-    nombre: 'Obra Vista 02',
-    descripcion: 'Expresión artística que invita a la contemplación y al descubrimiento sensorial.',
-    precio: '89.99',
+    nombre: 'En su espalda',
+    descripcion: 'Entre colores, texturas y recuerdos, esta obra celebra el vínculo invisible que une a una madre con su hijo. La figura del niño, sostenida por tejidos africanos y rodeada de un mosaico luminoso de cuentas, simboliza la seguridad, la alegría y el amor que acompañan el comienzo de la vida. Una pieza que habla de protección, de herencia cultural y de la felicidad de llevar y ser llevado.',
+    precio: '50',
     img: new URL('@/assets/productos/fotos-productos/Vista/v2.jpg', import.meta.url).href,
+    certificado: new URL('@/assets/productos/fotos-productos/Vista/Certificado Autenticidad_En su espalda.pdf', import.meta.url).href,
   },
   {
     id: 3,
-    nombre: 'Obra Vista 03',
-    descripcion: 'Una ventana a la tradición y la modernidad fusionadas en una sola imagen.',
-    precio: '89.99',
+    nombre: 'African girl',
+    descripcion: 'Esta obra textil rinde homenaje a la mujer africana a través de una representación simbólica y atemporal. Realizada con lana, tela africana y cuentas decorativas, combina texturas y colores inspirados en la naturaleza para crear una composición llena de identidad y sensibilidad. La ausencia de rasgos faciales convierte a la figura en un símbolo universal, permitiendo que cualquier mujer pueda verse reflejada en ella. Una pieza que celebra la belleza, la fuerza y la riqueza cultural africana desde una mirada original y contemporánea.',
+    precio: '50',
     img: new URL('@/assets/productos/fotos-productos/Vista/v3.jpg', import.meta.url).href,
+    certificado: new URL('@/assets/productos/fotos-productos/Vista/Certificado Autenticidad_african_girl.pdf', import.meta.url).href,
   },
   {
     id: 4,
-    nombre: 'Obra Vista 04',
-    descripcion: 'Composición visual que evoca emociones profundas y conexiones culturales.',
-    precio: '89.99',
+    nombre: 'Black and Stone',
+    descripcion: 'Entre sombras, texturas y formas, esta obra revela la fuerza serena de la mujer africana. Las piedras que dan forma a la figura evocan raíces, resistencia y conexión con la tierra, mientras que los tejidos africanos aportan color, identidad y memoria cultural. Sobre un fondo de relieves sutiles, se celebra la esencia femenina africana más allá de cualquier individualidad.',
+    precio: '50',
     img: new URL('@/assets/productos/fotos-productos/Vista/v4.jpg', import.meta.url).href,
+    certificado: new URL('@/assets/productos/fotos-productos/Vista/Certificado Autenticidad_black_and_stone.pdf', import.meta.url).href,
   },
 ])
 
@@ -85,6 +89,15 @@ const comprarProducto = (producto: { nombre: string; precio: string }) => {
           <div class="card-num">{{ String(producto.id).padStart(2, '0') }}</div>
           <h2 class="card-name">{{ producto.nombre }}</h2>
           <p class="card-desc">{{ producto.descripcion }}</p>
+          <a
+            v-if="producto.certificado"
+            :href="producto.certificado"
+            target="_blank"
+            rel="noopener"
+            class="cert-link"
+          >
+            <span class="cert-icon">↓</span> Certificado de autenticidad
+          </a>
           <div class="card-footer">
             <span class="card-price">€{{ producto.precio }}</span>
             <button class="buy-btn" @click="comprarProducto(producto)">
@@ -127,7 +140,7 @@ const comprarProducto = (producto: { nombre: string; precio: string }) => {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 9.5px;
   font-weight: 700;
   letter-spacing: 0.2em;
@@ -163,7 +176,7 @@ const comprarProducto = (producto: { nombre: string; precio: string }) => {
   background: rgba(140, 58, 80, 0.35);
 }
 .ew-text {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 9px;
   font-weight: 700;
   letter-spacing: 0.35em;
@@ -173,7 +186,7 @@ const comprarProducto = (producto: { nombre: string; precio: string }) => {
 }
 
 .page-title {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 22px;
   font-weight: 800;
   text-transform: uppercase;
@@ -190,7 +203,7 @@ const comprarProducto = (producto: { nombre: string; precio: string }) => {
   padding-left: 16px;
   margin: 0;
   p {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Nunito Sans', sans-serif;
     font-size: 13.5px;
     font-style: italic;
     color: rgba(61, 26, 38, 0.55);
@@ -248,14 +261,14 @@ const comprarProducto = (producto: { nombre: string; precio: string }) => {
 }
 
 .card-num {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 11px;
   font-style: italic;
   color: rgba(184, 154, 90, 0.75);
 }
 
 .card-name {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 14px;
   font-weight: 800;
   text-transform: uppercase;
@@ -266,7 +279,7 @@ const comprarProducto = (producto: { nombre: string; precio: string }) => {
 }
 
 .card-desc {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 14px;
   font-style: italic;
   color: rgba(61, 26, 38, 0.55);
@@ -274,6 +287,24 @@ const comprarProducto = (producto: { nombre: string; precio: string }) => {
   margin: 0;
   flex: 1;
 }
+
+.cert-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #8c3a50;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(140, 58, 80, 0.3);
+  padding-bottom: 1px;
+  transition: color 0.2s ease, border-color 0.2s ease;
+  &:hover { color: #3d1a26; border-color: rgba(61, 26, 38, 0.5); }
+}
+.cert-icon { font-size: 11px; }
 
 .card-footer {
   display: flex;
@@ -285,7 +316,7 @@ const comprarProducto = (producto: { nombre: string; precio: string }) => {
 }
 
 .card-price {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 18px;
   font-weight: 800;
   color: #3d1a26;
@@ -295,7 +326,7 @@ const comprarProducto = (producto: { nombre: string; precio: string }) => {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 9.5px;
   font-weight: 700;
   letter-spacing: 0.18em;
@@ -316,7 +347,7 @@ const comprarProducto = (producto: { nombre: string; precio: string }) => {
   position: fixed;
   bottom: -1.5rem;
   right: 2.5rem;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 120px;
   line-height: 1;
   color: rgba(61, 26, 38, 0.04);

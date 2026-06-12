@@ -102,7 +102,7 @@ const sentidos = [
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 9.5px;
   font-weight: 700;
   letter-spacing: 0.2em;
@@ -141,7 +141,7 @@ const sentidos = [
   background: rgba(140, 58, 80, 0.35);
 }
 .ew-text {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 9px;
   font-weight: 700;
   letter-spacing: 0.35em;
@@ -151,7 +151,7 @@ const sentidos = [
 }
 
 .page-title {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 22px;
   font-weight: 800;
   text-transform: uppercase;
@@ -168,7 +168,7 @@ const sentidos = [
   padding-left: 16px;
   margin: 0;
   p {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Nunito Sans', sans-serif;
     font-size: 13.5px;
     font-style: italic;
     color: rgba(61, 26, 38, 0.55);
@@ -228,7 +228,7 @@ const sentidos = [
 }
 
 .sense-num {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 11px;
   font-style: italic;
   color: rgba(184, 154, 90, 0.75);
@@ -236,7 +236,7 @@ const sentidos = [
   width: 20px;
 }
 .sense-name {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 13px;
   font-weight: 700;
   color: #3d1a26;
@@ -258,7 +258,7 @@ const sentidos = [
   position: fixed;
   bottom: -1.5rem;
   right: 2.5rem;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 120px;
   line-height: 1;
   color: rgba(61, 26, 38, 0.04);

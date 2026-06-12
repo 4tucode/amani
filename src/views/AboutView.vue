@@ -184,7 +184,7 @@
 }
 
 .ew-text {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 9.5px;
   font-weight: 700;
   letter-spacing: 0.35em;
@@ -195,7 +195,7 @@
 
 /* ── Títulos de panel ── */
 .panel-title {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 28px;
   font-weight: 800;
   text-transform: uppercase;
@@ -216,7 +216,7 @@
   margin: 0;
 
   p {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Nunito Sans', sans-serif;
     font-size: 16px;
     font-style: italic;
     color: rgba(61, 26, 38, 0.65);
@@ -227,7 +227,7 @@
 
 /* ── Descripción ── */
 .panel-desc {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 15.5px;
   color: rgba(61, 26, 38, 0.55);
   line-height: 1.75;
@@ -243,7 +243,7 @@
 }
 
 .sub-label {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 9.5px;
   font-weight: 700;
   letter-spacing: 0.3em;
@@ -253,7 +253,7 @@
 }
 
 .sub-text {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 15px;
   color: rgba(61, 26, 38, 0.5);
   line-height: 1.7;
@@ -267,7 +267,7 @@
 
 /* ── Texto de misión ── */
 .mission-text {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 18px;
   font-style: italic;
   color: rgba(61, 26, 38, 0.7);
@@ -286,7 +286,7 @@
 }
 
 .values-label {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 9.5px;
   font-weight: 700;
   letter-spacing: 0.3em;
@@ -312,14 +312,14 @@
 }
 
 .val-num {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 11px;
   font-style: italic;
   color: rgba(184, 154, 90, 0.75);
 }
 
 .val-name {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 11.5px;
   font-weight: 700;
   color: #3d1a26;
@@ -327,7 +327,7 @@
 }
 
 .val-desc {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 12px;
   font-style: italic;
   color: rgba(61, 26, 38, 0.45);
@@ -342,7 +342,7 @@
   margin-top: 0.25rem;
 
   p {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Nunito Sans', sans-serif;
     font-size: 15px;
     color: rgba(61, 26, 38, 0.55);
     line-height: 1.7;
@@ -361,7 +361,7 @@
   position: absolute;
   bottom: -1.5rem;
   right: 2.5rem;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 120px;
   line-height: 1;
   color: rgba(61, 26, 38, 0.04);

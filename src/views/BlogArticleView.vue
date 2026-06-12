@@ -213,7 +213,7 @@ if (!articulo.value) {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 9.5px;
   font-weight: 700;
   letter-spacing: 0.2em;
@@ -248,7 +248,7 @@ if (!articulo.value) {
 }
 
 .ew-text {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 9.5px;
   font-weight: 700;
   letter-spacing: 0.35em;
@@ -258,7 +258,7 @@ if (!articulo.value) {
 
 /* ── Título ── */
 .article-title {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 24px;
   font-weight: 800;
   text-transform: uppercase;
@@ -276,7 +276,7 @@ if (!articulo.value) {
 }
 
 .meta-date {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 13px;
   font-style: italic;
   color: rgba(184, 154, 90, 0.85);
@@ -288,7 +288,7 @@ if (!articulo.value) {
 }
 
 .meta-author {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 9px;
   font-weight: 700;
   letter-spacing: 0.15em;
@@ -303,7 +303,7 @@ if (!articulo.value) {
   margin: 0;
 
   p {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Nunito Sans', sans-serif;
     font-size: 15.5px;
     font-style: italic;
     color: rgba(61, 26, 38, 0.55);
@@ -315,7 +315,7 @@ if (!articulo.value) {
 /* ── Contenido del artículo ── */
 .article-content {
   :deep(p) {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Nunito Sans', sans-serif;
     font-size: 16px;
     color: rgba(61, 26, 38, 0.7);
     line-height: 1.85;
@@ -323,7 +323,7 @@ if (!articulo.value) {
   }
 
   :deep(h2) {
-    font-family: 'Syne', sans-serif;
+    font-family: 'Nunito Sans', sans-serif;
     font-size: 11px;
     font-weight: 700;
     letter-spacing: 0.25em;
@@ -356,7 +356,7 @@ if (!articulo.value) {
 }
 
 .not-found-title {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 22px;
   font-weight: 800;
   text-transform: uppercase;
@@ -369,7 +369,7 @@ if (!articulo.value) {
   position: absolute;
   bottom: -1.5rem;
   right: 2.5rem;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 120px;
   line-height: 1;
   color: rgba(61, 26, 38, 0.04);

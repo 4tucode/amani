@@ -201,7 +201,7 @@ onMounted(() => {
 }
 
 .eyebrow-text {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 0.65rem;
   font-weight: 700;
   letter-spacing: 0.22em;
@@ -212,7 +212,7 @@ onMounted(() => {
 
 /* ── Title ─────────────────────────────────────────────── */
 .hero-title {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: clamp(1.8rem, 4vw, 3.2rem);
   font-weight: 800;
   color: #3d1a26;
@@ -240,7 +240,7 @@ onMounted(() => {
 
 /* ── Subtitle ──────────────────────────────────────────── */
 .hero-subtitle {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-style: italic;
   font-size: clamp(1rem, 1.8vw, 1.3rem);
   color: #7a5560;
@@ -304,7 +304,7 @@ onMounted(() => {
 }
 
 .panel-title {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: clamp(1.6rem, 3vw, 2.4rem);
   font-weight: 800;
   color: #3d1a26;
@@ -313,7 +313,7 @@ onMounted(() => {
 }
 
 .panel-lead {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 1.05rem;
   font-style: italic;
   color: #7a5560;
@@ -346,7 +346,7 @@ onMounted(() => {
   }
 
   h4 {
-    font-family: 'Syne', sans-serif;
+    font-family: 'Nunito Sans', sans-serif;
     font-size: 0.85rem;
     font-weight: 700;
     color: #3d1a26;
@@ -356,7 +356,7 @@ onMounted(() => {
   }
 
   p {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Nunito Sans', sans-serif;
     font-size: 0.97rem;
     color: #7a5560;
     line-height: 1.6;
@@ -381,7 +381,7 @@ onMounted(() => {
   box-shadow: 0 2px 16px rgba(61, 26, 38, 0.06);
 
   .blog-tag {
-    font-family: 'Syne', sans-serif;
+    font-family: 'Nunito Sans', sans-serif;
     font-size: 0.6rem;
     font-weight: 700;
     letter-spacing: 0.15em;
@@ -392,7 +392,7 @@ onMounted(() => {
   }
 
   h4 {
-    font-family: 'Syne', sans-serif;
+    font-family: 'Nunito Sans', sans-serif;
     font-size: 0.82rem;
     font-weight: 700;
     color: #3d1a26;
@@ -401,7 +401,7 @@ onMounted(() => {
   }
 
   p {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Nunito Sans', sans-serif;
     font-size: 0.92rem;
     color: #7a5560;
     line-height: 1.55;
@@ -421,7 +421,7 @@ onMounted(() => {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 0.85rem;
   color: #3d1a26;
 

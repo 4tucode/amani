@@ -190,7 +190,7 @@ const articulos = ref([
 }
 
 .ew-text {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 9.5px;
   font-weight: 700;
   letter-spacing: 0.35em;
@@ -201,7 +201,7 @@ const articulos = ref([
 
 /* ── Títulos ── */
 .panel-title {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 28px;
   font-weight: 800;
   text-transform: uppercase;
@@ -222,7 +222,7 @@ const articulos = ref([
   margin: 0;
 
   p {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Nunito Sans', sans-serif;
     font-size: 16px;
     font-style: italic;
     color: rgba(61, 26, 38, 0.65);
@@ -240,7 +240,7 @@ const articulos = ref([
 }
 
 .count-num {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 2.5rem;
   font-style: italic;
   color: rgba(184, 154, 90, 0.6);
@@ -248,7 +248,7 @@ const articulos = ref([
 }
 
 .count-label {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 9.5px;
   font-weight: 700;
   letter-spacing: 0.2em;
@@ -304,14 +304,14 @@ const articulos = ref([
 }
 
 .article-date {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 11px;
   font-style: italic;
   color: rgba(184, 154, 90, 0.8);
 }
 
 .article-author {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 9px;
   font-weight: 700;
   letter-spacing: 0.15em;
@@ -320,7 +320,7 @@ const articulos = ref([
 }
 
 .article-title {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 12.5px;
   font-weight: 700;
   color: #3d1a26;
@@ -331,7 +331,7 @@ const articulos = ref([
 }
 
 .article-excerpt {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 13px;
   color: rgba(61, 26, 38, 0.5);
   line-height: 1.65;
@@ -344,7 +344,7 @@ const articulos = ref([
 }
 
 .article-link {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 9px;
   font-weight: 700;
   letter-spacing: 0.15em;
@@ -375,7 +375,7 @@ const articulos = ref([
 }
 
 .empty-title {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 13px;
   font-weight: 700;
   color: rgba(61, 26, 38, 0.4);
@@ -383,7 +383,7 @@ const articulos = ref([
 }
 
 .empty-sub {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 14px;
   font-style: italic;
   color: rgba(61, 26, 38, 0.3);
@@ -395,7 +395,7 @@ const articulos = ref([
   position: absolute;
   bottom: -1.5rem;
   right: 2.5rem;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 120px;
   line-height: 1;
   color: rgba(61, 26, 38, 0.04);

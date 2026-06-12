@@ -161,7 +161,7 @@ const isActive = (item: (typeof navItems)[0]) => {
 }
 
 .nav-label {
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 0.6rem;
   font-weight: 600;
   letter-spacing: 0.1em;

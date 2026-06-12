@@ -110,7 +110,7 @@ const navigateToExperienciaSensorial = (tipo: 'suave' | 'ambiente') => {
 .eyebrow { display: flex; align-items: center; gap: 0.75rem; }
 .ew-line { flex: 0 0 36px; height: 1px; background: rgba(140,58,80,0.35); }
 .ew-text {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 9.5px;
   font-weight: 700;
   letter-spacing: 0.35em;
@@ -120,7 +120,7 @@ const navigateToExperienciaSensorial = (tipo: 'suave' | 'ambiente') => {
 }
 
 .panel-title {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 26px;
   font-weight: 800;
   text-transform: uppercase;
@@ -136,7 +136,7 @@ const navigateToExperienciaSensorial = (tipo: 'suave' | 'ambiente') => {
   padding-left: 20px;
   margin: 0;
   p {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Nunito Sans', sans-serif;
     font-size: 16px;
     font-style: italic;
     color: rgba(61,26,38,0.65);
@@ -153,7 +153,7 @@ const navigateToExperienciaSensorial = (tipo: 'suave' | 'ambiente') => {
 }
 
 .panel-desc {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 15.5px;
   color: rgba(61,26,38,0.55);
   line-height: 1.75;
@@ -165,7 +165,7 @@ const navigateToExperienciaSensorial = (tipo: 'suave' | 'ambiente') => {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.2em;
@@ -192,7 +192,7 @@ const navigateToExperienciaSensorial = (tipo: 'suave' | 'ambiente') => {
   position: absolute;
   bottom: -1.5rem;
   right: 2.5rem;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 120px;
   line-height: 1;
   color: rgba(61,26,38,0.04);

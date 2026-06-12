@@ -100,7 +100,7 @@ defineEmits<{ explore: [] }>()
 }
 
 .card-title {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 1.05rem;
   font-weight: 700;
   color: #3d1a26;
@@ -110,7 +110,7 @@ defineEmits<{ explore: [] }>()
 }
 
 .card-description {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 0.97rem;
   color: #7a5560;
   text-align: center;
@@ -119,7 +119,7 @@ defineEmits<{ explore: [] }>()
 }
 
 .card-cta {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.1em;

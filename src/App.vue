@@ -37,7 +37,7 @@ import GlobalMusicPlayer from './components/GlobalMusicPlayer.vue'
   overflow: hidden;
   display: flex;
   background: #ecedf4;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
 }
 
 .app-content {
@@ -59,7 +59,7 @@ import GlobalMusicPlayer from './components/GlobalMusicPlayer.vue'
 }
 
 .top-bar-wordmark {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 0.65rem;
   font-weight: 800;
   letter-spacing: 0.35em;

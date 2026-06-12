@@ -138,7 +138,7 @@ const contactInfo = {
 }
 
 .ew-text {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 9.5px;
   font-weight: 700;
   letter-spacing: 0.35em;
@@ -149,7 +149,7 @@ const contactInfo = {
 
 /* ── Títulos ── */
 .panel-title {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 28px;
   font-weight: 800;
   text-transform: uppercase;
@@ -171,7 +171,7 @@ const contactInfo = {
 }
 
 .sub-label {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 9.5px;
   font-weight: 700;
   letter-spacing: 0.3em;
@@ -186,7 +186,7 @@ const contactInfo = {
   margin: 0;
 
   p {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Nunito Sans', sans-serif;
     font-size: 16px;
     font-style: italic;
     color: rgba(61, 26, 38, 0.65);
@@ -223,7 +223,7 @@ const contactInfo = {
 }
 
 .contact-label {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 9.5px;
   font-weight: 700;
   letter-spacing: 0.3em;
@@ -232,7 +232,7 @@ const contactInfo = {
 }
 
 .contact-value {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 20px;
   font-style: italic;
   color: rgba(61, 26, 38, 0.75);
@@ -249,7 +249,7 @@ const contactInfo = {
   position: absolute;
   bottom: -1.5rem;
   right: 2.5rem;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 120px;
   line-height: 1;
   color: rgba(61, 26, 38, 0.04);

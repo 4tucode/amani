@@ -96,7 +96,7 @@ onMounted(() => {
   background: linear-gradient(90deg, transparent, #b89a5a, transparent);
 }
 .ew-text {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 0.65rem;
   font-weight: 700;
   letter-spacing: 0.22em;
@@ -106,7 +106,7 @@ onMounted(() => {
 }
 
 .hero-title {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: clamp(1.8rem, 4vw, 3rem);
   font-weight: 800;
   color: #3d1a26;

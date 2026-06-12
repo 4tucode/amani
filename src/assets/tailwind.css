@@ -5,16 +5,12 @@
 /* Configuración personalizada de fuentes Apple */
 @layer base {
   html {
-    font-family:
-      -apple-system, BlinkMacSystemFont, 'San Francisco', 'Helvetica Neue', Helvetica, Arial,
-      sans-serif;
+    font-family: 'Nunito Sans', sans-serif;
     font-weight: bold;
   }
 
   body {
-    font-family:
-      -apple-system, BlinkMacSystemFont, 'San Francisco', 'Helvetica Neue', Helvetica, Arial,
-      sans-serif;
+    font-family: 'Nunito Sans', sans-serif;
     font-weight: bold;
   }
 }
@@ -22,9 +18,7 @@
 /* Clases de fuentes personalizadas */
 @layer utilities {
   .font-apple {
-    font-family:
-      -apple-system, BlinkMacSystemFont, 'San Francisco', 'Helvetica Neue', Helvetica, Arial,
-      sans-serif;
+    font-family: 'Nunito Sans', sans-serif;
     font-weight: bold;
   }
 }
