@@ -1,23 +1,41 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 import { useGlobalMusic } from '../composables/useGlobalMusic'
 import ImageLightbox from '../components/ImageLightbox.vue'
 
 const { isExperienciaSensorial } = useGlobalMusic()
 
 const productos = ref([
-  { id: 1, nombre: 'Especias del Sahel', descripcion: 'Una selección exclusiva de especias provenientes de las regiones del Sahel africano. Cada mezcla ha sido elaborada siguiendo recetas ancestrales que equilibran sabores ahumados, terrosos y florales únicos del continente.', precio: '34.99', categoria: 'Especias', rating: 4.7, stock: 20, img: 'https://picsum.photos/seed/spices-africa/300/300' },
-  { id: 2, nombre: 'Cacao Puro de Ghana', descripcion: 'El cacao de Ghana, considerado entre los mejores del mundo, cultivado en las exuberantes tierras tropicales del país. Un sabor intenso y complejo que revela notas frutales y terrosas en cada degustación.', precio: '28.99', categoria: 'Cacao', rating: 4.9, stock: 15, img: 'https://picsum.photos/seed/cacao-ghana/300/300' },
-  { id: 3, nombre: 'Té de Hibisco Bissap', descripcion: 'La flor de hibisco seco, conocida como bissap en el África Occidental, elabora una infusión de color rojo rubí con un sabor ácido y floral. Bebida sagrada de hospitalidad en Senegal y Guinea.', precio: '18.99', categoria: 'Infusión', rating: 4.8, stock: 40, img: 'https://picsum.photos/seed/hibiscus-tea/300/300' },
-  { id: 4, nombre: 'Aceite de Argán Premium', descripcion: 'Extraído de las nueces del árbol de argán que crece exclusivamente en Marruecos, este aceite dorado aporta un sabor suave y avellonado a cualquier preparación culinaria o cosmética tradicional.', precio: '45.99', categoria: 'Aceite', rating: 4.9, stock: 12, img: 'https://picsum.photos/seed/argan-oil/300/300' },
+  {
+    id: 1,
+    nombre: 'Puro Cacao 1906 · Contriti 36%',
+    descripcion: 'Tableta de cacao 100% natural de la casa Cacao 1906, elaborada con el método contriti que conserva intacto el sabor original del grano. Su 36% de cacao ofrece un perfil suave y ligeramente afrutado, ideal para descubrir el gusto puro del chocolate sin añadidos. Presentación de 50g envuelta en papel de estilo artesanal.',
+    precio: '4.50',
+    imgs: [
+      new URL('@/assets/productos/fotos-productos/Gusto/cacao1.jpg', import.meta.url).href,
+      new URL('@/assets/productos/fotos-productos/Gusto/cacao2.jpg', import.meta.url).href,
+    ],
+  },
+  {
+    id: 2,
+    nombre: 'Puro Cacao 1906 · Con Cacahuete 50%',
+    descripcion: 'Una tableta de 50% de cacao natural que combina la intensidad del chocolate con trozos de cacahuete tostado, resultando en un bocado crujiente y cremoso a partes iguales. Elaborada también por Cacao 1906 en formato de 50g, es la versión más golosa de la colección para quienes buscan un punto extra de sabor.',
+    precio: '4.95',
+    imgs: [
+      new URL('@/assets/productos/fotos-productos/Gusto/cacao3.jpg', import.meta.url).href,
+      new URL('@/assets/productos/fotos-productos/Gusto/cacao2.jpg', import.meta.url).href,
+    ],
+  },
 ])
-
-const productosFiltrados = computed(() => productos.value)
 
 const getBackRoute = () => isExperienciaSensorial.value ? '/experiencia-sensorial' : '/experiencia-estandar'
 
-const lightbox = ref<{ src: string; alt: string } | null>(null)
+const lightbox = ref<{ images: string[]; alt: string; index: number } | null>(null)
+
+const abrirGaleria = (producto: { nombre: string; imgs: string[] }, index: number) => {
+  lightbox.value = { images: producto.imgs, alt: producto.nombre, index }
+}
 
 const comprarProducto = (producto: { nombre: string; precio: string }) => {
   const numero = '34680150864'
@@ -28,119 +46,100 @@ const comprarProducto = (producto: { nombre: string; precio: string }) => {
 
 <template>
   <div class="gusto-view">
-    <div class="panels-row">
 
-      <!-- ── Panel izquierdo: intro ── -->
-      <div class="panel panel-left">
+    <!-- ── Cabecera ── -->
+    <div class="page-header">
+      <RouterLink :to="getBackRoute()" class="back-link">
+        <span class="back-arrow">←</span>
+        Volver a Experiencias
+      </RouterLink>
 
-        <RouterLink :to="getBackRoute()" class="back-link">
-          <span class="back-arrow">←</span>
-          Volver a Experiencias
-        </RouterLink>
-
+      <div class="header-center">
         <div class="eyebrow">
           <span class="ew-line" />
-          <span class="ew-text">Gusto</span>
-        </div>
-
-        <h1 class="panel-title">{{ productosFiltrados[0].nombre }}</h1>
-
-        <blockquote class="quote">
-          <p>{{ productosFiltrados[0].descripcion }}</p>
-        </blockquote>
-
-        <div class="article-count">
-          <span class="count-num">{{ String(productosFiltrados.length).padStart(2, '0') }}</span>
-          <span class="count-label">sabores disponibles</span>
-        </div>
-
-      </div>
-
-      <div class="v-divider" aria-hidden="true" />
-
-      <!-- ── Panel derecho: lista de productos ── -->
-      <div class="panel panel-right">
-
-        <div class="eyebrow eyebrow-r">
-          <span class="ew-text">Colección</span>
+          <span class="ew-text">Sentido · Gusto</span>
           <span class="ew-line" />
         </div>
+        <h1 class="page-title">Colección Gourmet</h1>
+      </div>
 
-        <h2 class="panel-title title-r">Sabores</h2>
+      <blockquote class="header-quote">
+        <p>Cacao puro y natural para despertar el paladar</p>
+      </blockquote>
+    </div>
 
-        <ul class="products-list">
-          <li
-            v-for="(producto, i) in productosFiltrados"
-            :key="producto.id"
-            class="product-item"
-            :style="{ animationDelay: `${0.15 + i * 0.06}s` }"
-          >
-            <img :src="producto.img" :alt="producto.nombre" class="product-thumb" @click="lightbox = { src: producto.img, alt: producto.nombre }" />
-            <div class="product-info">
-              <div class="product-meta">
-                <span class="product-cat">{{ producto.categoria }}</span>
-                <span class="product-price">€{{ producto.precio }}</span>
-              </div>
-              <h3 class="product-name">{{ producto.nombre }}</h3>
-              <button class="product-buy" @click="comprarProducto(producto)">
-                Comprar <span class="buy-arrow">→</span>
-              </button>
-            </div>
-          </li>
-        </ul>
-
-        <div v-if="productosFiltrados.length === 0" class="empty-state">
-          <p class="empty-title">No hay experiencias disponibles</p>
-          <p class="empty-sub">Vuelve más tarde para descubrir nuevos sabores</p>
+    <!-- ── Grid de productos ── -->
+    <div class="products-grid">
+      <div
+        v-for="(producto, i) in productos"
+        :key="producto.id"
+        class="product-card"
+        :style="{ animationDelay: `${0.1 + i * 0.1}s` }"
+      >
+        <div class="card-img-wrap" @click="abrirGaleria(producto, 0)">
+          <img :src="producto.imgs[0]" :alt="producto.nombre" class="card-img" />
         </div>
 
+        <div class="card-thumbs">
+          <button
+            v-for="(img, j) in producto.imgs"
+            :key="j"
+            class="thumb-btn"
+            :class="{ active: j === 0 }"
+            @click="abrirGaleria(producto, j)"
+          >
+            <img :src="img" :alt="`${producto.nombre} ${j + 1}`" class="thumb-img" />
+          </button>
+        </div>
+
+        <div class="card-body">
+          <div class="card-num">{{ String(producto.id).padStart(2, '0') }}</div>
+          <h2 class="card-name">{{ producto.nombre }}</h2>
+          <p class="card-desc">{{ producto.descripcion }}</p>
+          <div class="card-footer">
+            <span class="card-price">€{{ producto.precio }}</span>
+            <button class="buy-btn" @click="comprarProducto(producto)">
+              Comprar <span class="buy-arrow">→</span>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
 
-    <span class="deco-num" aria-hidden="true">{{ String(productosFiltrados.length).padStart(2, '0') }}</span>
+    <span class="deco-num" aria-hidden="true">02</span>
 
-    <ImageLightbox v-if="lightbox" :src="lightbox.src" :alt="lightbox.alt" @close="lightbox = null" />
+    <ImageLightbox
+      v-if="lightbox"
+      :images="lightbox.images"
+      :alt="lightbox.alt"
+      :initial-index="lightbox.index"
+      @close="lightbox = null"
+    />
   </div>
 </template>
 
 <style scoped lang="scss">
 @keyframes fadeUp {
-  from { opacity: 0; transform: translateY(12px); }
+  from { opacity: 0; transform: translateY(14px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
 .gusto-view {
   position: relative;
-  height: 100%;
-  overflow: hidden;
+  min-height: 100%;
   background: #ecedf4;
+  padding-bottom: 4rem;
 }
 
-.panels-row {
-  height: 100%;
+/* ── Cabecera ── */
+.page-header {
   display: flex;
-  align-items: stretch;
-}
-
-.panel {
-  flex: 1;
-  padding: 3.5rem 3.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  overflow-y: auto;
-  scrollbar-width: none;
-  &::-webkit-scrollbar { display: none; }
-}
-
-.panel-left  { animation: fadeUp 0.55s ease both; }
-.panel-right { align-items: flex-end; animation: fadeUp 0.55s ease 0.15s both; }
-
-.v-divider {
-  width: 1px;
-  flex-shrink: 0;
-  margin: 2.5rem 0;
-  background: linear-gradient(to bottom, transparent, rgba(140,58,80,0.2) 20%, rgba(140,58,80,0.2) 80%, transparent);
+  align-items: center;
+  gap: 2rem;
+  padding: 2.25rem 3.5rem 1.75rem;
+  border-bottom: 1px solid rgba(140, 58, 80, 0.08);
+  animation: fadeUp 0.45s ease both;
+  flex-wrap: wrap;
 }
 
 .back-link {
@@ -152,19 +151,39 @@ const comprarProducto = (producto: { nombre: string; precio: string }) => {
   font-weight: 700;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: rgba(61,26,38,0.4);
+  color: rgba(61, 26, 38, 0.4);
   text-decoration: none;
+  white-space: nowrap;
   transition: color 0.2s ease;
   &:hover { color: #8c3a50; }
 }
-.back-arrow { font-size: 11px; transition: transform 0.2s ease; }
+.back-arrow {
+  font-size: 11px;
+  transition: transform 0.2s ease;
+}
 .back-link:hover .back-arrow { transform: translateX(-3px); }
 
-.eyebrow { display: flex; align-items: center; gap: 0.75rem; }
-.ew-line { flex: 0 0 36px; height: 1px; background: rgba(140,58,80,0.35); }
+.header-center {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.ew-line {
+  flex: 0 0 32px;
+  height: 1px;
+  background: rgba(140, 58, 80, 0.35);
+}
 .ew-text {
   font-family: 'Nunito Sans', sans-serif;
-  font-size: 9.5px;
+  font-size: 9px;
   font-weight: 700;
   letter-spacing: 0.35em;
   text-transform: uppercase;
@@ -172,189 +191,263 @@ const comprarProducto = (producto: { nombre: string; precio: string }) => {
   white-space: nowrap;
 }
 
-.panel-title {
+.page-title {
   font-family: 'Nunito Sans', sans-serif;
   font-size: 22px;
   font-weight: 800;
   text-transform: uppercase;
   color: #3d1a26;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.04em;
   margin: 0;
   line-height: 1.2;
+  text-align: center;
 }
-.title-r { text-align: right; }
 
-.quote {
-  border-left: 2.5px solid rgba(140,58,80,0.25);
-  padding-left: 20px;
+.header-quote {
+  max-width: 220px;
+  border-left: 2px solid rgba(140, 58, 80, 0.25);
+  padding-left: 16px;
   margin: 0;
   p {
     font-family: 'Nunito Sans', sans-serif;
-    font-size: 14px;
+    font-size: 13.5px;
     font-style: italic;
-    color: rgba(61,26,38,0.65);
-    line-height: 1.75;
+    color: rgba(61, 26, 38, 0.55);
+    line-height: 1.7;
     margin: 0;
   }
 }
 
-.article-count {
-  display: flex;
-  align-items: baseline;
-  gap: 0.6rem;
-  margin-top: auto;
-}
-.count-num {
-  font-family: 'Nunito Sans', sans-serif;
-  font-size: 2.5rem;
-  font-style: italic;
-  color: rgba(184,154,90,0.6);
-  line-height: 1;
-}
-.count-label {
-  font-family: 'Nunito Sans', sans-serif;
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: rgba(61,26,38,0.35);
+/* ── Grid de productos ── */
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.75rem;
+  padding: 2.25rem 3.5rem;
 }
 
-.products-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+.product-card {
   display: flex;
   flex-direction: column;
-  width: 100%;
-  max-width: 400px;
-  align-items: flex-end;
-}
+  background: #fff;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(61, 26, 38, 0.07);
+  animation: fadeUp 0.55s ease both;
+  transition: transform 0.28s ease, box-shadow 0.28s ease;
 
-.product-item {
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 0.875rem;
-  padding: 0.85rem 0;
-  border-bottom: 1px solid rgba(140,58,80,0.1);
-  animation: fadeUp 0.5s ease both;
-  &:last-child { border-bottom: none; }
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(61, 26, 38, 0.13);
 
-  &:hover .product-buy {
-    opacity: 1;
-    transform: translateX(0);
-  }
-  &:hover .product-thumb {
-    opacity: 1;
-    transform: scale(1.04);
+    .card-img { transform: scale(1.04); }
   }
 }
 
-.product-thumb {
-  width: 60px;
-  height: 60px;
-  object-fit: cover;
-  border-radius: 4px;
-  flex-shrink: 0;
-  opacity: 0.85;
+.card-img-wrap {
+  overflow: hidden;
+  line-height: 0;
+  aspect-ratio: 4 / 3;
   cursor: pointer;
-  transition: opacity 0.2s ease, transform 0.2s ease;
+  background: #fff;
 }
 
-.product-info {
-  flex: 1;
+.card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  transition: transform 0.38s ease;
+}
+
+.card-thumbs {
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 0.2rem;
-}
-
-.product-meta {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-.product-cat {
-  font-family: 'Nunito Sans', sans-serif;
-  font-size: 9.5px;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: rgba(61,26,38,0.35);
-}
-.product-price {
-  font-family: 'Nunito Sans', sans-serif;
-  font-size: 13px;
-  font-weight: 500;
-  font-style: italic;
-  color: rgba(184,154,90,0.9);
-}
-
-.product-name {
-  font-family: 'Nunito Sans', sans-serif;
-  font-size: 13px;
-  font-weight: 600;
-  color: #3d1a26;
-  letter-spacing: 0.01em;
-  margin: 0;
-  text-align: right;
-  line-height: 1.35;
-}
-
-.product-buy {
-  font-family: 'Nunito Sans', sans-serif;
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: #8c3a50;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  gap: 0.3rem;
-  opacity: 0;
-  transform: translateX(4px);
-  transition: opacity 0.2s ease, transform 0.2s ease;
-}
-.buy-arrow { font-size: 11px; }
-
-.empty-state {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
   gap: 0.4rem;
+  padding: 0.6rem 1rem 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
 }
-.empty-title {
+
+.thumb-btn {
+  flex: 0 0 auto;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border-radius: 4px;
+  border: 1.5px solid transparent;
+  overflow: hidden;
+  cursor: pointer;
+  background: none;
+  line-height: 0;
+  opacity: 0.6;
+  transition: opacity 0.2s ease, border-color 0.2s ease;
+
+  &:hover { opacity: 1; }
+  &.active { opacity: 1; border-color: #8c3a50; }
+}
+
+.thumb-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.card-body {
+  padding: 1rem 1.5rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  flex: 1;
+}
+
+.card-num {
   font-family: 'Nunito Sans', sans-serif;
-  font-size: 13px;
-  font-weight: 700;
-  color: rgba(61,26,38,0.4);
-  margin: 0;
+  font-size: 11px;
+  font-style: italic;
+  color: rgba(184, 154, 90, 0.75);
 }
-.empty-sub {
+
+.card-name {
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: #3d1a26;
+  letter-spacing: 0.05em;
+  margin: 0;
+  line-height: 1.25;
+}
+
+.card-desc {
   font-family: 'Nunito Sans', sans-serif;
   font-size: 14px;
   font-style: italic;
-  color: rgba(61,26,38,0.3);
+  color: rgba(61, 26, 38, 0.55);
+  line-height: 1.7;
   margin: 0;
-  text-align: right;
+  flex: 1;
 }
 
+.card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 0.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(140, 58, 80, 0.1);
+}
+
+.card-price {
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+  color: #3d1a26;
+}
+
+.buy-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #fff;
+  background: #8c3a50;
+  border: none;
+  padding: 0.7rem 1.4rem;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+  &:hover { background: #3d1a26; transform: translateY(-1px); }
+}
+.buy-arrow { font-size: 11px; }
+
+/* ── Número decorativo ── */
 .deco-num {
-  position: absolute;
+  position: fixed;
   bottom: -1.5rem;
   right: 2.5rem;
   font-family: 'Nunito Sans', sans-serif;
   font-size: 120px;
   line-height: 1;
-  color: rgba(61,26,38,0.04);
+  color: rgba(61, 26, 38, 0.04);
   pointer-events: none;
   user-select: none;
   z-index: 0;
+}
+
+/* ── Tablet (≤ 768px) ── */
+@media (max-width: 768px) {
+  .page-header {
+    padding: 1.75rem 2rem 1.5rem;
+    gap: 1.25rem;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .header-center {
+    width: 100%;
+    align-items: flex-start;
+  }
+
+  .eyebrow {
+    justify-content: flex-start;
+  }
+
+  .header-quote {
+    max-width: 100%;
+  }
+
+  .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+    padding: 1.75rem 2rem;
+  }
+}
+
+/* ── Móvil (≤ 480px) ── */
+@media (max-width: 480px) {
+  .page-header {
+    padding: 1.25rem 1.25rem 1.25rem;
+    gap: 1rem;
+  }
+
+  .page-title {
+    font-size: 18px;
+  }
+
+  .header-quote {
+    display: none;
+  }
+
+  .products-grid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+    padding: 1.25rem 1.25rem;
+  }
+
+  .card-body {
+    padding: 1.1rem 1.1rem 1.2rem;
+  }
+
+  .card-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.85rem;
+  }
+
+  .buy-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 0.9rem 1.4rem;
+  }
+
+  .deco-num {
+    display: none;
+  }
 }
 </style>
