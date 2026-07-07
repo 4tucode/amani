@@ -203,4 +203,67 @@ const isActive = (item: (typeof navItems)[0]) => {
     border-color: #8c3a50;
   }
 }
+
+/* ── Móvil: sidebar vertical → barra de navegación inferior ── */
+@media (max-width: 480px) {
+  .sidebar {
+    width: 100%;
+    height: 60px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border-right: none;
+    border-top: 1px solid rgba(140, 58, 80, 0.12);
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    z-index: 200;
+  }
+
+  .logo-wrap,
+  .social-dots {
+    display: none;
+  }
+
+  .sidebar-nav {
+    flex: 1;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    height: 100%;
+    gap: 0;
+  }
+
+  .nav-item {
+    flex-direction: column;
+    width: auto;
+    flex: 1;
+    height: 100%;
+    padding: 0;
+    gap: 0.3rem;
+  }
+
+  .nav-marker {
+    width: 18px;
+    height: 2px;
+    left: 50%;
+    top: auto;
+    bottom: 6px;
+    transform: translateX(-50%);
+    border-radius: 2px;
+
+    .nav-item.active & {
+      height: 2px;
+    }
+  }
+
+  .nav-label {
+    writing-mode: horizontal-tb;
+    text-orientation: initial;
+    transform: none;
+    margin-left: 0;
+    font-size: 0.55rem;
+  }
+}
 </style>

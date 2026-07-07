@@ -1,6 +1,17 @@
 <script setup lang="ts">
+import gsap from 'gsap'
 import TheHeader from './components/TheHeader.vue'
 import GlobalMusicPlayer from './components/GlobalMusicPlayer.vue'
+
+// Solo opacidad: trasladar en `y` extiende el scrollable overflow de `.app-main`
+// mientras dura la animación y produce saltos de scroll en cada navegación.
+function onEnter(el: Element, done: () => void) {
+  gsap.fromTo(el, { opacity: 0 }, { opacity: 1, duration: 0.4, ease: 'power1.out', onComplete: done })
+}
+
+function onLeave(el: Element, done: () => void) {
+  gsap.to(el, { opacity: 0, duration: 0.25, ease: 'power1.in', onComplete: done })
+}
 </script>
 
 <template>
@@ -19,7 +30,7 @@ import GlobalMusicPlayer from './components/GlobalMusicPlayer.vue'
       <!-- Main content -->
       <main class="app-main">
         <RouterView v-slot="{ Component }">
-          <Transition name="page-fade" mode="out-in">
+          <Transition :css="false" mode="out-in" @enter="onEnter" @leave="onLeave">
             <component :is="Component" />
           </Transition>
         </RouterView>
@@ -80,14 +91,15 @@ import GlobalMusicPlayer from './components/GlobalMusicPlayer.vue'
   position: relative;
 }
 
-/* Page fade transition */
-.page-fade-enter-active,
-.page-fade-leave-active {
-  transition: opacity 0.45s ease;
-}
+/* ── Móvil: la barra de navegación pasa a fija abajo (ver TheHeader) ── */
+@media (max-width: 480px) {
+  .top-bar {
+    padding: 0 1.25rem;
+    height: 46px;
+  }
 
-.page-fade-enter-from,
-.page-fade-leave-to {
-  opacity: 0;
+  .app-main {
+    padding-bottom: 60px;
+  }
 }
 </style>

@@ -1,17 +1,23 @@
 <script setup lang="ts">
+import { ref } from 'vue'
+import { useGsapReveal } from '../composables/useGsapReveal'
+
 const contactInfo = {
   email: 'contacto@amani.com',
   telefono: '+34 123 456 789',
   horario: 'Lunes a Viernes: 9:00 - 18:00\nSábados: 10:00 - 14:00',
 }
+
+const rootEl = ref<HTMLElement | null>(null)
+useGsapReveal(rootEl)
 </script>
 
 <template>
-  <div class="contact-view">
+  <div class="contact-view" ref="rootEl">
     <div class="panels-row">
 
       <!-- ── Panel izquierdo: título + horario ── -->
-      <div class="panel panel-left">
+      <div class="panel panel-left" data-reveal>
 
         <div class="eyebrow">
           <span class="ew-line" />
@@ -33,7 +39,7 @@ const contactInfo = {
       <div class="v-divider" aria-hidden="true" />
 
       <!-- ── Panel derecho: email + teléfono ── -->
-      <div class="panel panel-right">
+      <div class="panel panel-right" data-reveal>
 
         <div class="eyebrow eyebrow-r">
           <span class="ew-text">Información</span>
@@ -43,13 +49,13 @@ const contactInfo = {
         <h2 class="panel-title title-r">Escríbenos</h2>
 
         <ul class="contact-list">
-          <li class="contact-item">
+          <li class="contact-item" data-reveal data-reveal-group="contact">
             <span class="contact-label">Email</span>
             <a :href="`mailto:${contactInfo.email}`" class="contact-value">
               {{ contactInfo.email }}
             </a>
           </li>
-          <li class="contact-item">
+          <li class="contact-item" data-reveal data-reveal-group="contact">
             <span class="contact-label">Teléfono</span>
             <a :href="`tel:${contactInfo.telefono.replace(/\s/g, '')}`" class="contact-value">
               {{ contactInfo.telefono }}
@@ -66,11 +72,6 @@ const contactInfo = {
 </template>
 
 <style scoped lang="scss">
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(12px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
 /* ── Contenedor ── */
 .contact-view {
   position: relative;
@@ -101,13 +102,8 @@ const contactInfo = {
   &::-webkit-scrollbar { display: none; }
 }
 
-.panel-left {
-  animation: fadeUp 0.55s ease both;
-}
-
 .panel-right {
   align-items: flex-end;
-  animation: fadeUp 0.55s ease 0.15s both;
 }
 
 /* ── Divisor vertical ── */
@@ -256,5 +252,50 @@ const contactInfo = {
   pointer-events: none;
   user-select: none;
   z-index: 0;
+}
+
+/* ── Móvil: paneles apilados, lectura a una columna ── */
+@media (max-width: 480px) {
+  .contact-view {
+    height: auto;
+    min-height: 100%;
+    overflow: visible;
+  }
+
+  .panels-row {
+    height: auto;
+    flex-direction: column;
+  }
+
+  .panel {
+    padding: 2rem 1.25rem;
+    overflow-y: visible;
+    gap: 1.25rem;
+  }
+
+  .panel-right {
+    align-items: flex-start;
+  }
+
+  .v-divider {
+    display: none;
+  }
+
+  .title-r {
+    text-align: left;
+  }
+
+  .contact-list {
+    align-items: flex-start;
+    max-width: 100%;
+  }
+
+  .contact-item {
+    align-items: flex-start;
+  }
+
+  .deco-num {
+    display: none;
+  }
 }
 </style>

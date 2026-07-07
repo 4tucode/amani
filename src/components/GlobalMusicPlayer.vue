@@ -23,7 +23,7 @@ export default {
 <template>
     <!-- Reproductor de música fijo en la parte inferior -->
     <div v-if="isExperienciaSensorial"
-        class="fixed bottom-0 left-0 right-0 z-50 bg-white backdrop-blur-sm border-t border-[#582a35] shadow-lg">
+        class="music-player-bar fixed bottom-0 left-0 right-0 z-50 bg-white backdrop-blur-sm border-t border-[#582a35] shadow-lg">
         <div class="max-w-4xl mx-auto px-2 sm:px-4 py-2 sm:py-4">
             <!-- Layout móvil: vertical -->
             <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 md:gap-0">
@@ -225,6 +225,14 @@ export default {
 
     50% {
         opacity: 0.5;
+    }
+}
+
+/* En móvil la barra de navegación ocupa el fondo (ver TheHeader): el reproductor
+   se coloca justo encima para no solaparse. */
+@media (max-width: 480px) {
+    .music-player-bar {
+        bottom: 60px;
     }
 }
 </style>

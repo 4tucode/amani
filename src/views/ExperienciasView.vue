@@ -1,21 +1,22 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useGlobalMusic } from '../composables/useGlobalMusic'
-import { scrollToTop } from '../composables/useScrollNavigation'
+import { useGsapReveal } from '../composables/useGsapReveal'
 import ExperienceCard from '../components/ExperienceCard.vue'
+
+const rootEl = ref<HTMLElement | null>(null)
+useGsapReveal(rootEl)
 
 const router = useRouter()
 const { stopExperienciaSensorial } = useGlobalMusic()
 
 const navigateToExperienciaSensorial = () => {
   router.push('/seleccion-tipo-musica')
-  scrollToTop()
 }
 
 const navigateToExperienciaEstandar = () => {
   router.push('/experiencia-estandar')
-  scrollToTop()
 }
 
 onMounted(() => {
@@ -24,8 +25,8 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="experiencias-view">
-    <div class="hero">
+  <div class="experiencias-view" ref="rootEl">
+    <div class="hero" data-reveal>
       <div class="eyebrow">
         <span class="ew-line" />
         <span class="ew-text">Amani</span>
@@ -41,12 +42,16 @@ onMounted(() => {
           title="Experiencia Estándar"
           description="Disfruta de la experiencia clásica de Amani con todas sus funcionalidades"
           type="standard"
+          data-reveal
+          data-reveal-group="cards"
           @explore="navigateToExperienciaEstandar"
         />
         <ExperienceCard
           title="Experiencia Sensorial"
           description="Sumérgete en una experiencia multisensorial con música y efectos especiales"
           type="sensorial"
+          data-reveal
+          data-reveal-group="cards"
           @explore="navigateToExperienciaSensorial"
         />
       </div>
@@ -55,10 +60,6 @@ onMounted(() => {
 </template>
 
 <style scoped lang="scss">
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(12px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
 @keyframes blink {
   0%, 100% { opacity: 1; }
   50% { opacity: 0; }
@@ -82,7 +83,6 @@ onMounted(() => {
   padding: 2rem 2.5rem;
   max-width: 800px;
   width: 100%;
-  animation: fadeUp 0.55s ease both;
 }
 
 .eyebrow {
@@ -134,5 +134,26 @@ onMounted(() => {
   margin-top: 0.5rem;
   flex-wrap: wrap;
   justify-content: center;
+}
+
+/* ── Móvil ─────────────────────────────────────────────── */
+@media (max-width: 480px) {
+  .experiencias-view {
+    height: auto;
+    min-height: 100%;
+    overflow: visible;
+    padding: 1.75rem 0;
+  }
+
+  .hero {
+    padding: 0 1.25rem;
+    gap: 1rem;
+  }
+
+  .cards-row {
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+  }
 }
 </style>

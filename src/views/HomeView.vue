@@ -1,10 +1,13 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useGlobalMusic } from '../composables/useGlobalMusic'
 import { useSidebarPanel } from '../composables/useSidebarPanel'
-import { scrollToTop } from '../composables/useScrollNavigation'
+import { useGsapReveal } from '../composables/useGsapReveal'
 import ExperienceCard from '../components/ExperienceCard.vue'
+
+const rootEl = ref<HTMLElement | null>(null)
+useGsapReveal(rootEl)
 
 const router = useRouter()
 const { stopExperienciaSensorial } = useGlobalMusic()
@@ -33,12 +36,10 @@ const blogPosts = [
 
 const navigateToExperienciaEstandar = () => {
   router.push('/experiencia-estandar')
-  scrollToTop()
 }
 
 const navigateToExperienciaSensorial = () => {
   router.push('/seleccion-tipo-musica')
-  scrollToTop()
 }
 
 onMounted(() => {
@@ -47,11 +48,11 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="home">
+  <div class="home" ref="rootEl">
     <!-- Hero / panels area -->
     <Transition name="panel-fade" mode="out-in">
       <!-- Hero -->
-      <div v-if="!activePanel" key="hero" class="hero">
+      <div v-if="!activePanel" key="hero" class="hero" data-reveal>
         <div class="eyebrow">
           <span class="eyebrow-line" />
           <span class="eyebrow-text">Bienvenido a Amani</span>
@@ -69,19 +70,74 @@ onMounted(() => {
             title="Experiencia Estándar"
             description="Disfruta de la experiencia clásica de Amani con todas sus funcionalidades"
             type="standard"
+            illustrated
+            data-reveal
+            data-reveal-group="cards"
             @explore="navigateToExperienciaEstandar"
-          />
+          >
+            <template #icon>
+              <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="60" cy="62" r="52" fill="#b89a5a" opacity="0.12" />
+                <circle cx="60" cy="62" r="36" fill="#8c3a50" opacity="0.06" />
+                <path d="M50 46 C46 40 46 34 52 28" stroke="#b89a5a" stroke-width="2.4" stroke-linecap="round" fill="none" opacity="0.55" />
+                <path d="M60 44 C56 37 58 30 64 24" stroke="#8c3a50" stroke-width="2.4" stroke-linecap="round" fill="none" opacity="0.4" />
+                <path d="M70 46 C74 40 73 34 68 28" stroke="#b89a5a" stroke-width="2.4" stroke-linecap="round" fill="none" opacity="0.55" />
+                <path d="M36 60 C36 74 47 84 60 84 C73 84 84 74 84 60 Z" fill="#8c3a50" />
+                <path d="M36 60 C36 74 47 84 60 84 C73 84 84 74 84 60 Z" fill="url(#bowlShade)" />
+                <ellipse cx="60" cy="60" rx="24" ry="6" fill="#6f2d40" />
+                <path d="M60 46 C64 52 66 57 60 62 C54 57 56 52 60 46 Z" fill="#b89a5a" />
+                <circle cx="60" cy="58" r="2.4" fill="#3d1a26" opacity="0.5" />
+                <path d="M86 68 C92 64 96 58 94 50 C88 54 84 60 86 68 Z" fill="#3d8a5a" opacity="0.75" />
+                <path d="M30 40 l2.4 5.4 l5.4 2.4 l-5.4 2.4 l-2.4 5.4 l-2.4 -5.4 l-5.4 -2.4 l5.4 -2.4 z" fill="#b89a5a" opacity="0.7" />
+                <path d="M92 34 l1.6 3.6 l3.6 1.6 l-3.6 1.6 l-1.6 3.6 l-1.6 -3.6 l-3.6 -1.6 l3.6 -1.6 z" fill="#8c3a50" opacity="0.55" />
+                <defs>
+                  <linearGradient id="bowlShade" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0" stop-color="#ffffff" stop-opacity="0.12" />
+                    <stop offset="1" stop-color="#000000" stop-opacity="0.12" />
+                  </linearGradient>
+                </defs>
+              </svg>
+            </template>
+          </ExperienceCard>
           <ExperienceCard
             title="Experiencia Sensorial"
             description="Sumérgete en una experiencia multisensorial con música y efectos especiales"
             type="sensorial"
+            illustrated
+            data-reveal
+            data-reveal-group="cards"
             @explore="navigateToExperienciaSensorial"
-          />
+          >
+            <template #icon>
+              <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="60" cy="62" r="52" fill="#8c3a50" opacity="0.1" />
+                <circle cx="60" cy="62" r="36" fill="#b89a5a" opacity="0.08" />
+                <path d="M20 62 C20 44 30 32 44 28" stroke="#8c3a50" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.3" />
+                <path d="M100 62 C100 44 90 32 76 28" stroke="#8c3a50" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.3" />
+                <path d="M28 62 C28 50 35 41 45 38" stroke="#b89a5a" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.5" />
+                <path d="M92 62 C92 50 85 41 75 38" stroke="#b89a5a" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.5" />
+                <path d="M30 66 C30 40 60 34 60 34 C60 34 90 40 90 66" stroke="#8c3a50" stroke-width="4.5" stroke-linecap="round" fill="none" />
+                <rect x="22" y="60" width="18" height="26" rx="9" fill="#8c3a50" />
+                <rect x="80" y="60" width="18" height="26" rx="9" fill="#8c3a50" />
+                <rect x="26" y="65" width="10" height="16" rx="5" fill="#b89a5a" opacity="0.5" />
+                <rect x="84" y="65" width="10" height="16" rx="5" fill="#b89a5a" opacity="0.5" />
+                <g fill="#3d8a5a" opacity="0.8">
+                  <circle cx="66" cy="92" r="4" />
+                  <rect x="69" y="76" width="2.2" height="17" />
+                  <path d="M69 76 L79 79 L79 82 L69 79 Z" />
+                </g>
+                <g fill="#b89a5a" opacity="0.7">
+                  <circle cx="50" cy="98" r="3" />
+                  <rect x="52.5" y="86" width="1.8" height="13" />
+                </g>
+              </svg>
+            </template>
+          </ExperienceCard>
         </div>
       </div>
 
       <!-- About panel -->
-      <div v-else-if="activePanel === 'about'" key="about" class="panel">
+      <div v-else-if="activePanel === 'about'" key="about" class="panel" data-reveal>
         <button class="panel-close" @click="closePanel" aria-label="Cerrar">✕</button>
         <div class="panel-inner">
           <div class="panel-eyebrow">
@@ -116,7 +172,7 @@ onMounted(() => {
       </div>
 
       <!-- Blog panel -->
-      <div v-else-if="activePanel === 'blog'" key="blog" class="panel">
+      <div v-else-if="activePanel === 'blog'" key="blog" class="panel" data-reveal>
         <button class="panel-close" @click="closePanel" aria-label="Cerrar">✕</button>
         <div class="panel-inner">
           <div class="panel-eyebrow">
@@ -126,7 +182,7 @@ onMounted(() => {
           </div>
           <h2 class="panel-title">Blog</h2>
           <div class="blog-grid">
-            <article v-for="post in blogPosts" :key="post.id" class="blog-card">
+            <article v-for="post in blogPosts" :key="post.id" class="blog-card" data-reveal data-reveal-group="blog">
               <span class="blog-tag">{{ post.tag }}</span>
               <h4>{{ post.title }}</h4>
               <p>{{ post.excerpt }}</p>
@@ -136,7 +192,7 @@ onMounted(() => {
       </div>
 
       <!-- Contact panel -->
-      <div v-else-if="activePanel === 'contact'" key="contact" class="panel">
+      <div v-else-if="activePanel === 'contact'" key="contact" class="panel" data-reveal>
         <button class="panel-close" @click="closePanel" aria-label="Cerrar">✕</button>
         <div class="panel-inner">
           <div class="panel-eyebrow">
@@ -441,5 +497,47 @@ onMounted(() => {
 .panel-fade-leave-to {
   opacity: 0;
   transform: translateY(12px);
+}
+
+/* ── Móvil ─────────────────────────────────────────────── */
+@media (max-width: 480px) {
+  .home {
+    height: auto;
+    min-height: 100%;
+    overflow: visible;
+    padding: 1.75rem 0;
+  }
+
+  .hero {
+    padding: 0 1.25rem;
+    gap: 1rem;
+  }
+
+  .cards-row {
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+
+  .panel {
+    padding: 1.5rem 1.25rem;
+    max-width: 100%;
+  }
+
+  .panel-close {
+    top: 1rem;
+    right: 1.25rem;
+  }
+
+  .about-grid,
+  .blog-grid {
+    flex-direction: column;
+  }
+
+  .about-card,
+  .blog-card {
+    min-width: 0;
+    width: 100%;
+  }
 }
 </style>

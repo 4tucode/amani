@@ -1,14 +1,18 @@
 <script setup lang="ts">
-// layout sin scroll: no se necesita useScrollToTop
+import { ref } from 'vue'
+import { useGsapReveal } from '../composables/useGsapReveal'
+
+const rootEl = ref<HTMLElement | null>(null)
+useGsapReveal(rootEl)
 </script>
 
 <template>
-  <div class="about-view">
+  <div class="about-view" ref="rootEl">
     <!-- Dos paneles -->
     <div class="panels-row">
 
       <!-- ── Panel izquierdo: Esencia + Visión ── -->
-      <div class="panel panel-left">
+      <div class="panel panel-left" data-reveal>
 
         <div class="eyebrow">
           <span class="ew-line" />
@@ -40,7 +44,7 @@
       <div class="v-divider" aria-hidden="true" />
 
       <!-- ── Panel derecho: Misión + Valores + Cierre ── -->
-      <div class="panel panel-right">
+      <div class="panel panel-right" data-reveal>
 
         <div class="eyebrow eyebrow-r">
           <span class="ew-text">Propósito</span>
@@ -57,27 +61,27 @@
         <div class="values-wrap">
           <h3 class="values-label">Nuestros valores</h3>
           <ul class="values-list">
-            <li class="value-item">
+            <li class="value-item" data-reveal data-reveal-group="values">
               <span class="val-num">01</span>
               <span class="val-name">Raíces</span>
               <span class="val-desc">autenticidad y tradición</span>
             </li>
-            <li class="value-item">
+            <li class="value-item" data-reveal data-reveal-group="values">
               <span class="val-num">02</span>
               <span class="val-name">Nostalgia</span>
               <span class="val-desc">el poder de recordar y revivir</span>
             </li>
-            <li class="value-item">
+            <li class="value-item" data-reveal data-reveal-group="values">
               <span class="val-num">03</span>
               <span class="val-name">Exploración</span>
               <span class="val-desc">curiosidad por descubrir lo nuevo</span>
             </li>
-            <li class="value-item">
+            <li class="value-item" data-reveal data-reveal-group="values">
               <span class="val-num">04</span>
               <span class="val-name">Cercanía</span>
               <span class="val-desc">conexión genuina con cada persona</span>
             </li>
-            <li class="value-item">
+            <li class="value-item" data-reveal data-reveal-group="values">
               <span class="val-num">05</span>
               <span class="val-name">Respeto global</span>
               <span class="val-desc">consumo consciente y sostenible</span>
@@ -100,17 +104,6 @@
 </template>
 
 <style scoped lang="scss">
-@keyframes fadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 /* ── Contenedor principal ── */
 .about-view {
   position: relative;
@@ -143,13 +136,8 @@
   }
 }
 
-.panel-left {
-  animation: fadeUp 0.55s ease both;
-}
-
 .panel-right {
   align-items: flex-end;
-  animation: fadeUp 0.55s ease 0.15s both;
 }
 
 /* ── Divisor vertical ── */
@@ -368,5 +356,48 @@
   pointer-events: none;
   user-select: none;
   z-index: 0;
+}
+
+/* ── Móvil: paneles apilados, lectura a una columna ── */
+@media (max-width: 480px) {
+  .about-view {
+    height: auto;
+    min-height: 100%;
+    overflow: visible;
+  }
+
+  .panels-row {
+    height: auto;
+    flex-direction: column;
+  }
+
+  .panel {
+    padding: 2rem 1.25rem;
+    overflow-y: visible;
+    gap: 1.25rem;
+  }
+
+  .panel-right {
+    align-items: flex-start;
+  }
+
+  .v-divider {
+    display: none;
+  }
+
+  .title-r,
+  .mission-text,
+  .closing {
+    text-align: left;
+  }
+
+  .values-wrap,
+  .values-list {
+    align-items: flex-start;
+  }
+
+  .deco-num {
+    display: none;
+  }
 }
 </style>

@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
 import { ref } from 'vue'
+import { useGsapReveal } from '../composables/useGsapReveal'
+
+const rootEl = ref<HTMLElement | null>(null)
+useGsapReveal(rootEl)
 
 const articulos = ref([
   {
@@ -43,11 +47,11 @@ const articulos = ref([
 </script>
 
 <template>
-  <div class="blog-view">
+  <div class="blog-view" ref="rootEl">
     <div class="panels-row">
 
       <!-- ── Panel izquierdo: intro editorial ── -->
-      <div class="panel panel-left">
+      <div class="panel panel-left" data-reveal>
 
         <div class="eyebrow">
           <span class="ew-line" />
@@ -71,7 +75,7 @@ const articulos = ref([
       <div class="v-divider" aria-hidden="true" />
 
       <!-- ── Panel derecho: lista de artículos ── -->
-      <div class="panel panel-right">
+      <div class="panel panel-right" data-reveal>
 
         <div class="eyebrow eyebrow-r">
           <span class="ew-text">Recientes</span>
@@ -82,7 +86,7 @@ const articulos = ref([
 
         <!-- Lista de artículos -->
         <ul v-if="articulos.length > 0" class="articles-list">
-          <li v-for="(articulo, i) in articulos" :key="articulo.id" class="article-item" :style="{ animationDelay: `${0.15 + i * 0.08}s` }">
+          <li v-for="articulo in articulos" :key="articulo.id" class="article-item" data-reveal data-reveal-group="articles">
             <div class="article-meta">
               <span class="article-date">{{ articulo.fecha }}</span>
               <span class="article-author">{{ articulo.autor }}</span>
@@ -110,17 +114,6 @@ const articulos = ref([
 </template>
 
 <style scoped lang="scss">
-@keyframes fadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 /* ── Contenedor ── */
 .blog-view {
   position: relative;
@@ -153,13 +146,8 @@ const articulos = ref([
   }
 }
 
-.panel-left {
-  animation: fadeUp 0.55s ease both;
-}
-
 .panel-right {
   align-items: flex-end;
-  animation: fadeUp 0.55s ease 0.15s both;
 }
 
 /* ── Divisor vertical ── */
@@ -276,7 +264,6 @@ const articulos = ref([
   gap: 0.35rem;
   padding: 1.25rem 0;
   border-bottom: 1px solid rgba(140, 58, 80, 0.1);
-  animation: fadeUp 0.5s ease both;
 
   &:first-child {
     padding-top: 0;
@@ -402,5 +389,66 @@ const articulos = ref([
   pointer-events: none;
   user-select: none;
   z-index: 0;
+}
+
+/* ── Móvil: paneles apilados, lectura a una columna ── */
+@media (max-width: 480px) {
+  .blog-view {
+    height: auto;
+    min-height: 100%;
+    overflow: visible;
+  }
+
+  .panels-row {
+    height: auto;
+    flex-direction: column;
+  }
+
+  .panel {
+    padding: 2rem 1.25rem;
+    overflow-y: visible;
+    gap: 1.25rem;
+  }
+
+  .panel-right {
+    align-items: flex-start;
+  }
+
+  .v-divider {
+    display: none;
+  }
+
+  .title-r {
+    text-align: left;
+  }
+
+  .articles-list {
+    align-items: flex-start;
+  }
+
+  .article-item {
+    max-width: 100%;
+  }
+
+  .article-meta {
+    justify-content: flex-start;
+  }
+
+  .article-title,
+  .article-excerpt {
+    text-align: left;
+  }
+
+  .article-link {
+    justify-content: flex-start;
+  }
+
+  .empty-state {
+    text-align: left;
+  }
+
+  .deco-num {
+    display: none;
+  }
 }
 </style>

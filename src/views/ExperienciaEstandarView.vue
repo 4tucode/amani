@@ -1,6 +1,10 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { scrollToTop } from '../composables/useScrollNavigation'
+import { useGsapReveal } from '../composables/useGsapReveal'
+
+const rootEl = ref<HTMLElement | null>(null)
+useGsapReveal(rootEl)
 
 const router = useRouter()
 
@@ -14,11 +18,11 @@ const sentidos = [
 </script>
 
 <template>
-  <div class="estandar-view">
+  <div class="estandar-view" ref="rootEl">
 
     <!-- ── Cabecera compacta ── -->
-    <div class="page-header">
-      <button class="back-link" @click="() => { router.push('/'); scrollToTop(); }">
+    <div class="page-header" data-reveal>
+      <button class="back-link" @click="router.push('/')">
         <span class="back-arrow">←</span>
         Volver al Inicio
       </button>
@@ -40,11 +44,12 @@ const sentidos = [
     <!-- ── Grid de sentidos ── -->
     <div class="senses-grid">
       <RouterLink
-        v-for="(sentido, i) in sentidos"
+        v-for="sentido in sentidos"
         :key="sentido.nombre"
         :to="sentido.path"
         class="sense-card"
-        :style="{ animationDelay: `${0.1 + i * 0.08}s` }"
+        data-reveal
+        data-reveal-group="senses"
       >
         <div class="sense-img-wrap">
           <img :src="sentido.img" :alt="sentido.nombre" class="sense-img" />
@@ -62,11 +67,6 @@ const sentidos = [
 </template>
 
 <style scoped lang="scss">
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(14px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
 .estandar-view {
   position: relative;
   min-height: 100%;
@@ -81,7 +81,6 @@ const sentidos = [
   gap: 2rem;
   padding: 2.25rem 3.5rem 1.75rem;
   border-bottom: 1px solid rgba(140, 58, 80, 0.08);
-  animation: fadeUp 0.45s ease both;
   flex-wrap: wrap;
 }
 
@@ -180,7 +179,6 @@ const sentidos = [
   overflow: hidden;
   background: #fff;
   box-shadow: 0 2px 12px rgba(61, 26, 38, 0.07);
-  animation: fadeUp 0.5s ease both;
   transition: transform 0.28s ease, box-shadow 0.28s ease;
 
   &:hover {
@@ -252,5 +250,60 @@ const sentidos = [
   pointer-events: none;
   user-select: none;
   z-index: 0;
+}
+
+/* ── Tablet (≤ 768px) ── */
+@media (max-width: 768px) {
+  .page-header {
+    padding: 1.75rem 2rem 1.5rem;
+    gap: 1.25rem;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .header-center {
+    width: 100%;
+    align-items: flex-start;
+  }
+
+  .eyebrow {
+    justify-content: flex-start;
+  }
+
+  .header-quote {
+    max-width: 100%;
+  }
+
+  .senses-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+    padding: 1.75rem 2rem;
+  }
+}
+
+/* ── Móvil (≤ 480px) ── */
+@media (max-width: 480px) {
+  .page-header {
+    padding: 1.25rem 1.25rem 1.25rem;
+    gap: 1rem;
+  }
+
+  .page-title {
+    font-size: 18px;
+  }
+
+  .header-quote {
+    display: none;
+  }
+
+  .senses-grid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+    padding: 1.25rem 1.25rem;
+  }
+
+  .deco-num {
+    display: none;
+  }
 }
 </style>

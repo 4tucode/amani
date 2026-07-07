@@ -1,6 +1,8 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import { RouterLink } from 'vue-router'
 import { useGlobalMusic } from '../composables/useGlobalMusic'
+import { useGsapReveal } from '../composables/useGsapReveal'
 
 const props = defineProps<{
   sentido: string
@@ -9,16 +11,19 @@ const props = defineProps<{
   icono: 'olfato' | 'oido'
 }>()
 
+const rootEl = ref<HTMLElement | null>(null)
+useGsapReveal(rootEl)
+
 const { isExperienciaSensorial } = useGlobalMusic()
 
 const getBackRoute = () => isExperienciaSensorial.value ? '/experiencia-sensorial' : '/experiencia-estandar'
 </script>
 
 <template>
-  <div class="coming-soon-view">
+  <div class="coming-soon-view" ref="rootEl">
 
     <!-- ── Cabecera ── -->
-    <div class="page-header">
+    <div class="page-header" data-reveal>
       <RouterLink :to="getBackRoute()" class="back-link">
         <span class="back-arrow">←</span>
         Volver a Experiencias
@@ -37,7 +42,7 @@ const getBackRoute = () => isExperienciaSensorial.value ? '/experiencia-sensoria
     </div>
 
     <!-- ── Estado vacío ── -->
-    <div class="empty-wrap">
+    <div class="empty-wrap" data-reveal>
       <svg class="empty-illustration" viewBox="0 0 400 320" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ilustración de colección en preparación">
         <circle cx="200" cy="168" r="138" fill="rgba(184,154,90,0.12)" />
         <circle cx="200" cy="168" r="100" fill="rgba(140,58,80,0.05)" />
@@ -92,11 +97,6 @@ const getBackRoute = () => isExperienciaSensorial.value ? '/experiencia-sensoria
 </template>
 
 <style scoped lang="scss">
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(14px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
 .coming-soon-view {
   position: relative;
   min-height: 100%;
@@ -111,7 +111,6 @@ const getBackRoute = () => isExperienciaSensorial.value ? '/experiencia-sensoria
   gap: 2rem;
   padding: 2.25rem 3.5rem 1.75rem;
   border-bottom: 1px solid rgba(140, 58, 80, 0.08);
-  animation: fadeUp 0.45s ease both;
   flex-wrap: wrap;
 }
 
@@ -190,7 +189,6 @@ const getBackRoute = () => isExperienciaSensorial.value ? '/experiencia-sensoria
   max-width: 460px;
   margin: 3.5rem auto 0;
   padding: 0 2rem;
-  animation: fadeUp 0.6s ease 0.1s both;
 }
 
 .empty-illustration {

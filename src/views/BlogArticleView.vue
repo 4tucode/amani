@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { RouterLink, useRoute } from 'vue-router'
 import { ref, computed } from 'vue'
+import { useGsapReveal } from '../composables/useGsapReveal'
+
+const rootEl = ref<HTMLElement | null>(null)
+useGsapReveal(rootEl)
 
 const route = useRoute()
 
@@ -91,13 +95,13 @@ if (!articulo.value) {
 </script>
 
 <template>
-  <div class="article-view">
+  <div class="article-view" ref="rootEl">
 
     <!-- Artículo encontrado -->
     <div v-if="articulo" class="panels-row">
 
       <!-- ── Panel izquierdo: meta del artículo ── -->
-      <div class="panel panel-left">
+      <div class="panel panel-left" data-reveal>
 
         <RouterLink to="/blog" class="back-link">
           <span class="back-arrow">←</span>
@@ -127,14 +131,14 @@ if (!articulo.value) {
       <div class="v-divider" aria-hidden="true" />
 
       <!-- ── Panel derecho: contenido ── -->
-      <div class="panel panel-right">
+      <div class="panel panel-right" data-reveal>
         <div class="article-content" v-html="articulo.contenido" />
       </div>
 
     </div>
 
     <!-- Artículo no encontrado -->
-    <div v-else class="not-found">
+    <div v-else class="not-found" data-reveal>
       <div class="eyebrow">
         <span class="ew-line" />
         <span class="ew-text">Error</span>
@@ -152,11 +156,6 @@ if (!articulo.value) {
 </template>
 
 <style scoped lang="scss">
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(12px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
 /* ── Contenedor ── */
 .article-view {
   position: relative;
@@ -186,12 +185,10 @@ if (!articulo.value) {
 
 .panel-left {
   flex: 0 0 38%;
-  animation: fadeUp 0.55s ease both;
 }
 
 .panel-right {
   flex: 1;
-  animation: fadeUp 0.55s ease 0.15s both;
 }
 
 /* ── Divisor vertical ── */
@@ -352,7 +349,6 @@ if (!articulo.value) {
   align-items: center;
   justify-content: center;
   gap: 1.25rem;
-  animation: fadeUp 0.55s ease both;
 }
 
 .not-found-title {
@@ -376,5 +372,43 @@ if (!articulo.value) {
   pointer-events: none;
   user-select: none;
   z-index: 0;
+}
+
+/* ── Móvil: paneles apilados, lectura a una columna ── */
+@media (max-width: 480px) {
+  .article-view {
+    height: auto;
+    min-height: 100%;
+    overflow: visible;
+  }
+
+  .panels-row {
+    height: auto;
+    flex-direction: column;
+  }
+
+  .panel {
+    padding: 2rem 1.25rem;
+    overflow-y: visible;
+    gap: 1.25rem;
+  }
+
+  .panel-left {
+    flex: none;
+  }
+
+  .v-divider {
+    display: none;
+  }
+
+  .not-found {
+    height: auto;
+    min-height: 100%;
+    padding: 2rem 1.25rem;
+  }
+
+  .deco-num {
+    display: none;
+  }
 }
 </style>

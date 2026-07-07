@@ -77,4 +77,12 @@ const router = createRouter({
   ],
 })
 
+// El scroll real ocurre dentro de `.app-main` (overflow-y: auto), no en `window`.
+// `scrollBehavior` de vue-router siempre acaba llamando a `window.scrollTo`
+// (incluso con la opción `el`), así que aquí reseteamos el contenedor a mano.
+router.afterEach(() => {
+  const scroller = document.querySelector('.app-main')
+  if (scroller) scroller.scrollTop = 0
+})
+
 export default router

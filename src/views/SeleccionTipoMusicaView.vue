@@ -1,21 +1,24 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { scrollToTop } from '../composables/useScrollNavigation'
+import { useGsapReveal } from '../composables/useGsapReveal'
+
+const rootEl = ref<HTMLElement | null>(null)
+useGsapReveal(rootEl)
 
 const router = useRouter()
 
 const navigateToExperienciaSensorial = (tipo: 'suave' | 'ambiente') => {
   router.push({ path: '/experiencia-sensorial', query: { tipo } })
-  scrollToTop()
 }
 </script>
 
 <template>
-  <div class="seleccion-view">
+  <div class="seleccion-view" ref="rootEl">
     <div class="panels-row">
 
       <!-- ── Panel izquierdo: Sensorial Suave ── -->
-      <div class="panel panel-left">
+      <div class="panel panel-left" data-reveal>
 
         <div class="eyebrow">
           <span class="ew-line" />
@@ -39,7 +42,7 @@ const navigateToExperienciaSensorial = (tipo: 'suave' | 'ambiente') => {
       <div class="v-divider" aria-hidden="true" />
 
       <!-- ── Panel derecho: Ambiente ── -->
-      <div class="panel panel-right">
+      <div class="panel panel-right" data-reveal>
 
         <div class="eyebrow eyebrow-r">
           <span class="ew-text">Modo Fiesta</span>
@@ -66,11 +69,6 @@ const navigateToExperienciaSensorial = (tipo: 'suave' | 'ambiente') => {
 </template>
 
 <style scoped lang="scss">
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(12px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
 .seleccion-view {
   position: relative;
   height: 100%;
@@ -97,8 +95,7 @@ const navigateToExperienciaSensorial = (tipo: 'suave' | 'ambiente') => {
   &::-webkit-scrollbar { display: none; }
 }
 
-.panel-left  { animation: fadeUp 0.55s ease both; }
-.panel-right { align-items: flex-end; animation: fadeUp 0.55s ease 0.15s both; }
+.panel-right { align-items: flex-end; }
 
 .v-divider {
   width: 1px;
@@ -199,5 +196,46 @@ const navigateToExperienciaSensorial = (tipo: 'suave' | 'ambiente') => {
   pointer-events: none;
   user-select: none;
   z-index: 0;
+}
+
+/* ── Móvil: paneles apilados, lectura a una columna ── */
+@media (max-width: 480px) {
+  .seleccion-view {
+    height: auto;
+    min-height: 100%;
+    overflow: visible;
+  }
+
+  .panels-row {
+    height: auto;
+    flex-direction: column;
+  }
+
+  .panel {
+    padding: 2rem 1.25rem;
+    overflow-y: visible;
+    gap: 1.25rem;
+  }
+
+  .panel-right { align-items: flex-start; }
+
+  .v-divider { display: none; }
+
+  .title-r,
+  .desc-r {
+    text-align: left;
+  }
+
+  .quote-r {
+    border-left: 2.5px solid rgba(140,58,80,0.25);
+    border-right: none;
+    padding-left: 20px;
+    padding-right: 0;
+    text-align: left;
+  }
+
+  .cta-btn-r { align-self: flex-start; }
+
+  .deco-num { display: none; }
 }
 </style>

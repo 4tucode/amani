@@ -2,7 +2,11 @@
 import { RouterLink } from 'vue-router'
 import { ref } from 'vue'
 import { useGlobalMusic } from '../composables/useGlobalMusic'
+import { useGsapReveal } from '../composables/useGsapReveal'
 import ImageLightbox from '../components/ImageLightbox.vue'
+
+const rootEl = ref<HTMLElement | null>(null)
+useGsapReveal(rootEl)
 
 const { isExperienciaSensorial } = useGlobalMusic()
 
@@ -102,10 +106,10 @@ const comprarProducto = (producto: { nombre: string; precio: string }) => {
 </script>
 
 <template>
-  <div class="tacto-view">
+  <div class="tacto-view" ref="rootEl">
 
     <!-- ── Cabecera ── -->
-    <div class="page-header">
+    <div class="page-header" data-reveal>
       <RouterLink :to="getBackRoute()" class="back-link">
         <span class="back-arrow">←</span>
         Volver a Experiencias
@@ -128,10 +132,11 @@ const comprarProducto = (producto: { nombre: string; precio: string }) => {
     <!-- ── Grid de productos ── -->
     <div class="products-grid">
       <div
-        v-for="(producto, i) in productos"
+        v-for="producto in productos"
         :key="producto.id"
         class="product-card"
-        :style="{ animationDelay: `${0.1 + i * 0.1}s` }"
+        data-reveal
+        data-reveal-group="products"
       >
         <div class="card-img-wrap" @click="abrirGaleria(producto, 0)">
           <img :src="producto.imgs[0]" :alt="producto.nombre" class="card-img" />
@@ -176,11 +181,6 @@ const comprarProducto = (producto: { nombre: string; precio: string }) => {
 </template>
 
 <style scoped lang="scss">
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(14px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
 .tacto-view {
   position: relative;
   min-height: 100%;
@@ -195,7 +195,6 @@ const comprarProducto = (producto: { nombre: string; precio: string }) => {
   gap: 2rem;
   padding: 2.25rem 3.5rem 1.75rem;
   border-bottom: 1px solid rgba(140, 58, 80, 0.08);
-  animation: fadeUp 0.45s ease both;
   flex-wrap: wrap;
 }
 
@@ -290,7 +289,6 @@ const comprarProducto = (producto: { nombre: string; precio: string }) => {
   border-radius: 6px;
   overflow: hidden;
   box-shadow: 0 2px 12px rgba(61, 26, 38, 0.07);
-  animation: fadeUp 0.55s ease both;
   transition: transform 0.28s ease, box-shadow 0.28s ease;
 
   &:hover {
