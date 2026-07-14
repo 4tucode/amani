@@ -3,8 +3,8 @@ import { ref } from 'vue'
 import { useGsapReveal } from '../composables/useGsapReveal'
 
 const contactInfo = {
-  email: 'contacto@amani.com',
-  telefono: '+34 123 456 789',
+  email: 'angelesmalavo1@gmail.com',
+  telefono: '+34 680 15 08 64',
   horario: 'Lunes a Viernes: 9:00 - 18:00\nSábados: 10:00 - 14:00',
 }
 
