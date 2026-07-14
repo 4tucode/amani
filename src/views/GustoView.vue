@@ -14,21 +14,76 @@ const productos = ref([
   {
     id: 1,
     nombre: 'Puro Cacao 1906 · Contriti 36%',
-    descripcion: 'Tableta de cacao 100% natural de la casa Cacao 1906, elaborada con el método contriti que conserva intacto el sabor original del grano. Su 36% de cacao ofrece un perfil suave y ligeramente afrutado, ideal para descubrir el gusto puro del chocolate sin añadidos. Presentación de 50g envuelta en papel de estilo artesanal.',
-    precio: '4.50',
+    descripcion: 'Tableta de cacao 100% natural de la casa Cacao 1906, elaborada con el método contriti que conserva intacto el sabor original del grano. Su 36% de cacao ofrece un perfil suave y ligeramente afrutado, ideal para descubrir el gusto puro del chocolate sin añadidos. Presentación de 50g.',
+    precio: '6',
     imgs: [
-      new URL('@/assets/productos/fotos-productos/Gusto/cacao1.jpg', import.meta.url).href,
-      new URL('@/assets/productos/fotos-productos/Gusto/cacao2.jpg', import.meta.url).href,
+      new URL('@/assets/productos/fotos-productos/Gusto/Photoroom_20260710_191357.jpg', import.meta.url).href,
+      new URL('@/assets/productos/fotos-productos/Gusto/Photoroom_20260602_175718.jpg', import.meta.url).href,
     ],
   },
   {
     id: 2,
     nombre: 'Puro Cacao 1906 · Con Cacahuete 50%',
-    descripcion: 'Una tableta de 50% de cacao natural que combina la intensidad del chocolate con trozos de cacahuete tostado, resultando en un bocado crujiente y cremoso a partes iguales. Elaborada también por Cacao 1906 en formato de 50g, es la versión más golosa de la colección para quienes buscan un punto extra de sabor.',
-    precio: '4.95',
+    descripcion: 'Una tableta de 50% de cacao natural que combina la intensidad del chocolate con trozos de cacahuete tostado, resultando en un bocado crujiente y cremoso a partes iguales. Elaborada por Cacao 1906 en formato de 50g, es la versión más golosa de la colección para quienes buscan un punto extra de sabor.',
+    precio: '6',
     imgs: [
-      new URL('@/assets/productos/fotos-productos/Gusto/cacao3.jpg', import.meta.url).href,
-      new URL('@/assets/productos/fotos-productos/Gusto/cacao2.jpg', import.meta.url).href,
+      new URL('@/assets/productos/fotos-productos/Gusto/Photoroom_20260710_191443.jpg', import.meta.url).href,
+      new URL('@/assets/productos/fotos-productos/Gusto/Photoroom_20260602_175622.jpg', import.meta.url).href,
+    ],
+  },
+  {
+    id: 3,
+    nombre: 'Puro Cacao 1906 · Blanco 36%',
+    descripcion: 'La cara más delicada del cacao: una tableta de chocolate blanco elaborada con manteca de cacao 100% natural de Guinea Ecuatorial. Su textura sedosa y su dulzor suave la convierten en la puerta de entrada perfecta a la colección para los paladares más golosos. Formato de 50g.',
+    precio: '6',
+    imgs: [
+      new URL('@/assets/productos/fotos-productos/Gusto/Photoroom_20260710_191322.jpg', import.meta.url).href,
+    ],
+  },
+  {
+    id: 4,
+    nombre: 'Puro Cacao 1906 · Con Coco 50%',
+    descripcion: 'Tableta de 50% de cacao natural con coco, una combinación tropical que une la intensidad del grano ecuatoguineano con el dulzor fresco del coco rallado. Un bocado exótico y equilibrado en formato de 50g, elaborado de forma artesanal por Cacao 1906.',
+    precio: '6',
+    imgs: [
+      new URL('@/assets/productos/fotos-productos/Gusto/Photoroom_20260710_191241.jpg', import.meta.url).href,
+    ],
+  },
+  {
+    id: 5,
+    nombre: 'Puro Cacao 1906 · Con Jengibre 65%',
+    descripcion: 'La tableta más intensa de la colección: 65% de cacao puro con toques de jengibre confitado que aportan un punto picante y cítrico al final de cada bocado. Pensada para los amantes del chocolate negro con carácter. Presentación de 50g, 100% natural.',
+    precio: '6',
+    imgs: [
+      new URL('@/assets/productos/fotos-productos/Gusto/Photoroom_20260710_191522.jpg', import.meta.url).href,
+    ],
+  },
+  {
+    id: 6,
+    nombre: 'Cacao Nibs · Bañados en Chocolate 50%',
+    descripcion: 'Nibs de cacao natural tostado bañados en chocolate al 50%, presentados en una elegante lata dorada. Crujientes, intensos y llenos de energía, son el snack perfecto para picar entre horas o acompañar el café. Puro sabor a origen en cada grano.',
+    precio: '8',
+    imgs: [
+      new URL('@/assets/productos/fotos-productos/Gusto/Photoroom_20260710_191204.jpg', import.meta.url).href,
+    ],
+  },
+  {
+    id: 7,
+    nombre: 'Crema de Cacao 1906',
+    descripcion: 'Crema de cacao untable elaborada con ingredientes naturales: cacao de Guinea Ecuatorial, leche y un toque de azúcar. Perfecta con pan en el desayuno, con frutas o como acompañamiento de postres. Una alternativa artesanal y auténtica a las cremas industriales.',
+    precio: '6',
+    imgs: [
+      new URL('@/assets/productos/fotos-productos/Gusto/Photoroom_20260710_191124.jpg', import.meta.url).href,
+      new URL('@/assets/productos/fotos-productos/Gusto/Photoroom_20260602_175506.jpg', import.meta.url).href,
+    ],
+  },
+  {
+    id: 8,
+    nombre: 'Puro Cacao en Polvo · 100% Natural',
+    descripcion: 'Cacao en polvo desgrasado, 100% natural y sin azúcares añadidos. Antioxidante y energizante, es ideal para repostería (bizcochos, tartas, galletas), confitería o como toque amargo en yogures y bebidas. El ingrediente esencial de toda despensa chocolatera.',
+    precio: '7',
+    imgs: [
+      new URL('@/assets/productos/fotos-productos/Gusto/Photoroom_20260710_191050.jpg', import.meta.url).href,
     ],
   },
 ])
