@@ -35,6 +35,11 @@ function onLeave(el: Element, done: () => void) {
           </Transition>
         </RouterView>
       </main>
+
+      <!-- Footer -->
+      <footer class="app-footer">
+        <RouterLink to="/politica-de-compra" class="footer-link">Política de compra</RouterLink>
+      </footer>
     </div>
 
     <!-- Global music player (fixed, unaffected by layout) -->
@@ -91,6 +96,31 @@ function onLeave(el: Element, done: () => void) {
   position: relative;
 }
 
+.app-footer {
+  height: 40px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 2.5rem;
+  border-top: 1px solid rgba(140, 58, 80, 0.08);
+}
+
+.footer-link {
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(61, 26, 38, 0.4);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.footer-link:hover {
+  color: #8c3a50;
+}
+
 /* ── Móvil: la barra de navegación pasa a fija abajo (ver TheHeader) ── */
 @media (max-width: 480px) {
   .top-bar {
@@ -100,6 +130,12 @@ function onLeave(el: Element, done: () => void) {
 
   .app-main {
     padding-bottom: 60px;
+  }
+
+  /* La nav móvil es fija abajo: el footer sube por encima de ella */
+  .app-footer {
+    margin-bottom: 60px;
+    padding: 0 1.25rem;
   }
 }
 </style>

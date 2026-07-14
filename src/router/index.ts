@@ -65,6 +65,11 @@ const router = createRouter({
       component: () => import('../views/ContactoView.vue'),
     },
     {
+      path: '/politica-de-compra',
+      name: 'politica-compra',
+      component: () => import('../views/PoliticaCompraView.vue'),
+    },
+    {
       path: '/blog',
       name: 'blog',
       component: () => import('../views/BlogView.vue'),
