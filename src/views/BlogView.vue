@@ -64,6 +64,13 @@ const articulos = ref([
           <p>Descubre historias, experiencias y reflexiones sobre los sentidos y la cultura</p>
         </blockquote>
 
+        <RouterLink to="/explora-guinea-ecuatorial" class="galeria-cta" data-reveal>
+          <span class="cta-label">Galería fotográfica</span>
+          <span class="cta-title">
+            Explora Guinea Ecuatorial <span class="cta-arrow" aria-hidden="true">→</span>
+          </span>
+        </RouterLink>
+
         <div class="article-count">
           <span class="count-num">{{ String(articulos.length).padStart(2, '0') }}</span>
           <span class="count-label">artículos disponibles</span>
@@ -216,6 +223,47 @@ const articulos = ref([
     color: rgba(61, 26, 38, 0.65);
     line-height: 2;
     margin: 0;
+  }
+}
+
+/* ── CTA galería ── */
+.galeria-cta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  text-decoration: none;
+  width: fit-content;
+
+  &:hover .cta-title {
+    color: #8c3a50;
+  }
+
+  &:hover .cta-arrow {
+    transform: translateX(5px);
+  }
+}
+
+.cta-label {
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(184, 154, 90, 0.9);
+}
+
+.cta-title {
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 19px;
+  font-weight: 800;
+  color: #3d1a26;
+  letter-spacing: 0.02em;
+  line-height: 1.3;
+  transition: color 0.2s ease;
+
+  .cta-arrow {
+    display: inline-block;
+    transition: transform 0.2s ease;
   }
 }
 

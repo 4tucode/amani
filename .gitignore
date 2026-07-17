@@ -28,3 +28,7 @@ coverage
 *.sw?
 
 *.tsbuildinfo
+
+# Originales de la galería (HEIF/MOV pesados); la web usa src/assets/fotos-galeria/web
+src/assets/fotos-galeria/*
+!src/assets/fotos-galeria/web

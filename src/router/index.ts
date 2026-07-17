@@ -65,6 +65,11 @@ const router = createRouter({
       component: () => import('../views/ContactoView.vue'),
     },
     {
+      path: '/explora-guinea-ecuatorial',
+      name: 'galeria-guinea',
+      component: () => import('../views/GaleriaGuineaView.vue'),
+    },
+    {
       path: '/politica-de-compra',
       name: 'politica-compra',
       component: () => import('../views/PoliticaCompraView.vue'),
