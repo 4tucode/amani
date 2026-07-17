@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { RouterLink, useRoute } from 'vue-router'
-import { ref, computed } from 'vue'
+import { ref, computed, watchEffect } from 'vue'
 import { useGsapReveal } from '../composables/useGsapReveal'
 
 const rootEl = ref<HTMLElement | null>(null)
@@ -92,6 +92,14 @@ const articulo = computed(() => articulos.value.find((a) => a.id === articuloId.
 if (!articulo.value) {
   console.warn('Artículo no encontrado')
 }
+
+// SEO: título y descripción propios de cada artículo (el router pone los genéricos).
+watchEffect(() => {
+  if (!articulo.value) return
+  document.title = `${articulo.value.titulo} | Blog Amani`
+  const desc = document.head.querySelector<HTMLMetaElement>('meta[name="description"]')
+  if (desc) desc.setAttribute('content', articulo.value.descripcion)
+})
 </script>
 
 <template>
