@@ -21,11 +21,11 @@ onMounted(() => {
 })
 
 const sentidos = [
-  { nombre: 'Vista',  num: '01', img: new URL('@/assets/comic/vista.png',   import.meta.url).href },
-  { nombre: 'Oído',   num: '02', img: new URL('@/assets/comic/oido.png',    import.meta.url).href },
-  { nombre: 'Olfato', num: '03', img: new URL('@/assets/comic/olfato.png',  import.meta.url).href },
-  { nombre: 'Gusto',  num: '04', img: new URL('@/assets/comic/gusto.png',   import.meta.url).href },
-  { nombre: 'Tacto',  num: '05', img: new URL('@/assets/comic/tacto.png',   import.meta.url).href },
+  { nombre: 'Vista',  slug: 'vista',  num: '01', img: new URL('@/assets/comic/vista.png',   import.meta.url).href },
+  { nombre: 'Oído',   slug: 'oido',   num: '02', img: new URL('@/assets/comic/oido.png',    import.meta.url).href },
+  { nombre: 'Olfato', slug: 'olfato', num: '03', img: new URL('@/assets/comic/olfato.png',  import.meta.url).href },
+  { nombre: 'Gusto',  slug: 'gusto',  num: '04', img: new URL('@/assets/comic/gusto.png',   import.meta.url).href },
+  { nombre: 'Tacto',  slug: 'tacto',  num: '05', img: new URL('@/assets/comic/tacto.png',   import.meta.url).href },
 ]
 </script>
 
@@ -58,7 +58,7 @@ const sentidos = [
       <RouterLink
         v-for="sentido in sentidos"
         :key="sentido.nombre"
-        :to="navigateToExperiencia(sentido.nombre.toLowerCase())"
+        :to="navigateToExperiencia(sentido.slug)"
         class="sense-card"
         data-reveal
         data-reveal-group="senses"

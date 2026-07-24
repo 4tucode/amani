@@ -171,6 +171,15 @@ const router = createRouter({
           'Historias, cultura y arte africano en el blog de Amani: artículos sobre Guinea Ecuatorial, artesanía y experiencias sensoriales.',
       },
     },
+    {
+      path: '/backstage',
+      name: 'backstage',
+      component: () => import('../views/BackstageView.vue'),
+      meta: {
+        title: 'Panel de Administración | Amani',
+        description: 'Panel privado de gestión de productos.',
+      },
+    },
   ],
 })
 

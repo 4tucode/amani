@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useGlobalMusic } from '../composables/useGlobalMusic'
 import { useGsapReveal } from '../composables/useGsapReveal'
+import { useProductos } from '../composables/useProductos'
 import ImageLightbox from '../components/ImageLightbox.vue'
 
 const rootEl = ref<HTMLElement | null>(null)
@@ -10,83 +11,8 @@ useGsapReveal(rootEl)
 
 const { isExperienciaSensorial } = useGlobalMusic()
 
-const productos = ref([
-  {
-    id: 1,
-    nombre: 'Puro Cacao 1906 · Contriti 36%',
-    descripcion: 'Tableta de cacao 100% natural de la casa Cacao 1906, elaborada con el método contriti que conserva intacto el sabor original del grano. Su 36% de cacao ofrece un perfil suave y ligeramente afrutado, ideal para descubrir el gusto puro del chocolate sin añadidos. Presentación de 50g.',
-    precio: '6',
-    imgs: [
-      new URL('@/assets/productos/fotos-productos/Gusto/Photoroom_20260710_191357.jpg', import.meta.url).href,
-      new URL('@/assets/productos/fotos-productos/Gusto/Photoroom_20260602_175718.jpg', import.meta.url).href,
-    ],
-  },
-  {
-    id: 2,
-    nombre: 'Puro Cacao 1906 · Con Cacahuete 50%',
-    descripcion: 'Una tableta de 50% de cacao natural que combina la intensidad del chocolate con trozos de cacahuete tostado, resultando en un bocado crujiente y cremoso a partes iguales. Elaborada por Cacao 1906 en formato de 50g, es la versión más golosa de la colección para quienes buscan un punto extra de sabor.',
-    precio: '6',
-    imgs: [
-      new URL('@/assets/productos/fotos-productos/Gusto/Photoroom_20260710_191443.jpg', import.meta.url).href,
-      new URL('@/assets/productos/fotos-productos/Gusto/Photoroom_20260602_175622.jpg', import.meta.url).href,
-    ],
-  },
-  {
-    id: 3,
-    nombre: 'Puro Cacao 1906 · Blanco 36%',
-    descripcion: 'La cara más delicada del cacao: una tableta de chocolate blanco elaborada con manteca de cacao 100% natural de Guinea Ecuatorial. Su textura sedosa y su dulzor suave la convierten en la puerta de entrada perfecta a la colección para los paladares más golosos. Formato de 50g.',
-    precio: '6',
-    imgs: [
-      new URL('@/assets/productos/fotos-productos/Gusto/Photoroom_20260710_191322.jpg', import.meta.url).href,
-    ],
-  },
-  {
-    id: 4,
-    nombre: 'Puro Cacao 1906 · Con Coco 50%',
-    descripcion: 'Tableta de 50% de cacao natural con coco, una combinación tropical que une la intensidad del grano ecuatoguineano con el dulzor fresco del coco rallado. Un bocado exótico y equilibrado en formato de 50g, elaborado de forma artesanal por Cacao 1906.',
-    precio: '6',
-    imgs: [
-      new URL('@/assets/productos/fotos-productos/Gusto/Photoroom_20260710_191241.jpg', import.meta.url).href,
-    ],
-  },
-  {
-    id: 5,
-    nombre: 'Puro Cacao 1906 · Con Jengibre 65%',
-    descripcion: 'La tableta más intensa de la colección: 65% de cacao puro con toques de jengibre confitado que aportan un punto picante y cítrico al final de cada bocado. Pensada para los amantes del chocolate negro con carácter. Presentación de 50g, 100% natural.',
-    precio: '6',
-    imgs: [
-      new URL('@/assets/productos/fotos-productos/Gusto/Photoroom_20260710_191522.jpg', import.meta.url).href,
-    ],
-  },
-  {
-    id: 6,
-    nombre: 'Cacao Nibs · Bañados en Chocolate 50%',
-    descripcion: 'Nibs de cacao natural tostado bañados en chocolate al 50%, presentados en una elegante lata dorada. Crujientes, intensos y llenos de energía, son el snack perfecto para picar entre horas o acompañar el café. Puro sabor a origen en cada grano.',
-    precio: '8',
-    imgs: [
-      new URL('@/assets/productos/fotos-productos/Gusto/Photoroom_20260710_191204.jpg', import.meta.url).href,
-    ],
-  },
-  {
-    id: 7,
-    nombre: 'Crema de Cacao 1906',
-    descripcion: 'Crema de cacao untable elaborada con ingredientes naturales: cacao de Guinea Ecuatorial, leche y un toque de azúcar. Perfecta con pan en el desayuno, con frutas o como acompañamiento de postres. Una alternativa artesanal y auténtica a las cremas industriales.',
-    precio: '6',
-    imgs: [
-      new URL('@/assets/productos/fotos-productos/Gusto/Photoroom_20260710_191124.jpg', import.meta.url).href,
-      new URL('@/assets/productos/fotos-productos/Gusto/Photoroom_20260602_175506.jpg', import.meta.url).href,
-    ],
-  },
-  {
-    id: 8,
-    nombre: 'Puro Cacao en Polvo · 100% Natural',
-    descripcion: 'Cacao en polvo desgrasado, 100% natural y sin azúcares añadidos. Antioxidante y energizante, es ideal para repostería (bizcochos, tartas, galletas), confitería o como toque amargo en yogures y bebidas. El ingrediente esencial de toda despensa chocolatera.',
-    precio: '7',
-    imgs: [
-      new URL('@/assets/productos/fotos-productos/Gusto/Photoroom_20260710_191050.jpg', import.meta.url).href,
-    ],
-  },
-])
+const { productos, cargando, error, cargarPorSentido } = useProductos()
+onMounted(() => cargarPorSentido('gusto'))
 
 const getBackRoute = () => isExperienciaSensorial.value ? '/experiencia-sensorial' : '/experiencia-estandar'
 
@@ -96,7 +22,8 @@ const abrirGaleria = (producto: { nombre: string; imgs: string[] }, index: numbe
   lightbox.value = { images: producto.imgs, alt: producto.nombre, index }
 }
 
-const comprarProducto = (producto: { nombre: string; precio: string }) => {
+const comprarProducto = (producto: { nombre: string; precio: string; agotado?: boolean }) => {
+  if (producto.agotado) return
   const numero = '34680150864'
   const mensaje = encodeURIComponent(`Hola, me interesa comprar el siguiente producto:\n\n📦 ${producto.nombre}\n💰 Precio: €${producto.precio}\n\nPor favor, contacta conmigo para completar la compra.`)
   window.open(`https://wa.me/${numero}?text=${mensaje}`, '_blank')
@@ -127,16 +54,22 @@ const comprarProducto = (producto: { nombre: string; precio: string }) => {
       </blockquote>
     </div>
 
+    <p v-if="cargando" class="estado-info">Cargando productos…</p>
+    <p v-else-if="error" class="estado-info">{{ error }}</p>
+    <p v-else-if="!productos.length" class="estado-info">Todavía no hay productos en esta colección.</p>
+
     <!-- ── Grid de productos ── -->
-    <div class="products-grid">
+    <div v-else class="products-grid">
       <div
-        v-for="producto in productos"
+        v-for="(producto, i) in productos"
         :key="producto.id"
         class="product-card"
+        :class="{ 'is-agotado': producto.agotado }"
         data-reveal
         data-reveal-group="products"
       >
         <div class="card-img-wrap" @click="abrirGaleria(producto, 0)">
+          <span v-if="producto.agotado" class="sold-out-badge">Agotado</span>
           <img :src="producto.imgs[0]" :alt="producto.nombre" class="card-img" />
         </div>
 
@@ -153,13 +86,19 @@ const comprarProducto = (producto: { nombre: string; precio: string }) => {
         </div>
 
         <div class="card-body">
-          <div class="card-num">{{ String(producto.id).padStart(2, '0') }}</div>
+          <div class="card-num">{{ String(i + 1).padStart(2, '0') }}</div>
           <h2 class="card-name">{{ producto.nombre }}</h2>
           <p class="card-desc">{{ producto.descripcion }}</p>
           <div class="card-footer">
             <span class="card-price">€{{ producto.precio }}</span>
-            <button class="buy-btn" @click="comprarProducto(producto)">
-              Comprar <span class="buy-arrow">→</span>
+            <button
+              class="buy-btn"
+              :class="{ 'is-disabled': producto.agotado }"
+              :disabled="producto.agotado"
+              @click="comprarProducto(producto)"
+            >
+              <template v-if="producto.agotado">Agotado</template>
+              <template v-else>Comprar <span class="buy-arrow">→</span></template>
             </button>
           </div>
         </div>
@@ -272,6 +211,16 @@ const comprarProducto = (producto: { nombre: string; precio: string }) => {
   }
 }
 
+.estado-info {
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 14px;
+  font-style: italic;
+  color: rgba(61, 26, 38, 0.5);
+  text-align: center;
+  padding: 3rem 2rem;
+  margin: 0;
+}
+
 /* ── Grid de productos ── */
 .products-grid {
   display: grid;
@@ -298,11 +247,30 @@ const comprarProducto = (producto: { nombre: string; precio: string }) => {
 }
 
 .card-img-wrap {
+  position: relative;
   overflow: hidden;
   line-height: 0;
   aspect-ratio: 4 / 3;
   cursor: pointer;
   background: #fff;
+}
+
+.sold-out-badge {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  z-index: 1;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #fff;
+  background: rgba(61, 26, 38, 0.88);
+  backdrop-filter: blur(3px);
+  padding: 0.45rem 0.9rem;
+  border-radius: 2px;
+  line-height: 1;
 }
 
 .card-img {
@@ -416,6 +384,13 @@ const comprarProducto = (producto: { nombre: string; precio: string }) => {
   cursor: pointer;
   transition: background 0.2s ease, transform 0.2s ease;
   &:hover { background: #3d1a26; transform: translateY(-1px); }
+
+  &.is-disabled {
+    background: rgba(61, 26, 38, 0.14);
+    color: rgba(61, 26, 38, 0.45);
+    cursor: not-allowed;
+    &:hover { background: rgba(61, 26, 38, 0.14); transform: none; }
+  }
 }
 .buy-arrow { font-size: 11px; }
 

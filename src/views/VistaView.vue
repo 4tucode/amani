@@ -1,52 +1,29 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useGlobalMusic } from '../composables/useGlobalMusic'
 import { useGsapReveal } from '../composables/useGsapReveal'
+import { useProductos } from '../composables/useProductos'
+import ImageLightbox from '../components/ImageLightbox.vue'
 
 const rootEl = ref<HTMLElement | null>(null)
 useGsapReveal(rootEl)
 
 const { isExperienciaSensorial } = useGlobalMusic()
 
-const productos = ref([
-  {
-    id: 1,
-    nombre: 'United colours of Africa',
-    descripcion: 'United Colours of Africa reúne en una sola obra la energía, la diversidad y la belleza de África. A través de un mosaico de tejidos tradicionales, colores intensos y motivos geométricos, cada fragmento cuenta una historia diferente mientras contribuye a una narrativa común. La obra habla de identidad, de encuentro y de la capacidad de múltiples voces, culturas y tradiciones para coexistir en armonía sin perder su esencia.',
-    precio: '85',
-    img: new URL('@/assets/productos/fotos-productos/Vista/v1.jpg', import.meta.url).href,
-    certificado: new URL('@/assets/productos/fotos-productos/Vista/Certificado Autenticidad_United colours of Africa.pdf', import.meta.url).href,
-  },
-  {
-    id: 2,
-    nombre: 'En su espalda',
-    descripcion: 'Entre colores, texturas y recuerdos, esta obra celebra el vínculo invisible que une a una madre con su hijo. La figura del niño, sostenida por tejidos africanos y rodeada de un mosaico luminoso de cuentas, simboliza la seguridad, la alegría y el amor que acompañan el comienzo de la vida. Una pieza que habla de protección, de herencia cultural y de la felicidad de llevar y ser llevado.',
-    precio: '65',
-    img: new URL('@/assets/productos/fotos-productos/Vista/v2.jpg', import.meta.url).href,
-    certificado: new URL('@/assets/productos/fotos-productos/Vista/Certificado Autenticidad_En su espalda.pdf', import.meta.url).href,
-  },
-  {
-    id: 3,
-    nombre: 'African girl',
-    descripcion: 'Esta obra textil rinde homenaje a la mujer africana a través de una representación simbólica y atemporal. Realizada con lana, tela africana y cuentas decorativas, combina texturas y colores inspirados en la naturaleza para crear una composición llena de identidad y sensibilidad. La ausencia de rasgos faciales convierte a la figura en un símbolo universal, permitiendo que cualquier mujer pueda verse reflejada en ella. Una pieza que celebra la belleza, la fuerza y la riqueza cultural africana desde una mirada original y contemporánea.',
-    precio: '50',
-    img: new URL('@/assets/productos/fotos-productos/Vista/v3.jpg', import.meta.url).href,
-    certificado: new URL('@/assets/productos/fotos-productos/Vista/Certificado Autenticidad_african_girl.pdf', import.meta.url).href,
-  },
-  {
-    id: 4,
-    nombre: 'Black and Stone',
-    descripcion: 'Entre sombras, texturas y formas, esta obra revela la fuerza serena de la mujer africana. Las piedras que dan forma a la figura evocan raíces, resistencia y conexión con la tierra, mientras que los tejidos africanos aportan color, identidad y memoria cultural. Sobre un fondo de relieves sutiles, se celebra la esencia femenina africana más allá de cualquier individualidad.',
-    precio: '90',
-    img: new URL('@/assets/productos/fotos-productos/Vista/v4.jpg', import.meta.url).href,
-    certificado: new URL('@/assets/productos/fotos-productos/Vista/Certificado Autenticidad_black_and_stone.pdf', import.meta.url).href,
-  },
-])
+const { productos, cargando, error, cargarPorSentido } = useProductos()
+onMounted(() => cargarPorSentido('vista'))
 
 const getBackRoute = () => isExperienciaSensorial.value ? '/experiencia-sensorial' : '/experiencia-estandar'
 
-const comprarProducto = (producto: { nombre: string; precio: string }) => {
+const lightbox = ref<{ images: string[]; alt: string; index: number } | null>(null)
+
+const abrirGaleria = (producto: { nombre: string; imgs: string[] }, index: number) => {
+  lightbox.value = { images: producto.imgs, alt: producto.nombre, index }
+}
+
+const comprarProducto = (producto: { nombre: string; precio: string; agotado?: boolean }) => {
+  if (producto.agotado) return
   const numero = '34680150864'
   const mensaje = encodeURIComponent(`Hola, me interesa comprar el siguiente producto:\n\n📦 ${producto.nombre}\n💰 Precio: €${producto.precio}\n\nPor favor, contacta conmigo para completar la compra.`)
   window.open(`https://wa.me/${numero}?text=${mensaje}`, '_blank')
@@ -77,21 +54,39 @@ const comprarProducto = (producto: { nombre: string; precio: string }) => {
       </blockquote>
     </div>
 
+    <p v-if="cargando" class="estado-info">Cargando productos…</p>
+    <p v-else-if="error" class="estado-info">{{ error }}</p>
+    <p v-else-if="!productos.length" class="estado-info">Todavía no hay productos en esta colección.</p>
+
     <!-- ── Grid de productos ── -->
-    <div class="products-grid">
+    <div v-else class="products-grid">
       <div
-        v-for="producto in productos"
+        v-for="(producto, i) in productos"
         :key="producto.id"
         class="product-card"
+        :class="{ 'is-agotado': producto.agotado }"
         data-reveal
         data-reveal-group="products"
       >
-        <div class="card-img-wrap">
-          <img :src="producto.img" :alt="producto.nombre" class="card-img" />
+        <div class="card-img-wrap" @click="abrirGaleria(producto, 0)">
+          <span v-if="producto.agotado" class="sold-out-badge">Agotado</span>
+          <img :src="producto.imgs[0]" :alt="producto.nombre" class="card-img" />
+        </div>
+
+        <div class="card-thumbs">
+          <button
+            v-for="(img, j) in producto.imgs"
+            :key="j"
+            class="thumb-btn"
+            :class="{ active: j === 0 }"
+            @click="abrirGaleria(producto, j)"
+          >
+            <img :src="img" :alt="`${producto.nombre} ${j + 1}`" class="thumb-img" />
+          </button>
         </div>
 
         <div class="card-body">
-          <div class="card-num">{{ String(producto.id).padStart(2, '0') }}</div>
+          <div class="card-num">{{ String(i + 1).padStart(2, '0') }}</div>
           <h2 class="card-name">{{ producto.nombre }}</h2>
           <p class="card-desc">{{ producto.descripcion }}</p>
           <a
@@ -105,8 +100,14 @@ const comprarProducto = (producto: { nombre: string; precio: string }) => {
           </a>
           <div class="card-footer">
             <span class="card-price">€{{ producto.precio }}</span>
-            <button class="buy-btn" @click="comprarProducto(producto)">
-              Comprar <span class="buy-arrow">→</span>
+            <button
+              class="buy-btn"
+              :class="{ 'is-disabled': producto.agotado }"
+              :disabled="producto.agotado"
+              @click="comprarProducto(producto)"
+            >
+              <template v-if="producto.agotado">Agotado</template>
+              <template v-else>Comprar <span class="buy-arrow">→</span></template>
             </button>
           </div>
         </div>
@@ -114,6 +115,14 @@ const comprarProducto = (producto: { nombre: string; precio: string }) => {
     </div>
 
     <span class="deco-num" aria-hidden="true">01</span>
+
+    <ImageLightbox
+      v-if="lightbox"
+      :images="lightbox.images"
+      :alt="lightbox.alt"
+      :initial-index="lightbox.index"
+      @close="lightbox = null"
+    />
   </div>
 </template>
 
@@ -237,9 +246,29 @@ const comprarProducto = (producto: { nombre: string; precio: string }) => {
 }
 
 .card-img-wrap {
+  position: relative;
   overflow: hidden;
   line-height: 0;
   aspect-ratio: 4 / 3;
+  cursor: pointer;
+}
+
+.sold-out-badge {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  z-index: 1;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #fff;
+  background: rgba(61, 26, 38, 0.88);
+  backdrop-filter: blur(3px);
+  padding: 0.45rem 0.9rem;
+  border-radius: 2px;
+  line-height: 1;
 }
 
 .card-img {
@@ -250,8 +279,52 @@ const comprarProducto = (producto: { nombre: string; precio: string }) => {
   transition: transform 0.38s ease;
 }
 
+.card-thumbs {
+  display: flex;
+  gap: 0.4rem;
+  padding: 0.6rem 1rem 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
+}
+
+.thumb-btn {
+  flex: 0 0 auto;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border-radius: 4px;
+  border: 1.5px solid transparent;
+  overflow: hidden;
+  cursor: pointer;
+  background: none;
+  line-height: 0;
+  opacity: 0.6;
+  transition: opacity 0.2s ease, border-color 0.2s ease;
+
+  &:hover { opacity: 1; }
+  &.active { opacity: 1; border-color: #8c3a50; }
+}
+
+.thumb-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.estado-info {
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 14px;
+  font-style: italic;
+  color: rgba(61, 26, 38, 0.5);
+  text-align: center;
+  padding: 3rem 2rem;
+  margin: 0;
+}
+
 .card-body {
-  padding: 1.4rem 1.5rem 1.5rem;
+  padding: 1rem 1.5rem 1.5rem;
   display: flex;
   flex-direction: column;
   gap: 0.6rem;
@@ -337,6 +410,13 @@ const comprarProducto = (producto: { nombre: string; precio: string }) => {
   cursor: pointer;
   transition: background 0.2s ease, transform 0.2s ease;
   &:hover { background: #3d1a26; transform: translateY(-1px); }
+
+  &.is-disabled {
+    background: rgba(61, 26, 38, 0.14);
+    color: rgba(61, 26, 38, 0.45);
+    cursor: not-allowed;
+    &:hover { background: rgba(61, 26, 38, 0.14); transform: none; }
+  }
 }
 .buy-arrow { font-size: 11px; }
 

@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useGlobalMusic } from '../composables/useGlobalMusic'
 import { useGsapReveal } from '../composables/useGsapReveal'
+import { useProductos } from '../composables/useProductos'
 import ImageLightbox from '../components/ImageLightbox.vue'
 
 const rootEl = ref<HTMLElement | null>(null)
@@ -10,85 +11,8 @@ useGsapReveal(rootEl)
 
 const { isExperienciaSensorial } = useGlobalMusic()
 
-const productos = ref([
-  {
-    id: 1,
-    nombre: 'Kaftán Boubou Ámbar',
-    descripcion: 'Un boubou de líneas puras en tono ámbar, con un peto de rayas doradas y negras que enmarca el escote y remata en un borlón trenzado a mano. Confeccionado en algodón ligero, su caída amplia y mangas capa lo convierten en una segunda piel fresca, pensada para sentir el tejido moverse con cada paso.',
-    precio: '25',
-    imgs: [
-      new URL('@/assets/productos/fotos-productos/Tacto/Producto 1 (25€)/Photoroom_20260602_163407.jpg', import.meta.url).href,
-      new URL('@/assets/productos/fotos-productos/Tacto/Producto 1 (25€)/Photoroom_20260602_163407(1).jpg', import.meta.url).href,
-      new URL('@/assets/productos/fotos-productos/Tacto/Producto 1 (25€)/Photoroom_20260602_164220.jpg', import.meta.url).href,
-      new URL('@/assets/productos/fotos-productos/Tacto/Producto 1 (25€)/Photoroom_20260602_164309.jpg', import.meta.url).href,
-      new URL('@/assets/productos/fotos-productos/Tacto/Producto 1 (25€)/Photoroom_20260602_164440.jpg', import.meta.url).href,
-    ],
-  },
-  {
-    id: 2,
-    nombre: 'Kaftán Batik Cobre',
-    descripcion: 'Teñido a mano con la técnica shibori, este kaftán combina cobre, mostaza y ciruela en un efecto marmolado único e irrepetible en cada pieza. Su corte holgado y mangas aladas invitan a redescubrir el tacto del algodón crudo, suave y fresco sobre la piel.',
-    precio: '15',
-    imgs: [
-      new URL('@/assets/productos/fotos-productos/Tacto/Producto 2 (15€)/Photoroom_20260602_172418.jpg', import.meta.url).href,
-      new URL('@/assets/productos/fotos-productos/Tacto/Producto 2 (15€)/Photoroom_20260602_172344.jpg', import.meta.url).href,
-      new URL('@/assets/productos/fotos-productos/Tacto/Producto 2 (15€)/Photoroom_20260602_172523.jpg', import.meta.url).href,
-      new URL('@/assets/productos/fotos-productos/Tacto/Producto 2 (15€)/Photoroom_20260602_172601.jpg', import.meta.url).href,
-      new URL('@/assets/productos/fotos-productos/Tacto/Producto 2 (15€)/Photoroom_20260602_172601(1).jpg', import.meta.url).href,
-      new URL('@/assets/productos/fotos-productos/Tacto/Producto 2 (15€)/Photoroom_20260602_172731.jpg', import.meta.url).href,
-    ],
-  },
-  {
-    id: 3,
-    nombre: 'Vestido Añil Serengeti',
-    descripcion: 'Inspirado en las técnicas de anudado tradicionales del África Occidental, este vestido tiñe el algodón en degradados de añil y arena. El cuello redondo y el fruncido delantero aportan volumen y movimiento, mientras la textura arrugada del tinte se percibe al tacto en cada pliegue.',
-    precio: '15',
-    imgs: [
-      new URL('@/assets/productos/fotos-productos/Tacto/Producto 3 (15€)/Photoroom_20260602_172848.jpg', import.meta.url).href,
-      new URL('@/assets/productos/fotos-productos/Tacto/Producto 3 (15€)/Photoroom_20260602_172810.jpg', import.meta.url).href,
-      new URL('@/assets/productos/fotos-productos/Tacto/Producto 3 (15€)/Photoroom_20260602_173059.jpg', import.meta.url).href,
-      new URL('@/assets/productos/fotos-productos/Tacto/Producto 3 (15€)/Photoroom_20260602_173155.jpg', import.meta.url).href,
-      new URL('@/assets/productos/fotos-productos/Tacto/Producto 3 (15€)/Photoroom_20260602_175422.jpg', import.meta.url).href,
-    ],
-  },
-  {
-    id: 4,
-    nombre: 'Vestido Turquesa Sahel',
-    descripcion: 'Un vestido de hombros descubiertos con estampado batik en turquesa y mostaza, rematado con volantes que aportan ligereza al movimiento. El elástico en el escote y el bajo escalonado en capas invitan a tocar y sentir la frescura del tejido en cada doblez.',
-    precio: '15',
-    imgs: [
-      new URL('@/assets/productos/fotos-productos/Tacto/Producto 4 (15€)/Photoroom_20260602_172253.jpg', import.meta.url).href,
-      new URL('@/assets/productos/fotos-productos/Tacto/Producto 4 (15€)/Photoroom_20260602_171915.jpg', import.meta.url).href,
-      new URL('@/assets/productos/fotos-productos/Tacto/Producto 4 (15€)/Photoroom_20260602_172041.jpg', import.meta.url).href,
-      new URL('@/assets/productos/fotos-productos/Tacto/Producto 4 (15€)/Photoroom_20260602_172120.jpg', import.meta.url).href,
-    ],
-  },
-  {
-    id: 5,
-    nombre: 'Vestido Ocre Malí',
-    descripcion: 'Un maxi vestido de tirantes finos con estampado shibori en ocre y negro, inspirado en los círculos concéntricos del teñido tradicional maliense. El cuerpo fruncido y la falda de capas caen con fluidez, revelando una textura suave y ligeramente crujiente al tacto.',
-    precio: '15',
-    imgs: [
-      new URL('@/assets/productos/fotos-productos/Tacto/Producto 5 (15€)/Photoroom_20260602_171540.jpg', import.meta.url).href,
-      new URL('@/assets/productos/fotos-productos/Tacto/Producto 5 (15€)/Photoroom_20260602_171329.jpg', import.meta.url).href,
-      new URL('@/assets/productos/fotos-productos/Tacto/Producto 5 (15€)/Photoroom_20260602_171440.jpg', import.meta.url).href,
-      new URL('@/assets/productos/fotos-productos/Tacto/Producto 5 (15€)/Photoroom_20260602_171650.jpg', import.meta.url).href,
-      new URL('@/assets/productos/fotos-productos/Tacto/Producto 5 (15€)/Photoroom_20260602_171742.jpg', import.meta.url).href,
-      new URL('@/assets/productos/fotos-productos/Tacto/Producto 5 (15€)/Photoroom_20260602_171830.jpg', import.meta.url).href,
-    ],
-  },
-  {
-    id: 6,
-    nombre: 'Vestido Amanecer Ashanti',
-    descripcion: 'Tonos rojos, naranjas y amarillos se funden en un estampado shibori que evoca el amanecer sobre la sabana. Los tirantes anudados a mano y el cuerpo fruncido ofrecen un ajuste cómodo, mientras el algodón ligero conserva la textura arrugada característica del teñido artesanal.',
-    precio: '15',
-    imgs: [
-      new URL('@/assets/productos/fotos-productos/Tacto/Producto 6 (15€)/Photoroom_20260602_170029.jpg', import.meta.url).href,
-      new URL('@/assets/productos/fotos-productos/Tacto/Producto 6 (15€)/Photoroom_20260602_171110.jpg', import.meta.url).href,
-      new URL('@/assets/productos/fotos-productos/Tacto/Producto 6 (15€)/Photoroom_20260602_171245.jpg', import.meta.url).href,
-    ],
-  },
-])
+const { productos, cargando, error, cargarPorSentido } = useProductos()
+onMounted(() => cargarPorSentido('tacto'))
 
 const getBackRoute = () => isExperienciaSensorial.value ? '/experiencia-sensorial' : '/experiencia-estandar'
 
@@ -98,7 +22,8 @@ const abrirGaleria = (producto: { nombre: string; imgs: string[] }, index: numbe
   lightbox.value = { images: producto.imgs, alt: producto.nombre, index }
 }
 
-const comprarProducto = (producto: { nombre: string; precio: string }) => {
+const comprarProducto = (producto: { nombre: string; precio: string; agotado?: boolean }) => {
+  if (producto.agotado) return
   const numero = '34680150864'
   const mensaje = encodeURIComponent(`Hola, me interesa comprar el siguiente producto:\n\n📦 ${producto.nombre}\n💰 Precio: €${producto.precio}\n\nPor favor, contacta conmigo para completar la compra.`)
   window.open(`https://wa.me/${numero}?text=${mensaje}`, '_blank')
@@ -129,16 +54,22 @@ const comprarProducto = (producto: { nombre: string; precio: string }) => {
       </blockquote>
     </div>
 
+    <p v-if="cargando" class="estado-info">Cargando productos…</p>
+    <p v-else-if="error" class="estado-info">{{ error }}</p>
+    <p v-else-if="!productos.length" class="estado-info">Todavía no hay productos en esta colección.</p>
+
     <!-- ── Grid de productos ── -->
-    <div class="products-grid">
+    <div v-else class="products-grid">
       <div
-        v-for="producto in productos"
+        v-for="(producto, i) in productos"
         :key="producto.id"
         class="product-card"
+        :class="{ 'is-agotado': producto.agotado }"
         data-reveal
         data-reveal-group="products"
       >
         <div class="card-img-wrap" @click="abrirGaleria(producto, 0)">
+          <span v-if="producto.agotado" class="sold-out-badge">Agotado</span>
           <img :src="producto.imgs[0]" :alt="producto.nombre" class="card-img" />
         </div>
 
@@ -155,13 +86,19 @@ const comprarProducto = (producto: { nombre: string; precio: string }) => {
         </div>
 
         <div class="card-body">
-          <div class="card-num">{{ String(producto.id).padStart(2, '0') }}</div>
+          <div class="card-num">{{ String(i + 1).padStart(2, '0') }}</div>
           <h2 class="card-name">{{ producto.nombre }}</h2>
           <p class="card-desc">{{ producto.descripcion }}</p>
           <div class="card-footer">
             <span class="card-price">€{{ producto.precio }}</span>
-            <button class="buy-btn" @click="comprarProducto(producto)">
-              Comprar <span class="buy-arrow">→</span>
+            <button
+              class="buy-btn"
+              :class="{ 'is-disabled': producto.agotado }"
+              :disabled="producto.agotado"
+              @click="comprarProducto(producto)"
+            >
+              <template v-if="producto.agotado">Agotado</template>
+              <template v-else>Comprar <span class="buy-arrow">→</span></template>
             </button>
           </div>
         </div>
@@ -274,6 +211,16 @@ const comprarProducto = (producto: { nombre: string; precio: string }) => {
   }
 }
 
+.estado-info {
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 14px;
+  font-style: italic;
+  color: rgba(61, 26, 38, 0.5);
+  text-align: center;
+  padding: 3rem 2rem;
+  margin: 0;
+}
+
 /* ── Grid de productos ── */
 .products-grid {
   display: grid;
@@ -300,10 +247,29 @@ const comprarProducto = (producto: { nombre: string; precio: string }) => {
 }
 
 .card-img-wrap {
+  position: relative;
   overflow: hidden;
   line-height: 0;
   aspect-ratio: 4 / 3;
   cursor: pointer;
+}
+
+.sold-out-badge {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  z-index: 1;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #fff;
+  background: rgba(61, 26, 38, 0.88);
+  backdrop-filter: blur(3px);
+  padding: 0.45rem 0.9rem;
+  border-radius: 2px;
+  line-height: 1;
 }
 
 .card-img {
@@ -417,6 +383,13 @@ const comprarProducto = (producto: { nombre: string; precio: string }) => {
   cursor: pointer;
   transition: background 0.2s ease, transform 0.2s ease;
   &:hover { background: #3d1a26; transform: translateY(-1px); }
+
+  &.is-disabled {
+    background: rgba(61, 26, 38, 0.14);
+    color: rgba(61, 26, 38, 0.45);
+    cursor: not-allowed;
+    &:hover { background: rgba(61, 26, 38, 0.14); transform: none; }
+  }
 }
 .buy-arrow { font-size: 11px; }
 
