@@ -72,7 +72,7 @@ const comprarProducto = (producto: { nombre: string; precio: string; agotado?: b
       >
         <div class="card-img-wrap" @click="abrirGaleria(producto, 0)">
           <span v-if="producto.agotado" class="sold-out-badge">Agotado</span>
-          <img :src="producto.imgs[0]" :alt="producto.nombre" class="card-img" />
+          <img :src="producto.imgs[0]" :alt="producto.nombre" class="card-img" loading="lazy" decoding="async" />
         </div>
 
         <div class="card-thumbs">
@@ -83,7 +83,7 @@ const comprarProducto = (producto: { nombre: string; precio: string; agotado?: b
             :class="{ active: j === 0 }"
             @click="abrirGaleria(producto, j)"
           >
-            <img :src="img" :alt="`${producto.nombre} ${j + 1}`" class="thumb-img" />
+            <img :src="img" :alt="`${producto.nombre} ${j + 1}`" class="thumb-img" loading="lazy" decoding="async" />
           </button>
         </div>
 
