@@ -197,6 +197,15 @@ const router = createRouter({
         description: 'Panel privado de gestión de productos.',
       },
     },
+    {
+      path: '/backstage/posts',
+      name: 'backstage-posts',
+      component: () => import('../views/BackstagePostsView.vue'),
+      meta: {
+        title: 'Panel de Administración · Posts | Amani',
+        description: 'Panel privado de gestión de los artículos del blog.',
+      },
+    },
   ],
 })
 
