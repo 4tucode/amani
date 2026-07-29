@@ -1,191 +1,164 @@
 <script setup lang="ts">
-import { ref, computed, reactive } from 'vue'
+import { onMounted, ref, reactive, computed } from 'vue'
 import { RouterLink } from 'vue-router'
 import { useAdminAuth } from '../composables/useAdminAuth'
-import { useProductos } from '../composables/useProductos'
+import { usePosts } from '../composables/usePosts'
 import { imagenABase64 } from '../utils/imagenBase64'
-import { SENTIDOS, type Producto, type Sentido } from '../types/producto'
+import { formatearFecha } from '../utils/fecha'
+import RichTextEditor from '../components/RichTextEditor.vue'
+import type { Post } from '../types/post'
 
 const { autenticado, verificando, error: errorAuth, verificarClave } = useAdminAuth()
 const {
-  productos,
+  posts,
   cargando,
   guardando,
-  error: errorProductos,
-  cargarPorSentido,
-  subirCertificado,
-  crearProducto,
-  actualizarProducto,
-  eliminarDocumento,
-  eliminarProducto,
-} = useProductos()
+  error: errorPosts,
+  cargarPosts,
+  sembrarPostEjemplo,
+  crearPost,
+  actualizarPost,
+  eliminarPost,
+} = usePosts()
 
 // ── Popup de clave ──
 const claveIntroducida = ref('')
+
+const cargarYSembrarSiVacio = async () => {
+  await cargarPosts()
+  if (posts.value.length === 0) {
+    const sembrado = await sembrarPostEjemplo()
+    if (sembrado) await cargarPosts()
+  }
+}
 
 const comprobarClave = async () => {
   const ok = await verificarClave(claveIntroducida.value)
   if (ok) {
     claveIntroducida.value = ''
-    cargarPorSentido(sentidoActivo.value)
+    cargarYSembrarSiVacio()
   }
 }
 
-// ── Filtro por sentido ──
-const sentidoActivo = ref<Sentido>('vista')
-
-const cambiarSentido = (sentido: Sentido) => {
-  sentidoActivo.value = sentido
-  cargarPorSentido(sentido)
-}
+onMounted(() => {
+  if (autenticado.value) cargarYSembrarSiVacio()
+})
 
 // ── Formulario crear / editar ──
 const formVisible = ref(false)
-const productoEditando = ref<Producto | null>(null)
+const postEditando = ref<Post | null>(null)
 
 const formVacio = () => ({
-  sentido: sentidoActivo.value as Sentido,
-  nombre: '',
+  titulo: '',
   descripcion: '',
-  precio: '',
-  agotado: false,
+  contenido: '',
+  autor: 'Equipo Amani',
+  fecha: new Date().toISOString().slice(0, 10),
   orden: 1,
 })
 
 const form = reactive(formVacio())
-const imgsExistentes = ref<string[]>([])
-const imgsNuevas = ref<File[]>([])
-const certificadoExistente = ref<string | null>(null)
-const certificadoNuevo = ref<File | null>(null)
+const portadaExistente = ref<string | null>(null)
+const portadaNueva = ref<File | null>(null)
+const procesandoImagenes = ref(false)
+const errorFormulario = ref('')
 
 const abrirCrear = () => {
-  productoEditando.value = null
+  postEditando.value = null
   Object.assign(form, formVacio())
-  form.orden = productos.value.length
-    ? Math.max(...productos.value.map((p) => p.orden)) + 1
-    : 1
-  imgsExistentes.value = []
-  imgsNuevas.value = []
-  certificadoExistente.value = null
-  certificadoNuevo.value = null
+  form.orden = posts.value.length ? Math.max(...posts.value.map((p) => p.orden)) + 1 : 1
+  portadaExistente.value = null
+  portadaNueva.value = null
+  errorFormulario.value = ''
   formVisible.value = true
 }
 
-const abrirEditar = (producto: Producto) => {
-  productoEditando.value = producto
+const abrirEditar = (post: Post) => {
+  postEditando.value = post
   Object.assign(form, {
-    sentido: producto.sentido,
-    nombre: producto.nombre,
-    descripcion: producto.descripcion,
-    precio: producto.precio,
-    agotado: producto.agotado,
-    orden: producto.orden,
+    titulo: post.titulo,
+    descripcion: post.descripcion,
+    contenido: post.contenido,
+    autor: post.autor,
+    fecha: post.fecha,
+    orden: post.orden,
   })
-  imgsExistentes.value = [...producto.imgs]
-  imgsNuevas.value = []
-  certificadoExistente.value = producto.certificado ?? null
-  certificadoNuevo.value = null
+  portadaExistente.value = post.imagenPortada
+  portadaNueva.value = null
+  errorFormulario.value = ''
   formVisible.value = true
 }
 
 const cerrarForm = () => {
   formVisible.value = false
-  productoEditando.value = null
+  postEditando.value = null
 }
 
-const onImagenesSeleccionadas = (e: Event) => {
+const onPortadaSeleccionada = (e: Event) => {
   const input = e.target as HTMLInputElement
-  imgsNuevas.value = input.files ? Array.from(input.files) : []
+  portadaNueva.value = input.files?.[0] ?? null
 }
 
-const onCertificadoSeleccionado = (e: Event) => {
-  const input = e.target as HTMLInputElement
-  certificadoNuevo.value = input.files?.[0] ?? null
+const quitarPortada = () => {
+  portadaExistente.value = null
+  portadaNueva.value = null
 }
 
-const quitarImagenExistente = (url: string) => {
-  imgsExistentes.value = imgsExistentes.value.filter((img) => img !== url)
-}
-
-const procesandoImagenes = ref(false)
-
-const guardarProducto = async () => {
-  if (!form.nombre.trim() || !form.precio.trim()) {
-    errorFormulario.value = 'Nombre y precio son obligatorios.'
+const guardarPost = async () => {
+  if (!form.titulo.trim() || !form.descripcion.trim()) {
+    errorFormulario.value = 'Título y descripción son obligatorios.'
     return
   }
   errorFormulario.value = ''
 
   procesandoImagenes.value = true
-  let nuevasUrls: string[]
-  let certificadoFinal = certificadoExistente.value
+  let portadaFinal = portadaExistente.value
   try {
-    nuevasUrls = await Promise.all(imgsNuevas.value.map((archivo) => imagenABase64(archivo)))
-    if (certificadoNuevo.value) {
-      certificadoFinal = await subirCertificado(certificadoNuevo.value, form.sentido)
+    if (portadaNueva.value) {
+      portadaFinal = await imagenABase64(portadaNueva.value)
     }
   } catch (e) {
     console.error(e)
-    errorFormulario.value = 'No se pudo procesar alguna de las fotos o el certificado.'
+    errorFormulario.value = 'No se pudo procesar la imagen de portada.'
     procesandoImagenes.value = false
     return
   }
   procesandoImagenes.value = false
 
-  const imgsFinales = [...imgsExistentes.value, ...nuevasUrls]
-
   const data = {
-    sentido: form.sentido,
-    nombre: form.nombre.trim(),
+    titulo: form.titulo.trim(),
     descripcion: form.descripcion.trim(),
-    precio: form.precio.trim(),
-    agotado: form.agotado,
+    contenido: form.contenido,
+    imagenPortada: portadaFinal,
+    autor: form.autor.trim() || 'Equipo Amani',
+    fecha: form.fecha,
     orden: Number(form.orden) || 1,
-    imgs: imgsFinales,
-    certificado: certificadoFinal,
   }
 
   try {
-    if (productoEditando.value?.id) {
-      if (productoEditando.value.sentido === data.sentido) {
-        await actualizarProducto(data.sentido, productoEditando.value.id, data)
-      } else {
-        // Cambiar de sentido implica mover de colección: se crea en la nueva
-        // y se borra solo el documento antiguo.
-        await crearProducto(data)
-        await eliminarDocumento(productoEditando.value.sentido, productoEditando.value.id)
-      }
+    if (postEditando.value?.id) {
+      await actualizarPost(postEditando.value.id, data)
     } else {
-      await crearProducto(data)
+      await crearPost(data)
     }
   } catch (e) {
     console.error(e)
-    errorFormulario.value = errorProductos.value || 'No se pudo guardar el producto.'
+    errorFormulario.value = errorPosts.value || 'No se pudo guardar el post.'
     return
   }
 
   cerrarForm()
-  cargarPorSentido(sentidoActivo.value)
+  cargarPosts()
 }
 
-const errorFormulario = ref('')
-
-const alternarAgotado = async (producto: Producto) => {
-  if (!producto.id) return
-  await actualizarProducto(producto.sentido, producto.id, { agotado: !producto.agotado })
-  cargarPorSentido(sentidoActivo.value)
-}
-
-const borrarProducto = async (producto: Producto) => {
-  const confirmado = window.confirm(`¿Eliminar "${producto.nombre}"? Esta acción no se puede deshacer.`)
+const borrarPost = async (post: Post) => {
+  const confirmado = window.confirm(`¿Eliminar "${post.titulo}"? Esta acción no se puede deshacer.`)
   if (!confirmado) return
-  await eliminarProducto(producto)
-  cargarPorSentido(sentidoActivo.value)
+  await eliminarPost(post)
+  cargarPosts()
 }
 
-const labelSentido = (sentido: Sentido) => SENTIDOS.find((s) => s.valor === sentido)?.label ?? sentido
-
-const hayProductos = computed(() => productos.value.length > 0)
+const hayPosts = computed(() => posts.value.length > 0)
 </script>
 
 <template>
@@ -214,49 +187,32 @@ const hayProductos = computed(() => productos.value.length > 0)
       <header class="backstage-header">
         <div>
           <h1 class="backstage-title">Panel de Administración</h1>
-          <p class="backstage-subtitle">Gestiona los productos de cada sentido</p>
+          <p class="backstage-subtitle">Gestiona los artículos del blog</p>
         </div>
         <div class="header-acciones">
-          <RouterLink to="/backstage/posts" class="btn-secundario">Ir a Posts</RouterLink>
-          <button class="btn-primary" @click="abrirCrear">+ Nuevo producto</button>
+          <RouterLink to="/backstage" class="btn-secundario">Ir a Productos</RouterLink>
+          <button class="btn-primary" @click="abrirCrear">+ Nuevo post</button>
         </div>
       </header>
 
-      <nav class="sentido-tabs">
-        <button
-          v-for="s in SENTIDOS"
-          :key="s.valor"
-          class="sentido-tab"
-          :class="{ active: sentidoActivo === s.valor }"
-          @click="cambiarSentido(s.valor)"
-        >
-          {{ s.label }}
-        </button>
-      </nav>
+      <p v-if="errorPosts" class="banner-error">{{ errorPosts }}</p>
 
-      <p v-if="errorProductos" class="banner-error">{{ errorProductos }}</p>
+      <div v-if="cargando" class="estado-vacio">Cargando posts…</div>
+      <div v-else-if="!hayPosts" class="estado-vacio">No hay posts todavía. Crea el primero.</div>
 
-      <div v-if="cargando" class="estado-vacio">Cargando productos…</div>
-      <div v-else-if="!hayProductos" class="estado-vacio">
-        No hay productos de {{ labelSentido(sentidoActivo) }} todavía. Crea el primero.
-      </div>
-
-      <div v-else class="productos-grid">
-        <div v-for="producto in productos" :key="producto.id" class="producto-card">
-          <div class="producto-img-wrap">
-            <img v-if="producto.imgs[0]" :src="producto.imgs[0]" :alt="producto.nombre" class="producto-img" />
-            <span v-if="producto.agotado" class="badge-agotado">Agotado</span>
+      <div v-else class="posts-grid">
+        <div v-for="post in posts" :key="post.id" class="post-card">
+          <div class="post-img-wrap">
+            <img v-if="post.imagenPortada" :src="post.imagenPortada" :alt="post.titulo" class="post-img" />
+            <div v-else class="post-img-vacia">Sin portada</div>
           </div>
-          <div class="producto-body">
-            <h3 class="producto-nombre">{{ producto.nombre }}</h3>
-            <p class="producto-precio">€{{ producto.precio }}</p>
-            <p class="producto-desc">{{ producto.descripcion }}</p>
-            <div class="producto-acciones">
-              <button class="btn-secundario" @click="abrirEditar(producto)">Editar</button>
-              <button class="btn-secundario" @click="alternarAgotado(producto)">
-                {{ producto.agotado ? 'Marcar disponible' : 'Marcar agotado' }}
-              </button>
-              <button class="btn-peligro" @click="borrarProducto(producto)">Eliminar</button>
+          <div class="post-body">
+            <p class="post-fecha">{{ formatearFecha(post.fecha) }} · {{ post.autor }}</p>
+            <h3 class="post-titulo">{{ post.titulo }}</h3>
+            <p class="post-desc">{{ post.descripcion }}</p>
+            <div class="post-acciones">
+              <button class="btn-secundario" @click="abrirEditar(post)">Editar</button>
+              <button class="btn-peligro" @click="borrarPost(post)">Eliminar</button>
             </div>
           </div>
         </div>
@@ -264,68 +220,58 @@ const hayProductos = computed(() => productos.value.length > 0)
 
       <!-- ── Modal crear / editar ── -->
       <div v-if="formVisible" class="form-overlay" @click.self="cerrarForm">
-        <form class="form-card" @submit.prevent="guardarProducto">
-          <h2 class="form-title">{{ productoEditando ? 'Editar producto' : 'Nuevo producto' }}</h2>
+        <form class="form-card" @submit.prevent="guardarPost">
+          <h2 class="form-title">{{ postEditando ? 'Editar post' : 'Nuevo post' }}</h2>
 
           <label class="form-label">
-            Sentido
-            <select v-model="form.sentido" class="form-input">
-              <option v-for="s in SENTIDOS" :key="s.valor" :value="s.valor">{{ s.label }}</option>
-            </select>
+            Título
+            <input v-model="form.titulo" type="text" class="form-input" required />
           </label>
 
           <label class="form-label">
-            Nombre
-            <input v-model="form.nombre" type="text" class="form-input" required />
-          </label>
-
-          <label class="form-label">
-            Descripción
-            <textarea v-model="form.descripcion" class="form-input form-textarea" rows="4"></textarea>
+            Descripción (extracto que se ve en el listado del blog)
+            <textarea v-model="form.descripcion" class="form-input form-textarea" rows="3"></textarea>
           </label>
 
           <div class="form-row">
             <label class="form-label">
-              Precio (€)
-              <input v-model="form.precio" type="text" class="form-input" required />
+              Autor
+              <input v-model="form.autor" type="text" class="form-input" />
             </label>
             <label class="form-label">
+              Fecha
+              <input v-model="form.fecha" type="date" class="form-input" />
+            </label>
+            <label class="form-label form-orden">
               Orden
               <input v-model.number="form.orden" type="number" class="form-input" />
             </label>
           </div>
 
-          <label class="form-check">
-            <input v-model="form.agotado" type="checkbox" />
-            Producto agotado
-          </label>
-
           <label class="form-label">
-            Fotos
-            <input type="file" accept="image/*" multiple class="form-input" @change="onImagenesSeleccionadas" />
+            Imagen de portada
+            <input type="file" accept="image/*" class="form-input" @change="onPortadaSeleccionada" />
           </label>
 
-          <div v-if="imgsExistentes.length" class="preview-thumbs">
-            <div v-for="img in imgsExistentes" :key="img" class="preview-thumb">
-              <img :src="img" alt="" />
-              <button type="button" class="preview-remove" @click="quitarImagenExistente(img)">×</button>
+          <div v-if="portadaExistente || portadaNueva" class="preview-thumbs">
+            <div class="preview-thumb">
+              <img v-if="portadaExistente && !portadaNueva" :src="portadaExistente" :alt="form.titulo" />
+              <span v-if="portadaNueva" class="preview-nueva">Nueva imagen lista</span>
+              <button type="button" class="preview-remove" @click="quitarPortada">×</button>
             </div>
           </div>
-          <p v-if="imgsNuevas.length" class="preview-hint">{{ imgsNuevas.length }} foto(s) nueva(s) lista(s) para subir.</p>
 
-          <label class="form-label">
-            Certificado de autenticidad (PDF, opcional)
-            <input type="file" accept="application/pdf" class="form-input" @change="onCertificadoSeleccionado" />
-          </label>
-          <p v-if="certificadoExistente && !certificadoNuevo" class="preview-hint">Ya tiene un certificado adjunto.</p>
-          <p v-if="certificadoNuevo" class="preview-hint">Nuevo certificado listo para subir.</p>
+          <div class="form-label">
+            Contenido del artículo
+            <RichTextEditor v-model="form.contenido" placeholder="Escribe el artículo… inserta imágenes con el botón 🖼️" />
+          </div>
 
           <p v-if="errorFormulario" class="banner-error">{{ errorFormulario }}</p>
 
           <div class="form-acciones">
             <button type="button" class="btn-secundario" @click="cerrarForm">Cancelar</button>
             <button type="submit" class="btn-primary" :disabled="guardando || procesandoImagenes">
-              {{ procesandoImagenes ? 'Procesando fotos y certificado…' : guardando ? 'Guardando…' : 'Guardar' }}
+              {{ procesandoImagenes ? 'Procesando imagen…' : guardando ? 'Guardando…' : 'Guardar' }}
             </button>
           </div>
         </form>
@@ -420,7 +366,7 @@ const hayProductos = computed(() => productos.value.length > 0)
   align-items: flex-start;
   justify-content: space-between;
   gap: 1rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.75rem;
   flex-wrap: wrap;
 }
 
@@ -497,35 +443,6 @@ const hayProductos = computed(() => productos.value.length > 0)
   &:hover { background: rgba(179, 38, 30, 0.08); }
 }
 
-/* ── Tabs de sentido ── */
-.sentido-tabs {
-  display: flex;
-  gap: 0.6rem;
-  flex-wrap: wrap;
-  margin-bottom: 1.75rem;
-}
-
-.sentido-tab {
-  font-family: inherit;
-  font-weight: 700;
-  font-size: 12px;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: rgba(61, 26, 38, 0.55);
-  background: #fff;
-  border: 1.5px solid transparent;
-  padding: 0.6rem 1.2rem;
-  border-radius: 20px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-
-  &:hover { color: #8c3a50; }
-  &.active {
-    color: #fff;
-    background: #8c3a50;
-  }
-}
-
 .banner-error {
   background: rgba(179, 38, 30, 0.08);
   color: #b3261e;
@@ -544,14 +461,14 @@ const hayProductos = computed(() => productos.value.length > 0)
   text-align: center;
 }
 
-/* ── Grid de productos ── */
-.productos-grid {
+/* ── Grid de posts ── */
+.posts-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 1.5rem;
 }
 
-.producto-card {
+.post-card {
   background: #fff;
   border-radius: 6px;
   overflow: hidden;
@@ -560,41 +477,48 @@ const hayProductos = computed(() => productos.value.length > 0)
   flex-direction: column;
 }
 
-.producto-img-wrap {
+.post-img-wrap {
   position: relative;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 16 / 9;
   background: #f2f2f5;
 }
 
-.producto-img {
+.post-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
 }
 
-.badge-agotado {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 0.12em;
+.post-img-vacia {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
   text-transform: uppercase;
-  color: #fff;
-  background: rgba(61, 26, 38, 0.88);
-  padding: 0.35rem 0.7rem;
-  border-radius: 2px;
+  letter-spacing: 0.08em;
+  color: rgba(61, 26, 38, 0.3);
 }
 
-.producto-body {
+.post-body {
   padding: 1rem 1.2rem 1.2rem;
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: 0.35rem;
 }
 
-.producto-nombre {
+.post-fecha {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: rgba(184, 154, 90, 0.9);
+  margin: 0;
+}
+
+.post-titulo {
   font-size: 14px;
   font-weight: 800;
   text-transform: uppercase;
@@ -602,14 +526,7 @@ const hayProductos = computed(() => productos.value.length > 0)
   margin: 0;
 }
 
-.producto-precio {
-  font-size: 15px;
-  font-weight: 800;
-  color: #8c3a50;
-  margin: 0;
-}
-
-.producto-desc {
+.post-desc {
   font-size: 12.5px;
   color: rgba(61, 26, 38, 0.55);
   line-height: 1.5;
@@ -620,7 +537,7 @@ const hayProductos = computed(() => productos.value.length > 0)
   overflow: hidden;
 }
 
-.producto-acciones {
+.post-acciones {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
@@ -643,7 +560,7 @@ const hayProductos = computed(() => productos.value.length > 0)
   background: #fff;
   border-radius: 8px;
   padding: 2rem;
-  max-width: 520px;
+  max-width: 640px;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -676,6 +593,10 @@ const hayProductos = computed(() => productos.value.length > 0)
   > .form-label { flex: 1; }
 }
 
+.form-orden {
+  max-width: 100px;
+}
+
 .form-input {
   font-family: inherit;
   font-size: 14px;
@@ -695,17 +616,6 @@ const hayProductos = computed(() => productos.value.length > 0)
   font-style: normal;
 }
 
-.form-check {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 13px;
-  font-weight: 700;
-  color: #3d1a26;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-}
-
 .preview-thumbs {
   display: flex;
   gap: 0.5rem;
@@ -714,12 +624,23 @@ const hayProductos = computed(() => productos.value.length > 0)
 
 .preview-thumb {
   position: relative;
-  width: 56px;
-  height: 56px;
+  width: 90px;
+  height: 60px;
   border-radius: 4px;
   overflow: hidden;
+  background: rgba(140, 58, 80, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   img { width: 100%; height: 100%; object-fit: cover; display: block; }
+}
+
+.preview-nueva {
+  font-size: 10px;
+  text-align: center;
+  padding: 0 0.3rem;
+  color: rgba(61, 26, 38, 0.55);
 }
 
 .preview-remove {
@@ -737,13 +658,6 @@ const hayProductos = computed(() => productos.value.length > 0)
   font-size: 12px;
   cursor: pointer;
   padding: 0;
-}
-
-.preview-hint {
-  font-size: 12px;
-  color: rgba(61, 26, 38, 0.55);
-  font-style: italic;
-  margin: -0.4rem 0 0;
 }
 
 .form-acciones {

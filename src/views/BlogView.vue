@@ -1,49 +1,16 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useGsapReveal } from '../composables/useGsapReveal'
+import { usePosts } from '../composables/usePosts'
+import { formatearFecha } from '../utils/fecha'
 
 const rootEl = ref<HTMLElement | null>(null)
 useGsapReveal(rootEl)
 
-const articulos = ref([
-  {
-    id: 1,
-    titulo: 'La magia de los sentidos en la cultura africana',
-    descripcion:
-      'Explora cómo los aromas, sabores y texturas forman parte esencial de las tradiciones milenarias del continente africano. Descubre la conexión profunda entre los sentidos y la memoria cultural.',
-    imagen: 'vista1.jpg',
-    fecha: '15 de marzo, 2024',
-    autor: 'Equipo Amani',
-  },
-  {
-    id: 2,
-    titulo: 'Viajes sensoriales: conectando culturas',
-    descripcion:
-      'Cada experiencia sensorial es un viaje que nos transporta a lugares lejanos. Aprende cómo los productos culturales pueden abrir puertas a nuevas comprensiones y conexiones humanas.',
-    imagen: 'olfato.jpg',
-    fecha: '10 de marzo, 2024',
-    autor: 'Equipo Amani',
-  },
-  {
-    id: 3,
-    titulo: 'El poder de la nostalgia en nuestras vidas',
-    descripcion:
-      'Los recuerdos sensoriales tienen la capacidad única de despertar emociones profundas. Descubre cómo los aromas y sabores pueden reconectarnos con momentos especiales de nuestro pasado.',
-    imagen: 'vista1.jpg',
-    fecha: '5 de marzo, 2024',
-    autor: 'Equipo Amani',
-  },
-  {
-    id: 4,
-    titulo: 'Descubre Guinea Ecuatorial',
-    descripcion:
-      'Las olas del mar tararean, en cada marea, su nombre. Guinea Ecuatorial: un pequeño gran tesoro en el corazón de África. Su latido se expande entre frondosas selvas tropicales, majestuosas montañas y playas vírgenes.',
-    imagen: 'IMG_4522.jpg',
-    fecha: '20 de marzo, 2024',
-    autor: 'Equipo Amani',
-  },
-])
+const { posts: articulos, cargando, error, cargarPosts } = usePosts()
+
+onMounted(cargarPosts)
 </script>
 
 <template>
@@ -91,11 +58,21 @@ const articulos = ref([
 
         <h2 class="panel-title title-r">Artículos</h2>
 
+        <!-- Cargando -->
+        <div v-if="cargando" class="empty-state">
+          <p class="empty-title">Cargando artículos…</p>
+        </div>
+
+        <!-- Error -->
+        <div v-else-if="error" class="empty-state">
+          <p class="empty-title">{{ error }}</p>
+        </div>
+
         <!-- Lista de artículos -->
-        <ul v-if="articulos.length > 0" class="articles-list">
-          <li v-for="articulo in articulos" :key="articulo.id" class="article-item" data-reveal data-reveal-group="articles">
+        <ul v-else-if="articulos.length > 0" class="articles-list">
+          <li v-for="articulo in articulos" :key="articulo.id" class="article-item">
             <div class="article-meta">
-              <span class="article-date">{{ articulo.fecha }}</span>
+              <span class="article-date">{{ formatearFecha(articulo.fecha) }}</span>
               <span class="article-author">{{ articulo.autor }}</span>
             </div>
             <h3 class="article-title">{{ articulo.titulo }}</h3>
