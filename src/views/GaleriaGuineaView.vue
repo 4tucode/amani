@@ -89,7 +89,7 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown))
         data-reveal-group="galeria"
         @click="abrir(i)"
       >
-        <img :src="foto.src" :alt="foto.alt" class="celda-img" loading="lazy" />
+        <img :src="foto.src" :alt="foto.alt" class="celda-img" loading="lazy" decoding="async" />
         <span class="celda-overlay" aria-hidden="true">
           <Icon icon="mdi:arrow-expand" class="celda-icon" />
         </span>
@@ -108,7 +108,7 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown))
         </button>
 
         <figure class="lb-figura" @click.self="cerrar">
-          <img :src="fotos[activa].src" :alt="fotos[activa].alt" class="lb-img" />
+          <img :src="fotos[activa].src" :alt="fotos[activa].alt" class="lb-img" decoding="async" />
         </figure>
 
         <button class="lb-btn lb-flecha lb-next" aria-label="Siguiente" @click="siguiente">

@@ -52,7 +52,7 @@ const sentidos = [
         data-reveal-group="senses"
       >
         <div class="sense-img-wrap">
-          <img :src="sentido.img" :alt="sentido.nombre" class="sense-img" />
+          <img :src="sentido.img" :alt="sentido.nombre" class="sense-img" decoding="async" />
         </div>
         <div class="sense-footer">
           <span class="sense-num">{{ sentido.num }}</span>
