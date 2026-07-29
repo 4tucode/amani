@@ -2,11 +2,15 @@
 import { RouterLink, useRoute } from 'vue-router'
 import { ref, computed, watchEffect } from 'vue'
 import { useGsapReveal } from '../composables/useGsapReveal'
+import { useJsonLd } from '../composables/useJsonLd'
+import { setMetaTag, SITE_URL } from '../utils/seoMeta'
 
 const rootEl = ref<HTMLElement | null>(null)
 useGsapReveal(rootEl)
 
 const route = useRoute()
+const articleJsonLd = useJsonLd('article-blogposting')
+const breadcrumbJsonLd = useJsonLd('breadcrumbs')
 
 const articulos = ref([
   {
@@ -15,6 +19,7 @@ const articulos = ref([
     descripcion: 'Explora cómo los aromas, sabores y texturas forman parte esencial de las tradiciones milenarias del continente africano.',
     imagen: 'vista1.jpg',
     fecha: '15 de marzo, 2024',
+    fechaISO: '2024-03-15',
     autor: 'Equipo Amani',
     contenido: `
       <p>Los sentidos han sido siempre la puerta de entrada a las experiencias más profundas de la humanidad. En la cultura africana, esta conexión sensorial adquiere una dimensión especial, donde cada aroma, sabor y textura cuenta una historia milenaria.</p>
@@ -35,6 +40,7 @@ const articulos = ref([
     descripcion: 'Cada experiencia sensorial es un viaje que nos transporta a lugares lejanos.',
     imagen: 'olfato.jpg',
     fecha: '10 de marzo, 2024',
+    fechaISO: '2024-03-10',
     autor: 'Equipo Amani',
     contenido: `
       <p>En un mundo cada vez más conectado digitalmente, pero a veces más desconectado emocionalmente, los viajes sensoriales ofrecen una forma única de explorar y entender otras culturas.</p>
@@ -50,6 +56,7 @@ const articulos = ref([
     descripcion: 'Los recuerdos sensoriales tienen la capacidad única de despertar emociones profundas.',
     imagen: 'vista1.jpg',
     fecha: '5 de marzo, 2024',
+    fechaISO: '2024-03-05',
     autor: 'Equipo Amani',
     contenido: `
       <p>La nostalgia es una de las emociones humanas más poderosas. Tiene la capacidad de transportarnos a momentos pasados, despertar emociones profundas y reconectarnos con quienes éramos y quienes somos.</p>
@@ -67,6 +74,7 @@ const articulos = ref([
     descripcion: 'Las olas del mar tararean, en cada marea, su nombre. Guinea Ecuatorial: un pequeño gran tesoro en el corazón de África.',
     imagen: 'IMG_4522.jpg',
     fecha: '20 de marzo, 2024',
+    fechaISO: '2024-03-20',
     autor: 'Equipo Amani',
     contenido: `
       <p>Las olas del mar tararean, en cada marea, su nombre. Guinea Ecuatorial: un pequeño gran tesoro en el corazón de África.</p>
@@ -93,12 +101,54 @@ if (!articulo.value) {
   console.warn('Artículo no encontrado')
 }
 
-// SEO: título y descripción propios de cada artículo (el router pone los genéricos).
+// SEO: título, OG/Twitter y datos estructurados propios de cada artículo
+// (el router pone los genéricos primero; aquí los sobrescribimos).
 watchEffect(() => {
-  if (!articulo.value) return
-  document.title = `${articulo.value.titulo} | Blog Amani`
-  const desc = document.head.querySelector<HTMLMetaElement>('meta[name="description"]')
-  if (desc) desc.setAttribute('content', articulo.value.descripcion)
+  if (!articulo.value) {
+    articleJsonLd.clear()
+    breadcrumbJsonLd.clear()
+    return
+  }
+
+  const art = articulo.value
+  const url = `${SITE_URL}/blog/${art.id}`
+  const title = `${art.titulo} | Blog Amani`
+
+  document.title = title
+  setMetaTag('name', 'description', art.descripcion)
+  setMetaTag('property', 'og:title', title)
+  setMetaTag('property', 'og:description', art.descripcion)
+  setMetaTag('property', 'og:type', 'article')
+  setMetaTag('property', 'og:url', url)
+  setMetaTag('name', 'twitter:title', title)
+  setMetaTag('name', 'twitter:description', art.descripcion)
+
+  articleJsonLd.set({
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: art.titulo,
+    description: art.descripcion,
+    datePublished: art.fechaISO,
+    inLanguage: 'es-ES',
+    author: { '@type': 'Organization', name: art.autor },
+    publisher: {
+      '@type': 'Organization',
+      name: 'Amani',
+      logo: { '@type': 'ImageObject', url: `${SITE_URL}/logo.png` },
+    },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': url },
+    image: `${SITE_URL}/og-image.jpg`,
+  })
+
+  breadcrumbJsonLd.set({
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Inicio', item: SITE_URL + '/' },
+      { '@type': 'ListItem', position: 2, name: 'Blog', item: SITE_URL + '/blog' },
+      { '@type': 'ListItem', position: 3, name: art.titulo, item: url },
+    ],
+  })
 })
 </script>
 

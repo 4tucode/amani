@@ -4,6 +4,7 @@ import { onMounted, ref } from 'vue'
 import { useGlobalMusic } from '../composables/useGlobalMusic'
 import { useGsapReveal } from '../composables/useGsapReveal'
 import { useProductos } from '../composables/useProductos'
+import { useProductosJsonLd } from '../composables/useProductosJsonLd'
 import ImageLightbox from '../components/ImageLightbox.vue'
 
 const rootEl = ref<HTMLElement | null>(null)
@@ -12,6 +13,7 @@ useGsapReveal(rootEl)
 const { isExperienciaSensorial } = useGlobalMusic()
 
 const { productos, cargando, error, cargarPorSentido } = useProductos()
+useProductosJsonLd('productos-vista', '/experiencia/vista', productos)
 onMounted(() => cargarPorSentido('vista'))
 
 const getBackRoute = () => isExperienciaSensorial.value ? '/experiencia-sensorial' : '/experiencia-estandar'

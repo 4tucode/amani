@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import { setMetaTag, setJsonLd, SITE_URL } from '../utils/seoMeta'
 
-const SITE_URL = 'https://www.amanisenses.com'
 const DEFAULT_TITLE = 'Amani | Experiencias Sensoriales y Arte Africano'
 const DEFAULT_DESCRIPTION =
   'Descubre Amani: arte africano hecho a mano a través de los cinco sentidos. Cuadros textiles, aromas, sabores e instrumentos de Guinea Ecuatorial y África Occidental.'
@@ -10,6 +10,8 @@ declare module 'vue-router' {
   interface RouteMeta {
     title?: string
     description?: string
+    // Nombre corto para el BreadcrumbList (el título completo suele llevar "| Amani").
+    breadcrumb?: string
   }
 }
 
@@ -29,6 +31,7 @@ const router = createRouter({
         title: 'Experiencia Estándar | Amani',
         description:
           'Explora la colección de Amani a tu ritmo: los cinco sentidos, arte africano hecho a mano y productos de Guinea Ecuatorial.',
+        breadcrumb: 'Experiencia Estándar',
       },
     },
     {
@@ -39,6 +42,7 @@ const router = createRouter({
         title: 'Experiencia Sensorial | Amani',
         description:
           'Sumérgete en la experiencia multisensorial de Amani: recorre el arte africano acompañado de música y efectos envolventes.',
+        breadcrumb: 'Experiencia Sensorial',
       },
     },
     {
@@ -49,6 +53,7 @@ const router = createRouter({
         title: 'Elige tu Música | Amani',
         description:
           'Selecciona la música que acompañará tu experiencia sensorial en Amani.',
+        breadcrumb: 'Elige tu Música',
       },
     },
     {
@@ -59,6 +64,7 @@ const router = createRouter({
         title: 'Vista · Cuadros de Arte Textil Africano | Amani',
         description:
           'Cuadros artesanales con tejidos africanos y cuentas: United Colours of Africa, En su espalda, African Girl y Black and Stone. Obras únicas con certificado de autenticidad.',
+        breadcrumb: 'Vista',
       },
     },
     {
@@ -69,6 +75,7 @@ const router = createRouter({
         title: 'Oído · Colección Sonora | Amani',
         description:
           'Instrumentos artesanales africanos hechos a mano, como el Sonajero Juju de vainas de África Occidental. Piezas únicas que dan voz a la tradición.',
+        breadcrumb: 'Oído',
       },
     },
     {
@@ -79,6 +86,7 @@ const router = createRouter({
         title: 'Olfato · Aromas de África | Amani',
         description:
           'Aromas y fragancias inspiradas en África: una experiencia olfativa que evoca la esencia de sus paisajes y tradiciones.',
+        breadcrumb: 'Olfato',
       },
     },
     {
@@ -89,6 +97,7 @@ const router = createRouter({
         title: 'Gusto · Sabores Africanos | Amani',
         description:
           'Sabores auténticos de África: productos gastronómicos seleccionados para descubrir la riqueza culinaria del continente.',
+        breadcrumb: 'Gusto',
       },
     },
     {
@@ -99,6 +108,7 @@ const router = createRouter({
         title: 'Tacto · Texturas Artesanales | Amani',
         description:
           'Texturas y artesanía africana para descubrir con las manos: piezas hechas a mano con materiales naturales.',
+        breadcrumb: 'Tacto',
       },
     },
     {
@@ -109,6 +119,7 @@ const router = createRouter({
         title: 'Experiencias de los 5 Sentidos | Amani',
         description:
           'Vista, oído, olfato, gusto y tacto: elige un sentido y descubre el arte y la artesanía africana de Amani.',
+        breadcrumb: 'Experiencias',
       },
     },
     {
@@ -119,6 +130,7 @@ const router = createRouter({
         title: 'Acerca de Amani · Nuestra Historia',
         description:
           'Conoce la historia de Amani, una plataforma de experiencias sensoriales que conecta a las personas con el arte y la cultura africana.',
+        breadcrumb: 'Acerca de Amani',
       },
     },
     {
@@ -129,6 +141,7 @@ const router = createRouter({
         title: 'Contacto | Amani',
         description:
           '¿Tienes alguna pregunta o quieres colaborar con Amani? Escríbenos y te responderemos lo antes posible.',
+        breadcrumb: 'Contacto',
       },
     },
     {
@@ -139,6 +152,7 @@ const router = createRouter({
         title: 'Explora Guinea Ecuatorial · Galería de Fotos | Amani',
         description:
           'Un recorrido en imágenes por Guinea Ecuatorial: paisajes, cultura y vida cotidiana vistos a través del objetivo de Amani.',
+        breadcrumb: 'Explora Guinea Ecuatorial',
       },
     },
     {
@@ -149,6 +163,7 @@ const router = createRouter({
         title: 'Política de Compra | Amani',
         description:
           'Condiciones de compra de los productos artesanales de Amani: pedidos, pagos, envíos y devoluciones.',
+        breadcrumb: 'Política de Compra',
       },
     },
     {
@@ -159,6 +174,7 @@ const router = createRouter({
         title: 'Blog | Amani',
         description:
           'Historias, cultura y arte africano en el blog de Amani: artículos sobre Guinea Ecuatorial, artesanía y experiencias sensoriales.',
+        breadcrumb: 'Blog',
       },
     },
     {
@@ -169,6 +185,7 @@ const router = createRouter({
         title: 'Blog | Amani',
         description:
           'Historias, cultura y arte africano en el blog de Amani: artículos sobre Guinea Ecuatorial, artesanía y experiencias sensoriales.',
+        breadcrumb: 'Artículo',
       },
     },
     {
@@ -183,15 +200,15 @@ const router = createRouter({
   ],
 })
 
-// Actualiza una etiqueta <meta> (creándola si no existe) para el SEO por página.
-const setMetaTag = (attr: 'name' | 'property', key: string, content: string) => {
-  let tag = document.head.querySelector<HTMLMetaElement>(`meta[${attr}="${key}"]`)
-  if (!tag) {
-    tag = document.createElement('meta')
-    tag.setAttribute(attr, key)
-    document.head.appendChild(tag)
-  }
-  tag.setAttribute('content', content)
+// Rutas que cuelgan de "Experiencias" en la navegación real, para que el
+// BreadcrumbList refleje esa jerarquía aunque las rutas sean planas.
+const BREADCRUMB_PARENT: Record<string, { name: string; path: string }> = {
+  '/experiencia/vista': { name: 'Experiencias', path: '/experiencias' },
+  '/experiencia/oido': { name: 'Experiencias', path: '/experiencias' },
+  '/experiencia/olfato': { name: 'Experiencias', path: '/experiencias' },
+  '/experiencia/gusto': { name: 'Experiencias', path: '/experiencias' },
+  '/experiencia/tacto': { name: 'Experiencias', path: '/experiencias' },
+  '/blog': { name: 'Blog', path: '/blog' },
 }
 
 router.afterEach((to) => {
@@ -203,6 +220,7 @@ router.afterEach((to) => {
   setMetaTag('name', 'description', description)
   setMetaTag('property', 'og:title', title)
   setMetaTag('property', 'og:description', description)
+  setMetaTag('property', 'og:type', 'website')
   setMetaTag('property', 'og:url', url)
   setMetaTag('name', 'twitter:title', title)
   setMetaTag('name', 'twitter:description', description)
@@ -214,6 +232,29 @@ router.afterEach((to) => {
     document.head.appendChild(canonical)
   }
   canonical.setAttribute('href', url)
+
+  // Home no necesita breadcrumb (sería un único nodo "Inicio", sin valor para Google).
+  // `/blog/:id` genera el suyo propio en BlogArticleView con el título real del artículo.
+  if (to.path === '/') {
+    setJsonLd('breadcrumbs', null)
+    return
+  }
+
+  const items = [{ name: 'Inicio', path: '/' }]
+  const parent = to.path === '/blog' ? null : BREADCRUMB_PARENT[to.path]
+  if (parent) items.push(parent)
+  items.push({ name: to.meta.breadcrumb ?? title, path: to.path })
+
+  setJsonLd('breadcrumbs', {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: items.map((item, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: item.name,
+      item: SITE_URL + item.path,
+    })),
+  })
 })
 
 // El scroll real ocurre dentro de `.app-main` (overflow-y: auto), no en `window`.
