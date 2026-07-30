@@ -180,6 +180,15 @@ const router = createRouter({
         description: 'Panel privado de gestión de productos.',
       },
     },
+    {
+      path: '/backstage/blog',
+      name: 'backstage-blog',
+      component: () => import('../views/BackstageBlogView.vue'),
+      meta: {
+        title: 'Panel de Administración · Blog | Amani',
+        description: 'Panel privado de gestión de artículos del blog.',
+      },
+    },
   ],
 })
 

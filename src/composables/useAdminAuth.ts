@@ -3,8 +3,22 @@ import { collection, getDocs } from 'firebase/firestore'
 import { db } from '../firebase'
 
 const SESSION_KEY = 'amani_backstage_auth'
+const REMEMBER_KEY = 'amani_backstage_remember'
+const REMEMBER_DIAS = 30
 
-const autenticado = ref(sessionStorage.getItem(SESSION_KEY) === '1')
+// El "recordar dispositivo" guarda en localStorage (sobrevive a cerrar el navegador)
+// una fecha de expiración; sessionStorage en cambio solo dura mientras la pestaña
+// esté abierta. Si el usuario no marca la casilla, se comporta como antes.
+function recordatorioValido(): boolean {
+  const expira = Number(localStorage.getItem(REMEMBER_KEY))
+  if (!expira || Date.now() > expira) {
+    localStorage.removeItem(REMEMBER_KEY)
+    return false
+  }
+  return true
+}
+
+const autenticado = ref(sessionStorage.getItem(SESSION_KEY) === '1' || recordatorioValido())
 
 export function useAdminAuth() {
   const verificando = ref(false)
@@ -15,7 +29,7 @@ export function useAdminAuth() {
   // a Firebase Auth: cualquiera con acceso directo a la API podría saltarse esta
   // pantalla, así que las reglas de Firestore deben impedir escritura en `productos`
   // y `claves` desde fuera de la consola/admin.
-  const verificarClave = async (clave: string) => {
+  const verificarClave = async (clave: string, recordarDispositivo = false) => {
     error.value = ''
     if (!clave.trim()) {
       error.value = 'Introduce la clave de administrador.'
@@ -28,6 +42,9 @@ export function useAdminAuth() {
       if (valida) {
         autenticado.value = true
         sessionStorage.setItem(SESSION_KEY, '1')
+        if (recordarDispositivo) {
+          localStorage.setItem(REMEMBER_KEY, String(Date.now() + REMEMBER_DIAS * 24 * 60 * 60 * 1000))
+        }
         return true
       }
       error.value = 'Clave incorrecta.'
@@ -44,6 +61,7 @@ export function useAdminAuth() {
   const cerrarSesion = () => {
     autenticado.value = false
     sessionStorage.removeItem(SESSION_KEY)
+    localStorage.removeItem(REMEMBER_KEY)
   }
 
   return { autenticado, verificando, error, verificarClave, cerrarSesion }
