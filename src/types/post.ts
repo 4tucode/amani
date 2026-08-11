@@ -1,10 +1,10 @@
-export interface ArticuloBlog {
+export interface Post {
   id?: string
   titulo: string
   descripcion: string
   contenido: string
-  imagen: string
-  fecha: string
+  imagenPortada: string | null
   autor: string
+  fecha: string
   orden: number
 }

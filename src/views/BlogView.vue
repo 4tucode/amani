@@ -2,13 +2,15 @@
 import { RouterLink } from 'vue-router'
 import { onMounted, ref } from 'vue'
 import { useGsapReveal } from '../composables/useGsapReveal'
-import { useBlogArticulos } from '../composables/useBlogArticulos'
+import { usePosts } from '../composables/usePosts'
+import { formatearFecha } from '../utils/fecha'
 
 const rootEl = ref<HTMLElement | null>(null)
 useGsapReveal(rootEl)
 
-const { articulos, cargando, error, cargarArticulos } = useBlogArticulos()
-onMounted(() => cargarArticulos())
+const { posts: articulos, cargando, error, cargarPosts } = usePosts()
+
+onMounted(cargarPosts)
 </script>
 
 <template>
@@ -56,19 +58,21 @@ onMounted(() => cargarArticulos())
 
         <h2 class="panel-title title-r">Artículos</h2>
 
-        <!-- Estado de carga / error -->
+        <!-- Cargando -->
         <div v-if="cargando" class="empty-state">
           <p class="empty-title">Cargando artículos…</p>
         </div>
+
+        <!-- Error -->
         <div v-else-if="error" class="empty-state">
           <p class="empty-title">{{ error }}</p>
         </div>
 
         <!-- Lista de artículos -->
         <ul v-else-if="articulos.length > 0" class="articles-list">
-          <li v-for="articulo in articulos" :key="articulo.id" class="article-item" data-reveal data-reveal-group="articles">
+          <li v-for="articulo in articulos" :key="articulo.id" class="article-item">
             <div class="article-meta">
-              <span class="article-date">{{ articulo.fecha }}</span>
+              <span class="article-date">{{ formatearFecha(articulo.fecha) }}</span>
               <span class="article-author">{{ articulo.autor }}</span>
             </div>
             <h3 class="article-title">{{ articulo.titulo }}</h3>

@@ -1,27 +1,81 @@
 <script setup lang="ts">
 import { RouterLink, useRoute } from 'vue-router'
-import { computed, onMounted, ref, watchEffect } from 'vue'
+import { ref, computed, onMounted, watchEffect } from 'vue'
 import { useGsapReveal } from '../composables/useGsapReveal'
-import { useBlogArticulos } from '../composables/useBlogArticulos'
+import { usePosts } from '../composables/usePosts'
+import { formatearFecha } from '../utils/fecha'
+import { useJsonLd } from '../composables/useJsonLd'
+import { setMetaTag, SITE_URL } from '../utils/seoMeta'
 
 const rootEl = ref<HTMLElement | null>(null)
 useGsapReveal(rootEl)
 
 const route = useRoute()
-const { articulos, cargando, cargarArticulos } = useBlogArticulos()
-onMounted(() => cargarArticulos())
+const articleJsonLd = useJsonLd('article-blogposting')
+const breadcrumbJsonLd = useJsonLd('breadcrumbs')
 
-const articuloIdParam = computed(() => route.params.id as string)
-const articulo = computed(() => articulos.value.find((a) => a.id === articuloIdParam.value))
+const { posts: articulos, cargando, cargarPosts } = usePosts()
 
-// SEO: título y descripción propios de cada artículo (el router pone los genéricos).
+onMounted(cargarPosts)
+
+const articuloId = computed(() => route.params.id as string)
+const articulo = computed(() => articulos.value.find((a) => a.id === articuloId.value))
+
+// SEO: título, OG/Twitter y datos estructurados propios de cada artículo
+// (el router pone los genéricos primero; aquí los sobrescribimos en cuanto
+// el post llega de Firestore).
 watchEffect(() => {
-  if (!articulo.value) return
-  document.title = `${articulo.value.titulo} | Blog Amani`
-  const desc = document.head.querySelector<HTMLMetaElement>('meta[name="description"]')
-  if (desc) desc.setAttribute('content', articulo.value.descripcion)
-})
+  if (!articulo.value) {
+    articleJsonLd.clear()
+    breadcrumbJsonLd.clear()
+    return
+  }
 
+  const art = articulo.value
+  const url = `${SITE_URL}/blog/${art.id}`
+  const title = `${art.titulo} | Blog Amani`
+  // La portada se guarda en base64 dentro del documento (no es una URL pública),
+  // así que solo sirve como og:image si en el futuro pasa a alojarse en Storage.
+  const ogImage = art.imagenPortada?.startsWith('http') ? art.imagenPortada : `${SITE_URL}/og-image.jpg`
+
+  document.title = title
+  setMetaTag('name', 'description', art.descripcion)
+  setMetaTag('property', 'og:title', title)
+  setMetaTag('property', 'og:description', art.descripcion)
+  setMetaTag('property', 'og:type', 'article')
+  setMetaTag('property', 'og:url', url)
+  setMetaTag('property', 'og:image', ogImage)
+  setMetaTag('name', 'twitter:title', title)
+  setMetaTag('name', 'twitter:description', art.descripcion)
+  setMetaTag('name', 'twitter:image', ogImage)
+
+  articleJsonLd.set({
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: art.titulo,
+    description: art.descripcion,
+    datePublished: art.fecha,
+    inLanguage: 'es-ES',
+    author: { '@type': 'Organization', name: art.autor },
+    publisher: {
+      '@type': 'Organization',
+      name: 'Amani',
+      logo: { '@type': 'ImageObject', url: `${SITE_URL}/logo.png` },
+    },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': url },
+    image: ogImage,
+  })
+
+  breadcrumbJsonLd.set({
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Inicio', item: SITE_URL + '/' },
+      { '@type': 'ListItem', position: 2, name: 'Blog', item: SITE_URL + '/blog' },
+      { '@type': 'ListItem', position: 3, name: art.titulo, item: url },
+    ],
+  })
+})
 </script>
 
 <template>
@@ -29,7 +83,7 @@ watchEffect(() => {
 
     <!-- Cargando -->
     <div v-if="cargando" class="not-found" data-reveal>
-      <p class="not-found-title">Cargando artículo…</p>
+      <h2 class="not-found-title">Cargando artículo…</h2>
     </div>
 
     <!-- Artículo encontrado -->
@@ -51,7 +105,7 @@ watchEffect(() => {
         <h1 class="article-title">{{ articulo.titulo }}</h1>
 
         <div class="article-meta">
-          <span class="meta-date">{{ articulo.fecha }}</span>
+          <span class="meta-date">{{ formatearFecha(articulo.fecha) }}</span>
           <span class="meta-sep">·</span>
           <span class="meta-author">{{ articulo.autor }}</span>
         </div>
@@ -67,6 +121,7 @@ watchEffect(() => {
 
       <!-- ── Panel derecho: contenido ── -->
       <div class="panel panel-right" data-reveal>
+        <img v-if="articulo.imagenPortada" :src="articulo.imagenPortada" :alt="articulo.titulo" class="article-portada" />
         <div class="article-content" v-html="articulo.contenido" />
       </div>
 
@@ -81,11 +136,6 @@ watchEffect(() => {
       <h2 class="not-found-title">Artículo no encontrado</h2>
       <RouterLink to="/blog" class="back-link">← Volver al Blog</RouterLink>
     </div>
-
-    <!-- Número decorativo -->
-    <span v-if="articulo" class="deco-num" aria-hidden="true">
-      {{ String(articulo.orden).padStart(2, '0') }}
-    </span>
 
   </div>
 </template>
@@ -244,6 +294,15 @@ watchEffect(() => {
   }
 }
 
+/* ── Portada del artículo ── */
+.article-portada {
+  width: 100%;
+  max-height: 320px;
+  object-fit: cover;
+  border-radius: 6px;
+  margin-bottom: 0.5rem;
+}
+
 /* ── Contenido del artículo ── */
 .article-content {
   :deep(p) {
@@ -271,6 +330,30 @@ watchEffect(() => {
     color: #3d1a26;
   }
 
+  :deep(a) {
+    color: #8c3a50;
+  }
+
+  :deep(blockquote) {
+    border-left: 3px solid rgba(140, 58, 80, 0.25);
+    padding-left: 1rem;
+    margin: 1.25rem 0;
+    font-style: italic;
+    color: rgba(61, 26, 38, 0.55);
+  }
+
+  :deep(ul) {
+    padding-left: 1.25rem;
+    margin: 0 0 1.25rem;
+  }
+
+  :deep(img) {
+    max-width: 100%;
+    border-radius: 6px;
+    margin: 1.25rem 0;
+    display: block;
+  }
+
   :deep(p:last-child) {
     margin-bottom: 0;
   }
@@ -293,20 +376,6 @@ watchEffect(() => {
   text-transform: uppercase;
   color: #3d1a26;
   margin: 0;
-}
-
-/* ── Número decorativo ── */
-.deco-num {
-  position: absolute;
-  bottom: -1.5rem;
-  right: 2.5rem;
-  font-family: 'Nunito Sans', sans-serif;
-  font-size: 120px;
-  line-height: 1;
-  color: rgba(61, 26, 38, 0.04);
-  pointer-events: none;
-  user-select: none;
-  z-index: 0;
 }
 
 /* ── Móvil: paneles apilados, lectura a una columna ── */
@@ -340,10 +409,6 @@ watchEffect(() => {
     height: auto;
     min-height: 100%;
     padding: 2rem 1.25rem;
-  }
-
-  .deco-num {
-    display: none;
   }
 }
 </style>

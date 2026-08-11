@@ -43,7 +43,7 @@ onUnmounted(() => {
       <button v-if="hasMultiple" class="lb-nav lb-prev" @click.stop="prev" aria-label="Foto anterior">‹</button>
 
       <div class="lb-img-wrap" @click.self="emit('close')">
-        <img :src="currentSrc" :alt="alt" class="lb-img" />
+        <img :src="currentSrc" :alt="alt" class="lb-img" decoding="async" />
       </div>
 
       <button v-if="hasMultiple" class="lb-nav lb-next" @click.stop="next" aria-label="Foto siguiente">›</button>

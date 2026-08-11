@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { ref, computed, reactive } from 'vue'
+import { RouterLink } from 'vue-router'
 import { useAdminAuth } from '../composables/useAdminAuth'
 import { useProductos } from '../composables/useProductos'
 import { imagenABase64 } from '../utils/imagenBase64'
 import { SENTIDOS, type Producto, type Sentido } from '../types/producto'
 
-const { autenticado, verificando, error: errorAuth, verificarClave, cerrarSesion } = useAdminAuth()
+const { autenticado, verificando, error: errorAuth, verificarClave } = useAdminAuth()
 const {
   productos,
   cargando,
@@ -21,10 +22,9 @@ const {
 
 // ── Popup de clave ──
 const claveIntroducida = ref('')
-const recordarDispositivo = ref(false)
 
 const comprobarClave = async () => {
-  const ok = await verificarClave(claveIntroducida.value, recordarDispositivo.value)
+  const ok = await verificarClave(claveIntroducida.value)
   if (ok) {
     claveIntroducida.value = ''
     cargarPorSentido(sentidoActivo.value)
@@ -202,10 +202,6 @@ const hayProductos = computed(() => productos.value.length > 0)
           placeholder="Clave de administrador"
           autofocus
         />
-        <label class="auth-remember">
-          <input v-model="recordarDispositivo" type="checkbox" />
-          Recordar este dispositivo durante 30 días
-        </label>
         <p v-if="errorAuth" class="auth-error">{{ errorAuth }}</p>
         <button type="submit" class="auth-btn" :disabled="verificando">
           {{ verificando ? 'Comprobando…' : 'Entrar' }}
@@ -220,10 +216,9 @@ const hayProductos = computed(() => productos.value.length > 0)
           <h1 class="backstage-title">Panel de Administración</h1>
           <p class="backstage-subtitle">Gestiona los productos de cada sentido</p>
         </div>
-        <div class="backstage-header-acciones">
-          <RouterLink to="/backstage/blog" class="btn-secundario">Artículos del blog</RouterLink>
+        <div class="header-acciones">
+          <RouterLink to="/backstage/posts" class="btn-secundario">Ir a Posts</RouterLink>
           <button class="btn-primary" @click="abrirCrear">+ Nuevo producto</button>
-          <button class="btn-secundario" @click="cerrarSesion">Cerrar sesión</button>
         </div>
       </header>
 
@@ -396,15 +391,6 @@ const hayProductos = computed(() => productos.value.length > 0)
   &:focus { border-color: #8c3a50; }
 }
 
-.auth-remember {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 12.5px;
-  color: rgba(61, 26, 38, 0.65);
-  cursor: pointer;
-}
-
 .auth-error {
   color: #b3261e;
   font-size: 12.5px;
@@ -438,6 +424,12 @@ const hayProductos = computed(() => productos.value.length > 0)
   flex-wrap: wrap;
 }
 
+.header-acciones {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
 .backstage-title {
   font-size: 22px;
   font-weight: 800;
@@ -451,17 +443,6 @@ const hayProductos = computed(() => productos.value.length > 0)
   font-size: 13.5px;
   color: rgba(61, 26, 38, 0.55);
   margin: 0.3rem 0 0;
-}
-
-.backstage-header-acciones {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  flex-wrap: wrap;
-}
-
-.backstage-header-acciones .btn-secundario {
-  text-decoration: none;
 }
 
 .btn-primary {
@@ -493,6 +474,9 @@ const hayProductos = computed(() => productos.value.length > 0)
   padding: 0.55rem 0.9rem;
   border-radius: 4px;
   cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
   transition: border-color 0.2s ease, background 0.2s ease;
   &:hover { border-color: #8c3a50; background: rgba(140, 58, 80, 0.06); }
 }

@@ -19,7 +19,7 @@ useGsapReveal(rootEl)
           <span class="ew-text">Quiénes somos</span>
         </div>
 
-        <h2 class="panel-title">Nuestra esencia</h2>
+        <h1 class="panel-title">Nuestra esencia</h1>
 
         <blockquote class="quote">
           <p>"Un aroma puede llevarte a tu infancia.</p>

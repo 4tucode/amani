@@ -1,149 +1,164 @@
 <script setup lang="ts">
-import { ref, computed, reactive } from 'vue'
+import { onMounted, ref, reactive, computed } from 'vue'
+import { RouterLink } from 'vue-router'
 import { useAdminAuth } from '../composables/useAdminAuth'
-import { useBlogArticulos } from '../composables/useBlogArticulos'
+import { usePosts } from '../composables/usePosts'
 import { imagenABase64 } from '../utils/imagenBase64'
-import type { ArticuloBlog } from '../types/blog'
+import { formatearFecha } from '../utils/fecha'
+import RichTextEditor from '../components/RichTextEditor.vue'
+import type { Post } from '../types/post'
 
-const { autenticado, verificando, error: errorAuth, verificarClave, cerrarSesion } = useAdminAuth()
+const { autenticado, verificando, error: errorAuth, verificarClave } = useAdminAuth()
 const {
-  articulos,
+  posts,
   cargando,
   guardando,
-  error: errorArticulos,
-  cargarArticulos,
-  crearArticulo,
-  actualizarArticulo,
-  eliminarArticulo,
-} = useBlogArticulos()
+  error: errorPosts,
+  cargarPosts,
+  sembrarPostEjemplo,
+  crearPost,
+  actualizarPost,
+  eliminarPost,
+} = usePosts()
 
 // ── Popup de clave ──
 const claveIntroducida = ref('')
-const recordarDispositivo = ref(false)
 
-const comprobarClave = async () => {
-  const ok = await verificarClave(claveIntroducida.value, recordarDispositivo.value)
-  if (ok) {
-    claveIntroducida.value = ''
-    cargarArticulos()
+const cargarYSembrarSiVacio = async () => {
+  await cargarPosts()
+  if (posts.value.length === 0) {
+    const sembrado = await sembrarPostEjemplo()
+    if (sembrado) await cargarPosts()
   }
 }
 
-if (autenticado.value) cargarArticulos()
+const comprobarClave = async () => {
+  const ok = await verificarClave(claveIntroducida.value)
+  if (ok) {
+    claveIntroducida.value = ''
+    cargarYSembrarSiVacio()
+  }
+}
+
+onMounted(() => {
+  if (autenticado.value) cargarYSembrarSiVacio()
+})
 
 // ── Formulario crear / editar ──
 const formVisible = ref(false)
-const articuloEditando = ref<ArticuloBlog | null>(null)
+const postEditando = ref<Post | null>(null)
 
 const formVacio = () => ({
   titulo: '',
   descripcion: '',
   contenido: '',
   autor: 'Equipo Amani',
-  fecha: '',
+  fecha: new Date().toISOString().slice(0, 10),
   orden: 1,
 })
 
 const form = reactive(formVacio())
-const imagenExistente = ref('')
-const imagenNueva = ref<File | null>(null)
+const portadaExistente = ref<string | null>(null)
+const portadaNueva = ref<File | null>(null)
+const procesandoImagenes = ref(false)
+const errorFormulario = ref('')
 
 const abrirCrear = () => {
-  articuloEditando.value = null
+  postEditando.value = null
   Object.assign(form, formVacio())
-  form.orden = articulos.value.length
-    ? Math.max(...articulos.value.map((a) => a.orden)) + 1
-    : 1
-  form.fecha = new Date().toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })
-  imagenExistente.value = ''
-  imagenNueva.value = null
+  form.orden = posts.value.length ? Math.max(...posts.value.map((p) => p.orden)) + 1 : 1
+  portadaExistente.value = null
+  portadaNueva.value = null
+  errorFormulario.value = ''
   formVisible.value = true
 }
 
-const abrirEditar = (articulo: ArticuloBlog) => {
-  articuloEditando.value = articulo
+const abrirEditar = (post: Post) => {
+  postEditando.value = post
   Object.assign(form, {
-    titulo: articulo.titulo,
-    descripcion: articulo.descripcion,
-    contenido: articulo.contenido,
-    autor: articulo.autor,
-    fecha: articulo.fecha,
-    orden: articulo.orden,
+    titulo: post.titulo,
+    descripcion: post.descripcion,
+    contenido: post.contenido,
+    autor: post.autor,
+    fecha: post.fecha,
+    orden: post.orden,
   })
-  imagenExistente.value = articulo.imagen
-  imagenNueva.value = null
+  portadaExistente.value = post.imagenPortada
+  portadaNueva.value = null
+  errorFormulario.value = ''
   formVisible.value = true
 }
 
 const cerrarForm = () => {
   formVisible.value = false
-  articuloEditando.value = null
+  postEditando.value = null
 }
 
-const onImagenSeleccionada = (e: Event) => {
+const onPortadaSeleccionada = (e: Event) => {
   const input = e.target as HTMLInputElement
-  imagenNueva.value = input.files?.[0] ?? null
+  portadaNueva.value = input.files?.[0] ?? null
 }
 
-const procesandoImagen = ref(false)
-const errorFormulario = ref('')
+const quitarPortada = () => {
+  portadaExistente.value = null
+  portadaNueva.value = null
+}
 
-const guardarArticulo = async () => {
-  if (!form.titulo.trim() || !form.contenido.trim()) {
-    errorFormulario.value = 'Título y contenido son obligatorios.'
+const guardarPost = async () => {
+  if (!form.titulo.trim() || !form.descripcion.trim()) {
+    errorFormulario.value = 'Título y descripción son obligatorios.'
     return
   }
   errorFormulario.value = ''
 
-  let imagenFinal = imagenExistente.value
-  if (imagenNueva.value) {
-    procesandoImagen.value = true
-    try {
-      imagenFinal = await imagenABase64(imagenNueva.value)
-    } catch (e) {
-      console.error(e)
-      errorFormulario.value = 'No se pudo procesar la imagen.'
-      procesandoImagen.value = false
-      return
+  procesandoImagenes.value = true
+  let portadaFinal = portadaExistente.value
+  try {
+    if (portadaNueva.value) {
+      portadaFinal = await imagenABase64(portadaNueva.value)
     }
-    procesandoImagen.value = false
+  } catch (e) {
+    console.error(e)
+    errorFormulario.value = 'No se pudo procesar la imagen de portada.'
+    procesandoImagenes.value = false
+    return
   }
+  procesandoImagenes.value = false
 
   const data = {
     titulo: form.titulo.trim(),
     descripcion: form.descripcion.trim(),
-    contenido: form.contenido.trim(),
-    autor: form.autor.trim(),
-    fecha: form.fecha.trim(),
+    contenido: form.contenido,
+    imagenPortada: portadaFinal,
+    autor: form.autor.trim() || 'Equipo Amani',
+    fecha: form.fecha,
     orden: Number(form.orden) || 1,
-    imagen: imagenFinal,
   }
 
   try {
-    if (articuloEditando.value?.id) {
-      await actualizarArticulo(articuloEditando.value.id, data)
+    if (postEditando.value?.id) {
+      await actualizarPost(postEditando.value.id, data)
     } else {
-      await crearArticulo(data)
+      await crearPost(data)
     }
   } catch (e) {
     console.error(e)
-    errorFormulario.value = errorArticulos.value || 'No se pudo guardar el artículo.'
+    errorFormulario.value = errorPosts.value || 'No se pudo guardar el post.'
     return
   }
 
   cerrarForm()
-  cargarArticulos()
+  cargarPosts()
 }
 
-const borrarArticulo = async (articulo: ArticuloBlog) => {
-  if (!articulo.id) return
-  const confirmado = window.confirm(`¿Eliminar "${articulo.titulo}"? Esta acción no se puede deshacer.`)
+const borrarPost = async (post: Post) => {
+  const confirmado = window.confirm(`¿Eliminar "${post.titulo}"? Esta acción no se puede deshacer.`)
   if (!confirmado) return
-  await eliminarArticulo(articulo.id)
-  cargarArticulos()
+  await eliminarPost(post)
+  cargarPosts()
 }
 
-const hayArticulos = computed(() => articulos.value.length > 0)
+const hayPosts = computed(() => posts.value.length > 0)
 </script>
 
 <template>
@@ -160,10 +175,6 @@ const hayArticulos = computed(() => articulos.value.length > 0)
           placeholder="Clave de administrador"
           autofocus
         />
-        <label class="auth-remember">
-          <input v-model="recordarDispositivo" type="checkbox" />
-          Recordar este dispositivo durante 30 días
-        </label>
         <p v-if="errorAuth" class="auth-error">{{ errorAuth }}</p>
         <button type="submit" class="auth-btn" :disabled="verificando">
           {{ verificando ? 'Comprobando…' : 'Entrar' }}
@@ -175,33 +186,33 @@ const hayArticulos = computed(() => articulos.value.length > 0)
     <template v-else>
       <header class="backstage-header">
         <div>
-          <h1 class="backstage-title">Artículos del Blog</h1>
-          <p class="backstage-subtitle">Gestiona las publicaciones del blog</p>
+          <h1 class="backstage-title">Panel de Administración</h1>
+          <p class="backstage-subtitle">Gestiona los artículos del blog</p>
         </div>
-        <div class="backstage-header-acciones">
-          <RouterLink to="/backstage" class="btn-secundario">Productos</RouterLink>
-          <button class="btn-primary" @click="abrirCrear">+ Nuevo artículo</button>
-          <button class="btn-secundario" @click="cerrarSesion">Cerrar sesión</button>
+        <div class="header-acciones">
+          <RouterLink to="/backstage" class="btn-secundario">Ir a Productos</RouterLink>
+          <button class="btn-primary" @click="abrirCrear">+ Nuevo post</button>
         </div>
       </header>
 
-      <p v-if="errorArticulos" class="banner-error">{{ errorArticulos }}</p>
+      <p v-if="errorPosts" class="banner-error">{{ errorPosts }}</p>
 
-      <div v-if="cargando" class="estado-vacio">Cargando artículos…</div>
-      <div v-else-if="!hayArticulos" class="estado-vacio">No hay artículos todavía. Crea el primero.</div>
+      <div v-if="cargando" class="estado-vacio">Cargando posts…</div>
+      <div v-else-if="!hayPosts" class="estado-vacio">No hay posts todavía. Crea el primero.</div>
 
-      <div v-else class="productos-grid">
-        <div v-for="articulo in articulos" :key="articulo.id" class="producto-card">
-          <div class="producto-img-wrap">
-            <img v-if="articulo.imagen" :src="articulo.imagen" :alt="articulo.titulo" class="producto-img" />
+      <div v-else class="posts-grid">
+        <div v-for="post in posts" :key="post.id" class="post-card">
+          <div class="post-img-wrap">
+            <img v-if="post.imagenPortada" :src="post.imagenPortada" :alt="post.titulo" class="post-img" />
+            <div v-else class="post-img-vacia">Sin portada</div>
           </div>
-          <div class="producto-body">
-            <h3 class="producto-nombre">{{ articulo.titulo }}</h3>
-            <p class="producto-precio">{{ articulo.fecha }}</p>
-            <p class="producto-desc">{{ articulo.descripcion }}</p>
-            <div class="producto-acciones">
-              <button class="btn-secundario" @click="abrirEditar(articulo)">Editar</button>
-              <button class="btn-peligro" @click="borrarArticulo(articulo)">Eliminar</button>
+          <div class="post-body">
+            <p class="post-fecha">{{ formatearFecha(post.fecha) }} · {{ post.autor }}</p>
+            <h3 class="post-titulo">{{ post.titulo }}</h3>
+            <p class="post-desc">{{ post.descripcion }}</p>
+            <div class="post-acciones">
+              <button class="btn-secundario" @click="abrirEditar(post)">Editar</button>
+              <button class="btn-peligro" @click="borrarPost(post)">Eliminar</button>
             </div>
           </div>
         </div>
@@ -209,8 +220,8 @@ const hayArticulos = computed(() => articulos.value.length > 0)
 
       <!-- ── Modal crear / editar ── -->
       <div v-if="formVisible" class="form-overlay" @click.self="cerrarForm">
-        <form class="form-card" @submit.prevent="guardarArticulo">
-          <h2 class="form-title">{{ articuloEditando ? 'Editar artículo' : 'Nuevo artículo' }}</h2>
+        <form class="form-card" @submit.prevent="guardarPost">
+          <h2 class="form-title">{{ postEditando ? 'Editar post' : 'Nuevo post' }}</h2>
 
           <label class="form-label">
             Título
@@ -218,13 +229,8 @@ const hayArticulos = computed(() => articulos.value.length > 0)
           </label>
 
           <label class="form-label">
-            Descripción (resumen que aparece en el listado)
-            <textarea v-model="form.descripcion" class="form-input form-textarea-normal" rows="3"></textarea>
-          </label>
-
-          <label class="form-label">
-            Contenido (HTML: usa &lt;p&gt;, &lt;h2&gt;, &lt;strong&gt;…)
-            <textarea v-model="form.contenido" class="form-input form-textarea" rows="10" required></textarea>
+            Descripción (extracto que se ve en el listado del blog)
+            <textarea v-model="form.descripcion" class="form-input form-textarea" rows="3"></textarea>
           </label>
 
           <div class="form-row">
@@ -234,9 +240,9 @@ const hayArticulos = computed(() => articulos.value.length > 0)
             </label>
             <label class="form-label">
               Fecha
-              <input v-model="form.fecha" type="text" class="form-input" placeholder="15 de marzo, 2024" />
+              <input v-model="form.fecha" type="date" class="form-input" />
             </label>
-            <label class="form-label">
+            <label class="form-label form-orden">
               Orden
               <input v-model.number="form.orden" type="number" class="form-input" />
             </label>
@@ -244,22 +250,28 @@ const hayArticulos = computed(() => articulos.value.length > 0)
 
           <label class="form-label">
             Imagen de portada
-            <input type="file" accept="image/*" class="form-input" @change="onImagenSeleccionada" />
+            <input type="file" accept="image/*" class="form-input" @change="onPortadaSeleccionada" />
           </label>
 
-          <div v-if="imagenExistente && !imagenNueva" class="preview-thumbs">
+          <div v-if="portadaExistente || portadaNueva" class="preview-thumbs">
             <div class="preview-thumb">
-              <img :src="imagenExistente" alt="" />
+              <img v-if="portadaExistente && !portadaNueva" :src="portadaExistente" :alt="form.titulo" />
+              <span v-if="portadaNueva" class="preview-nueva">Nueva imagen lista</span>
+              <button type="button" class="preview-remove" @click="quitarPortada">×</button>
             </div>
           </div>
-          <p v-if="imagenNueva" class="preview-hint">Nueva imagen lista para subir.</p>
+
+          <div class="form-label">
+            Contenido del artículo
+            <RichTextEditor v-model="form.contenido" placeholder="Escribe el artículo… inserta imágenes con el botón 🖼️" />
+          </div>
 
           <p v-if="errorFormulario" class="banner-error">{{ errorFormulario }}</p>
 
           <div class="form-acciones">
             <button type="button" class="btn-secundario" @click="cerrarForm">Cancelar</button>
-            <button type="submit" class="btn-primary" :disabled="guardando || procesandoImagen">
-              {{ procesandoImagen ? 'Procesando imagen…' : guardando ? 'Guardando…' : 'Guardar' }}
+            <button type="submit" class="btn-primary" :disabled="guardando || procesandoImagenes">
+              {{ procesandoImagenes ? 'Procesando imagen…' : guardando ? 'Guardando…' : 'Guardar' }}
             </button>
           </div>
         </form>
@@ -325,15 +337,6 @@ const hayArticulos = computed(() => articulos.value.length > 0)
   &:focus { border-color: #8c3a50; }
 }
 
-.auth-remember {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 12.5px;
-  color: rgba(61, 26, 38, 0.65);
-  cursor: pointer;
-}
-
 .auth-error {
   color: #b3261e;
   font-size: 12.5px;
@@ -363,7 +366,13 @@ const hayArticulos = computed(() => articulos.value.length > 0)
   align-items: flex-start;
   justify-content: space-between;
   gap: 1rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.75rem;
+  flex-wrap: wrap;
+}
+
+.header-acciones {
+  display: flex;
+  gap: 0.75rem;
   flex-wrap: wrap;
 }
 
@@ -380,17 +389,6 @@ const hayArticulos = computed(() => articulos.value.length > 0)
   font-size: 13.5px;
   color: rgba(61, 26, 38, 0.55);
   margin: 0.3rem 0 0;
-}
-
-.backstage-header-acciones {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  flex-wrap: wrap;
-}
-
-.backstage-header-acciones .btn-secundario {
-  text-decoration: none;
 }
 
 .btn-primary {
@@ -422,6 +420,9 @@ const hayArticulos = computed(() => articulos.value.length > 0)
   padding: 0.55rem 0.9rem;
   border-radius: 4px;
   cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
   transition: border-color 0.2s ease, background 0.2s ease;
   &:hover { border-color: #8c3a50; background: rgba(140, 58, 80, 0.06); }
 }
@@ -460,14 +461,14 @@ const hayArticulos = computed(() => articulos.value.length > 0)
   text-align: center;
 }
 
-/* ── Grid de artículos ── */
-.productos-grid {
+/* ── Grid de posts ── */
+.posts-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 1.5rem;
 }
 
-.producto-card {
+.post-card {
   background: #fff;
   border-radius: 6px;
   overflow: hidden;
@@ -476,27 +477,48 @@ const hayArticulos = computed(() => articulos.value.length > 0)
   flex-direction: column;
 }
 
-.producto-img-wrap {
+.post-img-wrap {
   position: relative;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 16 / 9;
   background: #f2f2f5;
 }
 
-.producto-img {
+.post-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
 }
 
-.producto-body {
+.post-img-vacia {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(61, 26, 38, 0.3);
+}
+
+.post-body {
   padding: 1rem 1.2rem 1.2rem;
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: 0.35rem;
 }
 
-.producto-nombre {
+.post-fecha {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: rgba(184, 154, 90, 0.9);
+  margin: 0;
+}
+
+.post-titulo {
   font-size: 14px;
   font-weight: 800;
   text-transform: uppercase;
@@ -504,14 +526,7 @@ const hayArticulos = computed(() => articulos.value.length > 0)
   margin: 0;
 }
 
-.producto-precio {
-  font-size: 12px;
-  font-style: italic;
-  color: #8c3a50;
-  margin: 0;
-}
-
-.producto-desc {
+.post-desc {
   font-size: 12.5px;
   color: rgba(61, 26, 38, 0.55);
   line-height: 1.5;
@@ -522,7 +537,7 @@ const hayArticulos = computed(() => articulos.value.length > 0)
   overflow: hidden;
 }
 
-.producto-acciones {
+.post-acciones {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
@@ -545,7 +560,7 @@ const hayArticulos = computed(() => articulos.value.length > 0)
   background: #fff;
   border-radius: 8px;
   padding: 2rem;
-  max-width: 560px;
+  max-width: 640px;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -575,8 +590,11 @@ const hayArticulos = computed(() => articulos.value.length > 0)
 .form-row {
   display: flex;
   gap: 1rem;
-  flex-wrap: wrap;
-  > .form-label { flex: 1; min-width: 120px; }
+  > .form-label { flex: 1; }
+}
+
+.form-orden {
+  max-width: 100px;
 }
 
 .form-input {
@@ -596,13 +614,6 @@ const hayArticulos = computed(() => articulos.value.length > 0)
 .form-textarea {
   resize: vertical;
   font-style: normal;
-  font-family: 'Courier New', monospace;
-  font-size: 13px;
-}
-
-.form-textarea-normal {
-  resize: vertical;
-  font-style: normal;
 }
 
 .preview-thumbs {
@@ -613,19 +624,40 @@ const hayArticulos = computed(() => articulos.value.length > 0)
 
 .preview-thumb {
   position: relative;
-  width: 72px;
-  height: 72px;
+  width: 90px;
+  height: 60px;
   border-radius: 4px;
   overflow: hidden;
+  background: rgba(140, 58, 80, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   img { width: 100%; height: 100%; object-fit: cover; display: block; }
 }
 
-.preview-hint {
-  font-size: 12px;
+.preview-nueva {
+  font-size: 10px;
+  text-align: center;
+  padding: 0 0.3rem;
   color: rgba(61, 26, 38, 0.55);
-  font-style: italic;
-  margin: -0.4rem 0 0;
+}
+
+.preview-remove {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 18px;
+  height: 18px;
+  line-height: 16px;
+  text-align: center;
+  border-radius: 50%;
+  border: none;
+  background: rgba(61, 26, 38, 0.85);
+  color: #fff;
+  font-size: 12px;
+  cursor: pointer;
+  padding: 0;
 }
 
 .form-acciones {
