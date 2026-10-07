@@ -5,6 +5,7 @@ import { useGlobalMusic } from '../composables/useGlobalMusic'
 import { useSidebarPanel } from '../composables/useSidebarPanel'
 import { useGsapReveal } from '../composables/useGsapReveal'
 import ExperienceCard from '../components/ExperienceCard.vue'
+import ColabAlenPopup from '../components/ColabAlenPopup.vue'
 
 const rootEl = ref<HTMLElement | null>(null)
 useGsapReveal(rootEl)
@@ -215,6 +216,8 @@ onMounted(() => {
         </div>
       </div>
     </Transition>
+
+    <ColabAlenPopup />
   </div>
 </template>
 
