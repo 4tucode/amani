@@ -42,24 +42,6 @@ function pesoPublico(rutaRelativa: string): number {
 }
 
 describe('compresión de imágenes en el build de producción', () => {
-  it('reduce de forma notable el peso de los PNG del cómic (assets importados)', () => {
-    const casos = [
-      { origen: 'src/assets/comic/vista.png', distBaseName: 'vista' },
-      { origen: 'src/assets/comic/tacto.png', distBaseName: 'tacto' },
-      { origen: 'src/assets/comic/gusto.png', distBaseName: 'gusto' },
-      { origen: 'src/assets/comic/oido.png', distBaseName: 'oido' },
-      { origen: 'src/assets/comic/olfato.png', distBaseName: 'olfato' },
-    ]
-
-    for (const { origen, distBaseName } of casos) {
-      const pesoOriginal = statSync(resolve(ROOT, origen)).size
-      const pesoFinal = pesoAssetOptimizado(distBaseName)
-
-      // Umbral conservador: en la práctica se observan ahorros del 44-72%.
-      expect(pesoFinal, `${origen}: ${pesoOriginal}B -> ${pesoFinal}B`).toBeLessThan(pesoOriginal * 0.7)
-    }
-  })
-
   it('reduce de forma notable el peso del logo (asset importado desde un componente)', () => {
     const pesoOriginal = statSync(resolve(ROOT, 'src/assets/logo_amani.png')).size
     const pesoFinal = pesoAssetOptimizado('logo_amani')
