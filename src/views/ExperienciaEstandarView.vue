@@ -9,11 +9,11 @@ useGsapReveal(rootEl)
 const router = useRouter()
 
 const sentidos = [
-  { nombre: 'Vista',  num: '01', img: new URL('@/assets/comic/vista.png',   import.meta.url).href, path: '/experiencia/vista'  },
-  { nombre: 'Oído',   num: '02', img: new URL('@/assets/comic/oido.png',    import.meta.url).href, path: '/experiencia/oido'   },
-  { nombre: 'Olfato', num: '03', img: new URL('@/assets/comic/olfato.png',  import.meta.url).href, path: '/experiencia/olfato' },
-  { nombre: 'Gusto',  num: '04', img: new URL('@/assets/comic/gusto.png',   import.meta.url).href, path: '/experiencia/gusto'  },
-  { nombre: 'Tacto',  num: '05', img: new URL('@/assets/comic/tacto.png',   import.meta.url).href, path: '/experiencia/tacto'  },
+  { nombre: 'Vista',  num: '01', color: '#582a35', video: new URL('@/assets/videos/tarjetas/vista.mp4', import.meta.url).href, path: '/experiencia/vista'  },
+  { nombre: 'Oído',   num: '02', color: '#7a782b', video: new URL('@/assets/videos/tarjetas/oido.mp4', import.meta.url).href, path: '/experiencia/oido'   },
+  { nombre: 'Olfato', num: '03', color: '#bb863c', video: new URL('@/assets/videos/tarjetas/olfato.mp4', import.meta.url).href, path: '/experiencia/olfato' },
+  { nombre: 'Gusto',  num: '04', color: '#7f4b5e', video: new URL('@/assets/videos/tarjetas/gusto.mp4', import.meta.url).href, path: '/experiencia/gusto'  },
+  { nombre: 'Tacto',  num: '05', color: '#e2b77b', video: new URL('@/assets/videos/tarjetas/tacto.mp4', import.meta.url).href, path: '/experiencia/tacto'  },
 ]
 </script>
 
@@ -51,8 +51,8 @@ const sentidos = [
         data-reveal
         data-reveal-group="senses"
       >
-        <div class="sense-img-wrap">
-          <img :src="sentido.img" :alt="sentido.nombre" class="sense-img" decoding="async" />
+        <div class="sense-media" :style="{ background: sentido.color }" aria-hidden="true">
+          <video class="sense-video" :src="sentido.video" autoplay loop muted playsinline preload="auto" />
         </div>
         <div class="sense-footer">
           <span class="sense-num">{{ sentido.num }}</span>
@@ -185,21 +185,24 @@ const sentidos = [
     transform: translateY(-5px);
     box-shadow: 0 10px 30px rgba(61, 26, 38, 0.13);
 
-    .sense-img { transform: scale(1.03); }
+    .sense-video { transform: scale(1.03); }
     .sense-arrow { opacity: 1; transform: translateX(0); }
     .sense-name { color: #8c3a50; }
   }
 }
 
-.sense-img-wrap {
+/* El color del sentido queda de fondo mientras carga el vídeo */
+.sense-media {
+  aspect-ratio: 6 / 5;
   overflow: hidden;
   line-height: 0;
 }
 
-.sense-img {
+.sense-video {
   width: 100%;
-  height: auto;
+  height: 100%;
   display: block;
+  object-fit: cover;
   transition: transform 0.35s ease;
 }
 
